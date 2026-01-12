@@ -9,6 +9,7 @@ function Header() {
 const [ user, setUser ] = useState(null);
 const [ userData, setUserData ] = useState(null);
 const [ showDropDown, setShowDropDown] = useState(false);
+const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
@@ -27,6 +28,15 @@ useEffect(() => {
   return () => unsubscribe();
 }, [])
 
+useEffect(() => {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}, [theme]);
+
+const toggleTheme = () => {
+  setTheme(theme === 'dark' ? 'light' : 'dark');
+};
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -36,6 +46,9 @@ useEffect(() => {
         <nav className={styles.nav}>
           <Link to="/" className={styles.navLink}>Kryefaqja</Link>
           <Link to="/workers" className={styles.navLink}>Mjeshtër</Link>
+          <button onClick={toggleTheme} className={styles.themeToggle}>
+            {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+          </button>
       {user ? (
   <div className={styles.profileWrapper}>
     {/* The Circle (The Toggle) */}

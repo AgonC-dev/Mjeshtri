@@ -1,7 +1,7 @@
 .wrapper {
   height: 100vh;
   width: 100vw;
-  background-color: #050505;
+  background-color: var(--bg-black);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +23,7 @@
 .blob1 {
   width: 400px;
   height: 400px;
-  background: #28a745;
+  background: var(--accent-emerald);
   top: -10%;
   left: -10%;
 }
@@ -40,7 +40,7 @@
 .blob3 {
   width: 300px;
   height: 300px;
-  background: #0f172a;
+  background: var(--bg-black);
   top: 40%;
   left: 30%;
   animation-duration: 15s;
@@ -55,15 +55,15 @@
 .glassCard {
   position: relative;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--white-r), var(--white-g), var(--white-b), 0.03);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
   border-radius: 30px;
   padding: 4rem 2rem;
   width: 90%;
   max-width: 550px;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(var(--black-r), var(--black-g), var(--black-b), 0.5);
   animation: fadeIn 1s ease-out;
 }
 
@@ -87,14 +87,14 @@
   transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
-  background: rgba(40, 167, 69, 0.2);
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
 
 /* --- Text Styling --- */
 .title {
-  color: #fff;
+  color: var(--text-white);
   font-size: 2.8rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -119,7 +119,7 @@
   50% {
     /* Moving up slightly with a tiny rotation for a natural "float" */
     transform: translate3d(0, -12px, 0) rotate(2deg);
-    color: #28a745;
+    color: var(--accent-emerald);
   }
 }
 
@@ -133,7 +133,7 @@
 .divider {
   width: 60px;
   height: 4px;
-  background: #28a745;
+  background: var(--accent-emerald);
   margin: 0 auto 2rem;
   border-radius: 2px;
 }
@@ -146,7 +146,7 @@
 .loadingBar {
   width: 100%;
   height: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--white-r), var(--white-g), var(--white-b), 0.05);
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -155,13 +155,13 @@
 .progressFill {
   width: 30%;
   height: 100%;
-  background: linear-gradient(90deg, #28a745, #00ff85);
+  background: linear-gradient(90deg, var(--accent-emerald), #00ff85);
   border-radius: 10px;
   animation: loadingAnim 2.5s infinite ease-in-out;
 }
 
 .statusText {
-  color: #28a745;
+  color: var(--accent-emerald);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 1px;
@@ -190,7 +190,7 @@
 }
 
 @keyframes titleBounce {
-  to { transform: translateY(-10px); color: #28a745; }
+  to { transform: translateY(-10px); color: var(--accent-emerald); }
 }
 
 @keyframes loadingAnim {

@@ -33,7 +33,7 @@
   transform: translateY(-4px);
   border-color: var(--accent-emerald);
   box-shadow: var(--shadow-medium);
-  background-color: rgba(0, 255, 133, 0.05);
+  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05);
 }
 
 .icon {

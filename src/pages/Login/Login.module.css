@@ -38,7 +38,7 @@
   width: 100%;
   padding: 0.75rem 1rem;
   background-color: var(--bg-primary);
-  border: 2px solid rgba(0, 255, 133, 0.12);
+  border: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.12);
   border-radius: var(--border-radius);
   color: var(--text-off-white);
   font-size: 0.95rem;
@@ -47,7 +47,7 @@
 .input:focus {
   outline: none;
   border-color: var(--accent-emerald);
-  box-shadow: 0 0 0 6px rgba(0, 255, 133, 0.06);
+  box-shadow: 0 0 0 6px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.06);
 }
 
 .submitButton {
@@ -55,9 +55,9 @@
   background: linear-gradient(
     90deg,
     var(--accent-emerald),
-    rgba(0, 255, 133, 0.8)
+    rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.8)
   );
-  color: #04110a;
+  color: var(--bg-primary);
   font-weight: 700;
   padding: 0.85rem 1rem;
   border: none;
@@ -72,7 +72,7 @@
   justify-content: center;
   gap: 8px;
   font-size: 0.9rem;
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(var(--white-r), var(--white-g), var(--white-b), 0.03);
   padding: 10px;
   border-radius: 8px;
 }
@@ -95,16 +95,16 @@
 
 .forgotDiv button:hover {
   color: #00cc6a;
-  text-shadow: 0 0 8px rgba(0, 255, 133, 0.4);
+  text-shadow: 0 0 8px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
 }
 
 /* Mesazhi i Gabimit (I kuq) */
 .errorMessage {
-  background-color: rgba(255, 77, 77, 0.1);
-  color: #ff4d4d;
+  background-color: rgba(var(--accent-red-r), var(--accent-red-g), var(--accent-red-b), 0.1);
+  color: var(--accent-red);
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 77, 77, 0.2);
+  border: 1px solid rgba(var(--accent-red-r), var(--accent-red-g), var(--accent-red-b), 0.2);
   margin-bottom: 15px;
   font-size: 0.85rem;
   text-align: center;
@@ -113,11 +113,11 @@
 
 /* Mesazhi i Suksesit për Reset (I gjelbër) */
 .successMessage {
-  background-color: rgba(0, 255, 133, 0.1);
-  color: #00ff85;
+  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+  color: var(--accent-emerald);
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid rgba(0, 255, 133, 0.2);
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
   margin-bottom: 15px;
   font-size: 0.85rem;
   text-align: center;
@@ -127,7 +127,7 @@
 .resetBtn {
   background: none;
   border: none;
-  color: #00ff85;
+  color: var(--accent-emerald);
   text-decoration: underline;
   font-weight: 600;
   cursor: pointer;
