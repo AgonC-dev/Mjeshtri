@@ -16,10 +16,16 @@ const Maintenance = () => {
         </div>
 
         <h1 className={styles.title}>
-          {"Së shpejti...".split("").map((char, i) => (
-            <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>{char}</span>
-          ))}
-        </h1>
+  {"Së shpejti...".split("").map((char, i) => (
+    <span 
+      key={i} 
+      className={styles.letter}
+      style={{ "--delay": `${i * 0.1}s` }}
+    >
+      {char === " " ? "\u00A0" : char}
+    </span>
+  ))}
+</h1>
 
         <div className={styles.divider}></div>
 
