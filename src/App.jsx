@@ -11,10 +11,18 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import styles from "./App.module.css";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
+import Maintenance from "./pages/Maintenance/Maintenance";
 
 const queryClient = new QueryClient();
 
 function App() {
+
+ const MAINTENANCE = true;
+
+ if (MAINTENANCE) {
+    return <Maintenance />
+ }
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
