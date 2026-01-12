@@ -1,0 +1,437 @@
+.wrap {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 24px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #fff, var(--accent-emerald));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+
+/* Glassmorphism Container */
+.form {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+}
+
+/* Inputs & Labels */
+.label {
+  display: block;
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.input, .textarea {
+  width: 100%;
+  
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 255, 133, 0.15);
+  border-radius: 12px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--accent-emerald);
+  background: rgba(0, 255, 133, 0.05);
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.1);
+  animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Buttons */
+.saveButton {
+  width: 100%;
+  margin-top: 2.5rem;
+  background: var(--accent-emerald);
+  color: #04110a;
+  padding: 1rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.saveButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.4);
+}
+
+.proButton {
+  background: transparent;
+  border: 2px solid var(--accent-emerald);
+  color: var(--accent-emerald);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Profile & Portfolio */
+
+
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.portItem {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s;
+}
+
+.portItem:hover {
+  transform: scale(1.05);
+  border-color: var(--accent-emerald);
+}
+.status {
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  
+  /* Modern Glass Look */
+  background: rgba(0, 255, 133, 0.08);
+  backdrop-filter: blur(8px);
+  
+  /* Emerald Border & Glow */
+  border: 1px solid rgba(0, 255, 133, 0.3);
+  border-left: 5px solid var(--accent-emerald);
+  color: #e0e0e0;
+  
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  
+  /* Animation to make it pop */
+  animation: slideDown 0.4s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Adding a small checkmark icon via CSS before the text */
+.status::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-emerald);
+  color: #04110a;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+
+
+/* --- Animation Rich File Inputs --- */
+
+/* Hide the default text/button while keeping it functional */
+.fileInput {
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #a0a0a0;
+  font-size: 0.8rem;
+}
+
+/* Custom styling for the "Choose File" button part of the input */
+.fileInput::-webkit-file-upload-button {
+  background: rgba(0, 255, 133, 0.1);
+  border: 1px solid rgba(0, 255, 133, 0.3);
+  border-radius: 8px;
+  color: var(--accent-emerald);
+  padding: 8px 16px;
+  margin-right: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.fileInput:hover::-webkit-file-upload-button {
+  background: var(--accent-emerald);
+  color: #04110a;
+  box-shadow: 0 0 20px rgba(0, 255, 133, 0.4);
+  transform: translateY(-2px);
+}
+
+/* --- Profile Preview Animation --- */
+.profilePreview {
+  width: 180px;
+  height: 180px;
+  border-radius: 24px;
+  border: 3px dashed rgba(0, 255, 133, 0.2);
+  padding: 5px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.5s ease;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profilePreview img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Bouncing border animation when empty */
+.avatarPlaceholder {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  animation: breathe 3s infinite ease-in-out;
+}
+
+.profilePreview:hover {
+  border-color: var(--accent-emerald);
+  transform: scale(1.02) rotate(1deg);
+  box-shadow: 0 0 30px rgba(0, 255, 133, 0.15);
+}
+
+.profilePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 18px;
+  animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- Portfolio Grid Animations --- */
+.portItem {
+  position: relative;
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  animation: popIn 0.4s ease-out backwards;
+}
+
+/* Staggered animation for grid items */
+.portItem:nth-child(1) { animation-delay: 0.1s; }
+.portItem:nth-child(2) { animation-delay: 0.2s; }
+.portItem:nth-child(3) { animation-delay: 0.3s; }
+
+.portItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.portItem:hover img {
+  transform: scale(1.2);
+}
+
+/* Green glow overlay on hover */
+.portItem::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 255, 133, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portItem:hover::after {
+  opacity: 1;
+}
+.deleteBtn {
+  background-color: rgba(255, 68, 68, 0.1); /* Subtle red tint */
+  color: #ff4444;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.deleteBtn:hover {
+  background-color: #ff4444;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+}
+
+.deleteBtn:active {
+  transform: scale(0.95); /* Shrink effect on click */
+}
+
+/* Optional: Add a shake animation if the user tries to save without a photo */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.deleteBtn:focus {
+  outline: none;
+  border-color: #ff4444;
+}
+
+/* --- Keyframes --- */
+@keyframes reveal {
+  from { opacity: 0; transform: scale(0.8) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Phone Input Glassmorphism Styling --- */
+
+.phoneContainer {
+  width: 100% !important;
+  margin-top: 0.5rem;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.phoneInput {
+  width: 100% !important;
+  height: auto !important;
+  padding: 1rem 1rem 1rem 52px !important; /* Left padding for flag */
+  
+  /* Matches your .input style */
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(0, 255, 133, 0.15) !important;
+  border-radius: 12px !important;
+  color: white !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.phoneInput:focus {
+  outline: none !important;
+  border-color: var(--accent-emerald) !important;
+  background: rgba(0, 255, 133, 0.05) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.1) !important;
+  /* Apply your custom reveal animation */
+  animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.phoneButton {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 12px 0 0 12px !important;
+  padding-left: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Hover effect for the flag button */
+.phoneButton:hover {
+  background: rgba(0, 255, 133, 0.1) !important;
+}
+
+/* The Country Dropdown List */
+.phoneDropdown {
+  background: #0a0a0a !important; /* Solid dark for readability */
+  border: 1px solid rgba(0, 255, 133, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 8px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-emerald) transparent;
+}
+
+/* Style the search or country items inside the list */
+:global(.react-tel-input .country-list .country) {
+  border-radius: 8px !important;
+  padding: 10px !important;
+  transition: all 0.2s ease;
+  color: #fff !important;
+}
+
+:global(.react-tel-input .country-list .country:hover) {
+  background: rgba(0, 255, 133, 0.1) !important;
+  color: var(--accent-emerald) !important;
+}
+
+:global(.react-tel-input .country-list .country.highlight) {
+  background: var(--accent-emerald) !important;
+  color: #04110a !important;
+}
+
+/* Fix flag icon size to match your modern look */
+:global(.react-tel-input .selected-flag .flag) {
+  transform: scale(1.1);
+}
+
+/* Ensure the arrow matches your muted labels */
+:global(.react-tel-input .selected-flag .arrow) {
+  border-top-color: #a0a0a0 !important;
+}
+
+:global(.react-tel-input .selected-flag .arrow.up) {
+  border-bottom-color: var(--accent-emerald) !important;
+}
+
+/* Reviews */
+.reviewCard {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 4px solid var(--accent-emerald);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 0 12px 12px 0;
+}
+
+@media (max-width: 900px) {
+  .row { grid-template-columns: 1fr; gap: 2rem; }
+  .form { padding: 1.5rem; }
+}

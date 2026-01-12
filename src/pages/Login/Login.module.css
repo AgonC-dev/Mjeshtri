@@ -1,0 +1,165 @@
+.loginWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  min-height: 60vh;
+  background: transparent;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-off-white);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  color: var(--text-off-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-primary);
+  border: 2px solid rgba(0, 255, 133, 0.12);
+  border-radius: var(--border-radius);
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 6px rgba(0, 255, 133, 0.06);
+}
+
+.submitButton {
+  margin-top: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    var(--accent-emerald),
+    rgba(0, 255, 133, 0.8)
+  );
+  color: #04110a;
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.forgotDiv {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.forgotDiv p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.forgotDiv button {
+  background: none;
+  border: none;
+  color: var(--accent-emerald);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.forgotDiv button:hover {
+  color: #00cc6a;
+  text-shadow: 0 0 8px rgba(0, 255, 133, 0.4);
+}
+
+/* Mesazhi i Gabimit (I kuq) */
+.errorMessage {
+  background-color: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  text-align: center;
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Mesazhi i Suksesit për Reset (I gjelbër) */
+.successMessage {
+  background-color: rgba(0, 255, 133, 0.1);
+  color: #00ff85;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 133, 0.2);
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Butoni Reseto */
+.resetBtn {
+  background: none;
+  border: none;
+  color: #00ff85;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 5px;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.resetBtn:hover {
+  opacity: 0.8;
+}
+
+/* Animacioni për gabimet */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Kur butoni është i bllokuar gjatë kyçjes */
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 1.25rem;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+}

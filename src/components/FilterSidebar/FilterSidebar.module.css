@@ -1,0 +1,73 @@
+.sidebar {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-off-white);
+  border-bottom: 2px solid rgba(0, 255, 133, 0.2);
+  padding-bottom: 0.75rem;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-primary);
+  border: 2px solid rgba(0, 255, 133, 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(0, 255, 133, 0.1);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.select {
+  cursor: pointer;
+}
+
+.priceRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.priceInput {
+  flex: 1;
+  -moz-appearance: textfield;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    position: static;
+  }
+}

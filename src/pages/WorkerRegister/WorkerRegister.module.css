@@ -1,0 +1,392 @@
+.register {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-off-white);
+  text-align: center;
+}
+
+.form {
+  background-color: var(--bg-secondary);
+  padding: 2.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-primary);
+  border: 2px solid rgba(0, 255, 133, 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-off-white);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent-emerald);
+  box-shadow: 0 0 0 3px rgba(0, 255, 133, 0.1);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.select {
+  cursor: pointer;
+}
+
+.helpText {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.photoUpload {
+  margin-top: 0.5rem;
+}
+
+.uploadLabel {
+  display: block;
+  width: 100%;
+  padding: 3rem 2rem;
+  background-color: var(--bg-primary);
+  border: 2px dashed rgba(0, 255, 133, 0.3);
+  border-radius: var(--border-radius);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.uploadLabel:hover {
+  border-color: var(--accent-emerald);
+  background-color: rgba(0, 255, 133, 0.05);
+}
+
+.uploadText {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.previewContainer {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.preview {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  display: block;
+}
+
+.removePhoto {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: transparent;
+  color: var(--accent-emerald);
+  border: 2px solid var(--accent-emerald);
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.removePhoto:hover {
+  background-color: var(--accent-emerald);
+  color: var(--bg-primary);
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: var(--accent-emerald);
+  color: var(--bg-primary);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-soft);
+}
+
+.submitButton:hover {
+  background-color: #00cc6a;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-emerald);
+}
+
+.tosText {
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+}
+
+.tosLink {
+  color: var(--accent-emerald);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tosLink:hover {
+  text-decoration: underline;
+}
+
+.authSwitch {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.authLink {
+  color: var(--accent-emerald);
+  font-weight: 600;
+  margin-left: 0.25rem;
+  text-decoration: none;
+}
+
+.authLink:hover {
+  text-decoration: underline;
+}
+/* Step Counter Styles */
+.stepCounter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0 1rem 0;
+  gap: 0; /* Removing gap to let the line connect */
+}
+
+.stepCounter span {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: var(--bg-primary);
+  border: 2px solid rgba(0, 255, 133, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.stepCounter span.activeStep {
+  background-color: var(--accent-emerald);
+  border-color: var(--accent-emerald);
+  color: var(--bg-primary);
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.3);
+}
+
+.line {
+  width: 60px;
+  height: 2px;
+  background-color: rgba(0, 255, 133, 0.2);
+  margin: 0 -2px; /* Slight overlap to ensure it touches the circles */
+}
+
+/* Button Group for Step 2 */
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.backButton {
+  flex: 1;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: var(--text-off-white);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-muted);
+}
+
+/* Ensure Checkbox row is visible */
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 10px;
+  background: rgba(0, 255, 133, 0.03);
+  border-radius: var(--border-radius);
+}
+
+.errorMessage {
+  background-color: rgba(255, 77, 77, 0.1); /* Soft red background */
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: shake 0.4s ease-in-out; /* Attention grabber */
+}
+
+.errorIcon {
+  font-size: 1.1rem;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Make button look disabled when loading */
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: linear-gradient(
+    135deg,
+    #444,
+    #222
+  ); /* Gray out the emerald gradient */
+}
+
+
+/* Container for the phone input */
+/* Container for the phone input */
+.phoneContainer {
+  width: 100% !important;
+  margin-bottom: 1rem;
+}
+
+/* The actual text input box - matching .input */
+.phoneInput {
+  width: 100% !important;
+  height: auto !important; /* Let padding define height */
+  padding: 0.75rem 1rem 0.75rem 48px !important; /* Extra left padding for flag */
+  background-color: var(--bg-primary) !important;
+  border: 2px solid rgba(0, 255, 133, 0.2) !important;
+  border-radius: var(--border-radius) !important;
+  color: var(--text-off-white) !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Matching the emerald focus effect */
+.phoneInput:focus {
+  outline: none !important;
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 0 3px rgba(0, 255, 133, 0.1) !important;
+}
+
+/* The button that holds the flag - making it blend into the input */
+.phoneButton {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: var(--border-radius) 0 0 var(--border-radius) !important;
+  padding-left: 8px !important;
+}
+
+/* Hover state for the flag button */
+.phoneButton:hover, 
+.phoneButton:focus {
+  background-color: rgba(0, 255, 133, 0.05) !important;
+}
+
+/* The dropdown list of countries */
+.phoneDropdown {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-off-white) !important;
+  border: 1px solid rgba(0, 255, 133, 0.2) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-medium) !important;
+}
+
+/* Global overrides for the library items */
+:global(.react-tel-input .country-list .country:hover) {
+  background-color: var(--bg-primary) !important;
+  color: var(--accent-emerald) !important;
+}
+
+:global(.react-tel-input .country-list .country.highlight) {
+  background-color: var(--accent-emerald) !important;
+  color: var(--bg-primary) !important;
+}
+
+:global(.react-tel-input .selected-flag .arrow) {
+  border-top-color: var(--text-muted) !important;
+}
+
+:global(.react-tel-input .selected-flag .arrow.up) {
+  border-bottom-color: var(--accent-emerald) !important;
+}
+
+
+@media (max-width: 768px) {
+  .register {
+    margin: 1rem auto;
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .form {
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,261 @@
+.profile {
+  padding: 2rem 0;
+}
+
+.header {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.imageContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-primary);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.onlineBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  border: 3px solid var(--bg-secondary);
+  box-shadow: 0 0 10px rgba(0, 255, 133, 0.6);
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-off-white);
+}
+
+.category {
+  color: var(--accent-emerald);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.city {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stars {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.ratingValue {
+  color: var(--text-off-white);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  border: 2px solid rgba(0, 255, 133, 0.1);
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-emerald);
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.portfolioSection {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-off-white);
+}
+
+
+.ctaSection {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.notFound {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+
+.backButton {
+  margin-top: 1.5rem;
+  background-color: var(--accent-emerald);
+  color: var(--bg-primary);
+  padding: 0.75rem 2rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: #00CC6A;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.bio {
+  margin: 1.9rem 0 2.5rem 0; /* Reduced top margin to keep it close to info */
+  padding-left: 1.5rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.1); /* Subtle grayish line */
+  max-width: 800px; /* Prevents text from stretching too wide on desktop */
+}
+
+.bio p {
+  color: var(--text-muted); /* Grayish color from your theme */
+  line-height: 1.6;
+  font-size: 1rem;
+  white-space: pre-line;
+  margin: 0;
+  font-style: italic; /* Makes it feel more like a personal statement */
+}
+
+/* Container for the whole section */
+.portfolioSection {
+  margin: 40px 0;
+  width: 100%;
+}
+
+/* Bigger Title with Green Accent */
+.portfolioTitle {
+  font-size: 1.8rem; /* Made the text bigger */
+  color: var(--text-muted);
+  margin-bottom: 25px;
+  border-left: 6px solid #28a745; /* Changed Blue to Green */
+  padding-left: 15px;
+  font-weight: 700;
+}
+
+/* Horizontal Layout */
+.portfolioFlex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Wraps to next line only when out of space */
+  gap: 20px;
+  width: 100%;
+}
+
+/* Bigger Image Container */
+.portfolioItem {
+  /* This makes the items start at 400px wide and grow to fill space */
+  flex: 1 1 400px; 
+  max-width: 450px; /* Prevents it from getting TOO huge on massive screens */
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(0, 255, 133, 0.1);
+  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.portfolioItem:hover {
+  transform: scale(1.02); /* Slight pop effect on hover */
+  border-color: #28a745;  /* Border turns green on hover */
+}
+
+/* The actual image */
+.portfolioImage {
+  width: 100%;
+  height: 100%;      /* Keeps the original uploaded proportions */
+  display: block;
+  object-fit: cover; 
+}
+
+/* Mobile: On small screens, let them take full width */
+@media (max-width: 600px) {
+  .portfolioItem {
+    flex: 1 1 100%;
+  }
+  .portfolioTitle {
+    font-size: 1.5rem;
+  }
+}
+/* Mobile Adjustment: if screen is tiny, make images slightly smaller to fit better */
+@media (max-width: 480px) {
+  .portfolioItem {
+    width: calc(50% - 6px); /* Show 2 images per row on small phones */
+    height: 120px;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .imageContainer {
+    width: 150px;
+    height: 150px;
+  }
+
+  .name {
+    font-size: 2rem;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolioGrid {
+    grid-template-columns: 1fr;
+  }
+}

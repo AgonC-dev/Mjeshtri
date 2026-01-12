@@ -1,0 +1,161 @@
+/* --- Original Styles (Do Not Touch) --- */
+.workerList {
+  padding: 2rem 0;
+  position: relative;
+}
+
+.debugInfo {
+  background-color: var(--bg-secondary);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--accent-emerald);
+  box-shadow: var(--shadow-soft);
+}
+
+.debugText {
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  font-family: 'Courier New', monospace;
+}
+
+.debugText strong {
+  color: var(--accent-emerald);
+  font-weight: 600;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-off-white);
+  text-align: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.results {
+  width: 100%;
+}
+
+.resultsCount {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.resultsWrapper {
+  position: relative;
+  min-height: 400px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.noResults {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+/* --- Fixed Loading & Fetching Styles --- */
+
+/* 1. Top Browser Progress Bar (Emerald Green) */
+.loadingBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(16, 185, 129, 0.1);
+  overflow: hidden;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loadingBar.active {
+  opacity: 1;
+}
+
+.loadingBar::after {
+  content: "";
+  position: absolute;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-emerald), transparent);
+  animation: slide 1.5s infinite ease-in-out;
+}
+
+/* 2. Initial Loader (Centered Spinner) */
+.initialLoader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  width: 100%;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(16, 185, 129, 0.1);
+  border-top: 3px solid var(--accent-emerald);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+.loadingText {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* 3. Grid Blur (For Category/Filter Changes) */
+.grid.dimmed {
+  opacity: 0.5;
+  filter: blur(8px) grayscale(0.5);
+  pointer-events: none;
+}
+
+/* --- Animations --- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slide {
+  from { left: -50%; }
+  to { left: 150%; }
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
