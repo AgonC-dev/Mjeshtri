@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 
 function App() {
 
- const MAINTENANCE = false;
+ const MAINTENANCE = true;
 
  if (MAINTENANCE) {
     return <Maintenance />
