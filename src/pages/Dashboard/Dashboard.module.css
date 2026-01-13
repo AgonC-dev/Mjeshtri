@@ -50,6 +50,7 @@
 .input,
 .textarea {
   width: 100%;
+   font-size: 16px;
   padding: 1rem;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
@@ -62,6 +63,7 @@
 .input:focus,
 .textarea:focus {
   outline: none;
+ 
   border-color: var(--accent-emerald);
   background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05);
   box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
@@ -164,48 +166,6 @@
 
 /* ===================== FILE INPUT (NO TEXT) ===================== */
 
-.fileInput {
-  width: 100%;
-  margin-top: 10px;
-  font-size: 0.8rem;
-  color: transparent; /* This hides the "Choose File" text */
-  cursor: pointer;
-}
-
-/* Style for the actual button part of the input */
-.fileInput::file-selector-button {
-  background: rgba(0, 255, 133, 0.1);
-  border: 1px solid rgba(0, 255, 133, 0.3);
-  border-radius: 8px;
-  color: var(--accent-emerald);
-  padding: 10px 16px;
-  margin-right: 0;
-  cursor: pointer;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  width: 100%; /* Makes the button fill the width like your other buttons */
-  transition: all 0.3s ease;
-}
-
-.fileInput::-webkit-file-upload-button {
-  background: rgba(0, 255, 133, 0.1);
-  border: 1px solid rgba(0, 255, 133, 0.3);
-  border-radius: 8px;
-  color: var(--accent-emerald);
-  padding: 10px 16px;
-  cursor: pointer;
-  font-weight: 600;
-  text-transform: uppercase;
-  width: 100%;
-  transition: all 0.3s ease;
-}
-
-.fileInput::file-selector-button:hover,
-.fileInput::-webkit-file-upload-button:hover {
-  background: rgba(0, 255, 133, 0.25);
-  border-color: var(--accent-emerald);
-}
 
 /* ===================== PROFILE ===================== */
 
