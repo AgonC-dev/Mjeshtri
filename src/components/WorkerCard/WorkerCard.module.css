@@ -179,5 +179,5 @@
 :global([data-theme="light"]) :local(.card) {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card);
 }

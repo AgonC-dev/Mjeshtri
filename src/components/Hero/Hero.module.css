@@ -10,6 +10,44 @@
   margin-bottom: 3rem;
 }
 
+/* Light theme: cleaner base with a subtle emerald radial accent */
+:global([data-theme="light"]) :local(.hero) {
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+:global([data-theme="light"]) :local(.hero)::before {
+  content: "";
+  position: absolute;
+  top: -6%;
+  left: -8%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(
+        var(--accent-emerald-r),
+        var(--accent-emerald-g),
+        var(--accent-emerald-b),
+        0.12
+      )
+      0%,
+    rgba(
+        var(--accent-emerald-r),
+        var(--accent-emerald-g),
+        var(--accent-emerald-b),
+        0.04
+      )
+      40%,
+    transparent 60%
+  );
+  filter: blur(38px);
+  opacity: 0.95;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;

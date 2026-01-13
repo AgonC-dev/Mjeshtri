@@ -59,7 +59,7 @@ function FilterSidebar({
         </select>
       </div>
 
-      <div className={styles.section}>
+      {/* <div className={styles.section}>
         <label className={styles.label}>Çmimi (nga - deri)</label>
         <div className={styles.priceRow}>
           <input
@@ -83,7 +83,7 @@ function FilterSidebar({
             className={styles.input + " " + styles.priceInput}
           />
         </div>
-      </div>
+      </div> */}
     </aside>
   );
 }

@@ -1,0 +1,74 @@
+/* Featured workers layout and light-theme tweaks */
+.featuredWorkers {
+  padding: 2rem 1rem;
+  margin: 0 auto 2rem auto;
+  max-width: 1200px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-off-white);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.viewAll {
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+.viewAllButton {
+  background: var(--accent-emerald);
+  color: var(--bg-primary);
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+}
+
+.viewAllButton:hover {
+  background: var(--accent-emerald-dark);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .featuredWorkers {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .grid {
+    gap: 0.9rem;
+  }
+}
+
+/* Light theme: subtle section background and more card separation */
+:global([data-theme="light"]) :local(.featuredWorkers) {
+  background-color: transparent;
+  padding: 2rem 1rem;
+}
+
+:global([data-theme="light"]) :local(.viewAllButton) {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Slightly increase grid gap and add subtle section padding on light theme for separation */
+:global([data-theme="light"]) :local(.grid) {
+  gap: 1.6rem;
+}
+
+:global([data-theme="light"]) :local(.featuredWorkers) {
+  padding-bottom: 2.5rem;
+}

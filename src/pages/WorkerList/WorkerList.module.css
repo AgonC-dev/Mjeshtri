@@ -166,6 +166,22 @@
   }
 }
 
+/* Light theme: slightly more gap and subtle section padding for clearer card separation */
+:global([data-theme="light"]) :local(.grid) {
+  gap: 2.2rem;
+}
+
+:global([data-theme="light"]) :local(.debugInfo) {
+  border: 1px solid
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.08
+    );
+  background-color: rgba(var(--white-r), var(--white-g), var(--white-b), 0.02);
+}
+
 @media (max-width: 768px) {
   .debugInfo {
     padding: 0.85rem 1rem;

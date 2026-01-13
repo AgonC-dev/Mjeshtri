@@ -30,8 +30,8 @@ function WorkerList() {
 
   // Fetching data with TanStack Query
   const { data: allWorkers, isLoading, isFetching } = useQuery({
-    queryKey: ['workers', selectedCity, selectedCategory, debouncedSearchQuery],
-    queryFn: () => fetchUsers(selectedCity, selectedCategory, debouncedSearchQuery),
+    queryKey: ['workers', selectedCity, selectedCategory],
+    queryFn: () => fetchUsers(selectedCity, selectedCategory),
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 5,
   })
@@ -78,7 +78,7 @@ function WorkerList() {
     return allWorkers.filter((worker) => {
       const matchesCity = selectedCity === 'Të gjitha' || worker.city === selectedCity
       const matchesCategory = selectedCategory === 'Të gjitha' || worker.category === selectedCategory
-      const matchesPrice = (maxPrice === 0) || (worker.startingPrice >= minPrice && worker.startingPrice <= maxPrice)
+      // const matchesPrice = (maxPrice === 0) || (worker.startingPrice >= minPrice && worker.startingPrice <= maxPrice)
       
       const searchStr = debouncedSearchQuery.toLowerCase()
       const matchesSearch = !searchStr || 
@@ -86,7 +86,7 @@ function WorkerList() {
         worker.category?.toLowerCase().includes(searchStr) ||
         worker.city?.toLowerCase().includes(searchStr)
 
-      return matchesCity && matchesCategory && matchesPrice && matchesSearch
+      return matchesCity && matchesCategory  && matchesSearch
     })
   }, [allWorkers, debouncedSearchQuery, selectedCity, selectedCategory, minPrice, maxPrice])
 

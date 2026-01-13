@@ -5,7 +5,7 @@ import { db } from "./firebase";
 // your firebase config
 
 
-export async function fetchUsers(city, category, searchQuery) { // Added searchQuery here
+export async function fetchUsers(city, category) { 
   try {
     const workersRef = collection(db, "workers");
     let constraints = [where("isActive", "==", true)];
@@ -18,28 +18,23 @@ export async function fetchUsers(city, category, searchQuery) { // Added searchQ
       constraints.push(where("category", "==", category));
     }
 
-    // NEW: Search Filter in Backend
-    if (searchQuery && searchQuery.trim() !== '') {
-      // This is the Firestore trick for "Starts With"
-      constraints.push(where("fullName", ">=", searchQuery));
-      constraints.push(where("fullName", "<=", searchQuery + '\uf8ff'));
-    }
-
+    // Remove the searchQuery constraints from here
+    // Keep ordering so the list is consistent
     constraints.push(orderBy("fullName", "asc"));
-    constraints.push(limit(40));
+    constraints.push(limit(100)); // Increase limit slightly to allow frontend filtering
 
     const q = query(workersRef, ...constraints);
     const querySnapshot = await getDocs(q);
     
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
-    console.error("Firebase Search Error:", error);
+    console.error("Firebase Fetch Error:", error);
     return []; 
   }
 }
 
-export async function fetchWorkerDetails(id) {
-    const docRef = doc(db, "workers", id);
-    const docSnap = await getDoc(docRef);
-    return { id: docSnap.id, ...docSnap.data() };
-}
+// export async function fetchWorkerDetails(id) {
+//     const docRef = doc(db, "workers", id);
+//     const docSnap = await getDoc(docRef);
+//     return { id: docSnap.id, ...docSnap.data() };
+// }
