@@ -46,7 +46,7 @@ const navigate = useNavigate();
         <div className={styles.priceContainer}>
           <span className={styles.priceLabel}>Prej:</span>
           <span className={styles.priceAmount}>
-            {worker.startingPrice != null
+            {worker.startingPrice != null && worker.startingPrice !== 0
              ? `${worker.startingPrice}€`
               : 'Me marrëveshje'}
         </span>
