@@ -257,7 +257,7 @@ function Dashboard() {
     value={form.phoneNumber}
     onChange={handlePhoneNum}
     containerClass={styles.phoneContainer}
-    inputClass={styles.phoneInput}
+    inputClass={styles.PhoneInput}
     buttonClass={styles.phoneButton}
     dropdownClass={styles.phoneDropdown}
     // This allows the library to use your custom CSS classes
@@ -320,51 +320,65 @@ function Dashboard() {
             </button>
           </div>
 
-          <div className={styles.col}>
-            <label className={styles.label}>Foto Profili</label>
-            <div className={styles.profilePreview}>
-               {profileFile ? (
-                <img 
-                  src={URL.createObjectURL(profileFile)} 
-                  alt="preview" 
-                  className={styles.profile} 
-                />
-               ) : form.profileUrl ? (
-    /* Otherwise, show the one from Firebase */
-                 <img src={form.profileUrl} alt="profile" className={styles.profile}/>
-                 ) : (
-                 <div className={styles.avatarPlaceholder}>Foto</div>
-                )}
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleProfileSelect}
-              className={styles.fileInput}
-            />
-            <button onClick={handleDeleteProfile} type="button" className={styles.deleteBtn}>Fshi Profilin</button>
-       
-            <label className={styles.label}>Portofoli</label>
-            <div className={styles.portfolioGrid}>
-              {(form.portfolio || []).map((url, i) => (
-                <div key={i} className={styles.portItem}>
-                  <img src={url} alt={`pf-${i}`} />
-                </div>
-              ))}
-              {portfolioFiles.map((f, i) => (
-                <div key={`new-${i}`} className={styles.portItem}>
-                  <img src={URL.createObjectURL(f)} alt={`new-${i}`} />
-                </div>
-              ))}
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handlePortfolioSelect}
-              className={styles.fileInput}
-            />
-          </div>
+           <div className={styles.col}>
+  <label className={styles.label}>Foto Profili</label>
+  <div className={styles.profilePreview}>
+    {profileFile ? (
+      <img 
+        src={URL.createObjectURL(profileFile)} 
+        alt="preview" 
+        className={styles.profile} 
+      />
+    ) : form.profileUrl ? (
+      <img src={form.profileUrl} alt="profile" className={styles.profile}/>
+    ) : (
+      <div className={styles.avatarPlaceholder}>Foto</div>
+    )}
+  </div>
+
+  {/* PROFILE UPLOAD */}
+  <input
+    type="file"
+    id="profile-upload"
+    accept="image/*"
+    onChange={handleProfileSelect}
+    className={styles.hiddenInput} 
+  />
+  <label htmlFor="profile-upload" className={styles.customUploadBtn}>
+    NGARKO FOTO
+  </label>
+
+  <button onClick={handleDeleteProfile} type="button" className={styles.deleteBtn}>
+    Fshi Profilin
+  </button>
+
+  <label className={styles.label}>Portofoli</label>
+  <div className={styles.portfolioGrid}>
+    {(form.portfolio || []).map((url, i) => (
+      <div key={i} className={styles.portItem}>
+        <img src={url} alt={`pf-${i}`} />
+      </div>
+    ))}
+    {portfolioFiles.map((f, i) => (
+      <div key={`new-${i}`} className={styles.portItem}>
+        <img src={URL.createObjectURL(f)} alt={`new-${i}`} />
+      </div>
+    ))}
+  </div>
+
+  {/* PORTFOLIO UPLOAD */}
+  <input
+    type="file"
+    id="portfolio-upload"
+    accept="image/*"
+    multiple
+    onChange={handlePortfolioSelect}
+    className={styles.hiddenInput}
+  />
+  <label htmlFor="portfolio-upload" className={styles.customUploadBtn}>
+    NGARKO FOTOT
+  </label>
+</div>
         </div>
       </form>
 

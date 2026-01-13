@@ -12,9 +12,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
+  text-align: left;
 }
 
-/* Glassmorphism Container */
+/* ===================== FORM ===================== */
+
 .form {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
@@ -30,7 +32,12 @@
   gap: 3rem;
 }
 
-/* Inputs & Labels */
+.col {
+  min-width: 0;
+}
+
+/* ===================== INPUTS ===================== */
+
 .label {
   display: block;
   color: #a0a0a0;
@@ -43,42 +50,76 @@
 .input,
 .textarea {
   width: 100%;
-
   padding: 1rem;
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.15
-    );
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
   border-radius: 12px;
   color: white;
-  transition: all 0.3s ease;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
   border-color: var(--accent-emerald);
-  background: rgba(
-    var(--accent-emerald-r),
-    var(--accent-emerald-g),
-    var(--accent-emerald-b),
-    0.05
-  );
-  box-shadow: 0 0 15px
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.1
-    );
-  animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05);
+  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+  animation: reveal 0.45s ease;
 }
 
-/* Buttons */
+/* ===================== PHONE INPUT INTEGRATION ===================== */
+
+.phoneContainer {
+  width: 100% !important;
+  border: none !important;
+}
+
+.PhoneInput {
+  width: 100% !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15) !important;
+  border-radius: 12px !important;
+  color: white !important;
+  padding: 1rem !important;
+  padding-left: 48px !important;
+  font-size: 1rem !important;
+  font-family: inherit !important;
+  height: auto !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.PhoneInput:focus {
+  outline: none !important;
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15) !important;
+}
+
+.phoneButton {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 12px 0 0 12px !important;
+  width: 40px !important;
+}
+
+.phoneButton:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.phoneDropdown {
+  background: #121212 !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  border-radius: 8px !important;
+}
+
+.phoneDropdown li:hover {
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2) !important;
+}
+
+/* ===================== BUTTONS ===================== */
+
 .saveButton {
   width: 100%;
   margin-top: 2.5rem;
@@ -90,12 +131,19 @@
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .saveButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.45);
+}
+
+.proRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
 .proButton {
@@ -106,161 +154,101 @@
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Profile & Portfolio */
-
-.portfolioGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
-}
-
-.portItem {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s;
-}
-
-.portItem:hover {
-  transform: scale(1.05);
-  border-color: var(--accent-emerald);
-}
-.status {
-  margin-bottom: 2rem;
-  padding: 1rem 1.5rem;
-
-  /* Modern Glass Look */
-  background: rgba(0, 255, 133, 0.08);
-  backdrop-filter: blur(8px);
-
-  /* Emerald Border & Glow */
-  border: 1px solid rgba(0, 255, 133, 0.3);
-  border-left: 5px solid var(--accent-emerald);
-  color: #e0e0e0;
-
-  border-radius: 12px;
-  font-weight: 500;
-  font-size: 0.95rem;
-
-  /* Animation to make it pop */
-  animation: slideDown 0.4s ease-out;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Adding a small checkmark icon via CSS before the text */
-.status::before {
-  content: "✓";
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.proButton:hover {
   background: var(--accent-emerald);
   color: #04110a;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  font-size: 0.7rem;
-  font-weight: 900;
 }
 
-/* --- Animation Rich File Inputs --- */
+/* ===================== FILE INPUT (NO TEXT) ===================== */
 
-/* Hide the default text/button while keeping it functional */
 .fileInput {
   width: 100%;
   margin-top: 10px;
-  cursor: pointer;
-  color: #a0a0a0;
   font-size: 0.8rem;
+  color: transparent; /* This hides the "Choose File" text */
+  cursor: pointer;
 }
 
-/* Custom styling for the "Choose File" button part of the input */
+/* Style for the actual button part of the input */
+.fileInput::file-selector-button {
+  background: rgba(0, 255, 133, 0.1);
+  border: 1px solid rgba(0, 255, 133, 0.3);
+  border-radius: 8px;
+  color: var(--accent-emerald);
+  padding: 10px 16px;
+  margin-right: 0;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%; /* Makes the button fill the width like your other buttons */
+  transition: all 0.3s ease;
+}
+
 .fileInput::-webkit-file-upload-button {
   background: rgba(0, 255, 133, 0.1);
   border: 1px solid rgba(0, 255, 133, 0.3);
   border-radius: 8px;
   color: var(--accent-emerald);
-  padding: 8px 16px;
-  margin-right: 12px;
+  padding: 10px 16px;
   cursor: pointer;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  width: 100%;
+  transition: all 0.3s ease;
 }
 
-.fileInput:hover::-webkit-file-upload-button {
-  background: var(--accent-emerald);
-  color: #04110a;
-  box-shadow: 0 0 20px rgba(0, 255, 133, 0.4);
-  transform: translateY(-2px);
+.fileInput::file-selector-button:hover,
+.fileInput::-webkit-file-upload-button:hover {
+  background: rgba(0, 255, 133, 0.25);
+  border-color: var(--accent-emerald);
 }
 
-/* --- Profile Preview Animation --- */
+/* ===================== PROFILE ===================== */
+
 .profilePreview {
   width: 180px;
   height: 180px;
   border-radius: 24px;
   border: 3px dashed rgba(0, 255, 133, 0.2);
   padding: 5px;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  position: relative;
-  transition: all 0.5s ease;
-  background: rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.profilePreview img {
-  object-fit: cover;
-  object-position: center;
-}
-
-/* Bouncing border animation when empty */
-.avatarPlaceholder {
-  color: var(--accent-emerald);
-  font-weight: 700;
-  animation: breathe 3s infinite ease-in-out;
-}
-
-.profilePreview:hover {
-  border-color: var(--accent-emerald);
-  transform: scale(1.02) rotate(1deg);
-  box-shadow: 0 0 30px rgba(0, 255, 133, 0.15);
-}
-
-.profilePreview img {
+.profile {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 18px;
-  animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* --- Portfolio Grid Animations --- */
+.avatarPlaceholder {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ===================== PORTFOLIO ===================== */
+
+.portfolioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
 .portItem {
-  position: relative;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.3);
-  animation: popIn 0.4s ease-out backwards;
-}
-
-/* Staggered animation for grid items */
-.portItem:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.portItem:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.portItem:nth-child(3) {
-  animation-delay: 0.3s;
+  position: relative;
+  animation: popIn 0.35s ease backwards;
 }
 
 .portItem img {
@@ -271,135 +259,127 @@
 }
 
 .portItem:hover img {
-  transform: scale(1.2);
+  transform: scale(1.18);
 }
 
-/* Green glow overlay on hover */
-.portItem::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 255, 133, 0.3), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+/* ===================== STATUS ===================== */
+
+.status {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-left: 5px solid var(--accent-emerald);
+  background: rgba(0, 255, 133, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.portItem:hover::after {
-  opacity: 1;
+.status::before {
+  content: "✓";
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  color: #04110a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
 }
+
+/* ===================== DELETE BUTTON ===================== */
+
 .deleteBtn {
-  background-color: rgba(255, 68, 68, 0.1); /* Subtle red tint */
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(255, 68, 68, 0.1);
   color: #ff4444;
   border: 1px solid rgba(255, 68, 68, 0.3);
   padding: 10px 20px;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 10px;
-  width: 100%;
+  transition: all 0.25s ease;
+  margin-bottom: 1.5rem;
 }
 
 .deleteBtn:hover {
-  background-color: #ff4444;
+  background: #ff4444;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+  box-shadow: 0 6px 18px rgba(255, 68, 68, 0.45);
 }
 
-.deleteBtn:active {
-  transform: scale(0.95); /* Shrink effect on click */
+/* This hides the ugly default browser "Choose File" input completely */
+.hiddenInput {
+  display: none;
 }
 
-/* Optional: Add a shake animation if the user tries to save without a photo */
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
+/* This styles the Label to look exactly like your emerald buttons */
+.customUploadBtn {
+  display: block;
+  width: 100%;
+  background: rgba(0, 255, 133, 0.1);
+  border: 1px solid rgba(0, 255, 133, 0.3);
+  border-radius: 12px;
+  color: var(--accent-emerald);
+  padding: 10px 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
-.deleteBtn:focus {
-  outline: none;
-  border-color: #ff4444;
+.customUploadBtn:hover {
+  background: rgba(0, 255, 133, 0.25);
+  border-color: var(--accent-emerald);
+  transform: translateY(-2px);
 }
 
-/* --- Keyframes --- */
+/* ===================== ANIMATIONS ===================== */
+
 @keyframes reveal {
-  from {
-    opacity: 0;
-    transform: scale(0.8) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes popIn {
-  from {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes breathe {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-}
+/* ===================== RESPONSIVE ===================== */
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Reviews */
-.reviewCard {
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 4px solid var(--accent-emerald);
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  border-radius: 0 12px 12px 0;
+@media (max-width: 1024px) {
+  .row { gap: 2rem; }
 }
 
 @media (max-width: 900px) {
-  .row {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  .row { grid-template-columns: 1fr; }
+  .col:nth-child(2) {
+    order: -1;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
   }
-  .form {
-    padding: 1.5rem;
-  }
+  .title { text-align: center; font-size: 2rem; }
+}
+
+@media (max-width: 600px) {
+  .wrap { padding: 0 15px; margin: 1.5rem auto; }
+  .form { padding: 1.5rem; }
+  .profilePreview { width: 150px; height: 150px; }
+  .proRow { flex-direction: column; align-items: stretch; }
+  .proButton { width: 100%; }
+  .saveButton { font-size: 1.1rem; }
+}
+
+@media (max-width: 380px) {
+  .portfolioGrid { grid-template-columns: repeat(2, 1fr); }
 }
