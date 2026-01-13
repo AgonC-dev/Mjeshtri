@@ -37,7 +37,13 @@
   background-color: var(--accent-emerald);
   border-radius: 50%;
   border: 3px solid var(--bg-secondary);
-  box-shadow: 0 0 10px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6);
+  box-shadow: 0 0 10px
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.6
+    );
 }
 
 .info {
@@ -94,7 +100,13 @@
   border-radius: var(--border-radius);
   text-align: center;
   box-shadow: var(--shadow-soft);
-  border: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+  border: 2px solid
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.1
+    );
 }
 
 .statValue {
@@ -142,7 +154,7 @@
 }
 
 .backButton:hover {
-  background-color: #00CC6A;
+  background-color: var(--accent-emerald-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
 }
@@ -150,7 +162,8 @@
 .bio {
   margin: 1.9rem 0 2.5rem 0; /* Reduced top margin to keep it close to info */
   padding-left: 1.5rem;
-  border-left: 2px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1); /* Subtle grayish line */
+  border-left: 2px solid
+    rgba(var(--white-r), var(--white-g), var(--white-b), 0.1); /* Subtle grayish line */
   max-width: 800px; /* Prevents text from stretching too wide on desktop */
 }
 
@@ -191,28 +204,35 @@
 /* Bigger Image Container */
 .portfolioItem {
   /* This makes the items start at 400px wide and grow to fill space */
-  flex: 1 1 400px; 
+  flex: 1 1 400px;
   max-width: 450px; /* Prevents it from getting TOO huge on massive screens */
   height: 300px;
   border-radius: 12px;
   overflow: hidden;
-  border: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
-  
-  box-shadow: 0 4px 12px rgba(var(--black-r), var(--black-g), var(--black-b), 0.08);
+  border: 2px solid
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.1
+    );
+
+  box-shadow: 0 4px 12px
+    rgba(var(--black-r), var(--black-g), var(--black-b), 0.08);
   transition: transform 0.3s ease;
 }
 
 .portfolioItem:hover {
   transform: scale(1.02); /* Slight pop effect on hover */
-  border-color: var(--accent-emerald);  /* Border turns green on hover */
+  border-color: var(--accent-emerald); /* Border turns green on hover */
 }
 
 /* The actual image */
 .portfolioImage {
   width: 100%;
-  height: 100%;      /* Keeps the original uploaded proportions */
+  height: 100%; /* Keeps the original uploaded proportions */
   display: block;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 /* Mobile: On small screens, let them take full width */

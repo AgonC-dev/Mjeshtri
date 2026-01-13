@@ -7,11 +7,13 @@
   justify-content: center;
   overflow: hidden;
   position: relative;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* --- Animated Background Blobs --- */
-.blob1, .blob2, .blob3 {
+.blob1,
+.blob2,
+.blob3 {
   position: absolute;
   filter: blur(80px);
   border-radius: 50%;
@@ -31,7 +33,7 @@
 .blob2 {
   width: 350px;
   height: 350px;
-  background: #00cc6a;
+  background: var(--accent-emerald-dark);
   bottom: -5%;
   right: -5%;
   animation-delay: -5s;
@@ -47,8 +49,12 @@
 }
 
 @keyframes moveAround {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(100px, 50px) scale(1.2); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(100px, 50px) scale(1.2);
+  }
 }
 
 /* --- Glassmorphism Card --- */
@@ -87,7 +93,12 @@
   transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
-  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
+  background: rgba(
+    var(--accent-emerald-r),
+    var(--accent-emerald-g),
+    var(--accent-emerald-b),
+    0.2
+  );
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
@@ -113,7 +124,8 @@
 }
 
 @keyframes smoothWave {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate3d(0, 0, 0);
   }
   50% {
@@ -155,7 +167,11 @@
 .progressFill {
   width: 30%;
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-emerald), #00ff85);
+  background: linear-gradient(
+    90deg,
+    var(--accent-emerald),
+    var(--accent-emerald-dark)
+  );
   border-radius: 10px;
   animation: loadingAnim 2.5s infinite ease-in-out;
 }
@@ -175,26 +191,56 @@
 
 /* --- Animations --- */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes pulse {
-  0% { width: 80px; height: 80px; opacity: 1; }
-  100% { width: 180px; height: 180px; opacity: 0; }
+  0% {
+    width: 80px;
+    height: 80px;
+    opacity: 1;
+  }
+  100% {
+    width: 180px;
+    height: 180px;
+    opacity: 0;
+  }
 }
 
 @keyframes titleBounce {
-  to { transform: translateY(-10px); color: var(--accent-emerald); }
+  to {
+    transform: translateY(-10px);
+    color: var(--accent-emerald);
+  }
 }
 
 @keyframes loadingAnim {
-  0% { transform: translateX(-100%); width: 20%; }
-  50% { width: 50%; }
-  100% { transform: translateX(400%); width: 20%; }
+  0% {
+    transform: translateX(-100%);
+    width: 20%;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    transform: translateX(400%);
+    width: 20%;
+  }
 }

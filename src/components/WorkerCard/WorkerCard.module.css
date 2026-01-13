@@ -125,3 +125,59 @@
     font-size: 1.1rem;
   }
 }
+
+/* Smaller, tighter cards on small phones */
+@media (max-width: 480px) {
+  .card {
+    border-radius: 10px;
+  }
+
+  .imageContainer {
+    padding-top: 66%; /* shorter image to reduce card height */
+  }
+
+  .content {
+    padding: 0.9rem;
+  }
+
+  .name {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .category {
+    font-size: 0.85rem;
+  }
+
+  .priceAmount {
+    font-size: 1rem;
+  }
+
+  .rating {
+    margin-bottom: 0.6rem;
+  }
+
+  .buttonContainer {
+    margin-top: 0.6rem;
+  }
+}
+
+/* Light theme overrides: ensure readable (black) text on light cards */
+:global([data-theme="light"]) :local(.card) :local(.content) {
+  color: #000000;
+}
+
+:global([data-theme="light"]) :local(.card) :local(.name),
+:global([data-theme="light"]) :local(.card) :local(.priceAmount),
+:global([data-theme="light"]) :local(.card) :local(.ratingValue),
+:global([data-theme="light"]) :local(.card) :local(.city),
+:global([data-theme="light"]) :local(.card) :local(.priceLabel) {
+  color: #000000;
+}
+
+/* Light theme: make card background slightly darker than page and add subtle border */
+:global([data-theme="light"]) :local(.card) {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-soft);
+}

@@ -7,14 +7,14 @@
 :root {
   /* Dark Theme Colors */
   --bg-primary: #121212;
-  --bg-secondary: #1A1A1A;
+  --bg-secondary: #1a1a1a;
   --bg-black: #000000;
-  --accent-emerald: #00FF85;
+  --accent-emerald: #00ff85;
   --accent-emerald-r: 0;
   --accent-emerald-g: 255;
   --accent-emerald-b: 133;
-  --text-off-white: #E0E0E0;
-  --text-muted: #A0A0A0;
+  --text-off-white: #e0e0e0;
+  --text-muted: #a0a0a0;
   --text-white: #ffffff;
   --accent-red: #ff4d4d;
   --accent-red-r: 255;
@@ -30,6 +30,9 @@
   --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.4);
   --bg-dropdown: #1a1a1a;
+  --card-bg: var(--bg-secondary);
+  --card-border: rgba(0, 0, 0, 0.12);
+  --accent-emerald-dark: #00cc6a;
 }
 
 [data-theme="light"] {
@@ -37,10 +40,13 @@
   --bg-primary: #e9ecef; /* Darker gray for primary background */
   --bg-secondary: #f8f9fa; /* Slightly off-white for secondary */
   --bg-black: #495057; /* Dark gray for accents */
-  --accent-emerald: #00FF85;
+  --accent-emerald: #00b36a; /* slightly darker emerald for better contrast */
   --accent-emerald-r: 0;
-  --accent-emerald-g: 255;
-  --accent-emerald-b: 133;
+  --accent-emerald-g: 179;
+  --accent-emerald-b: 106;
+  --accent-emerald-dark: #00995a;
+  --card-bg: #e3e7ea; /* cards slightly darker than body */
+  --card-border: rgba(0, 0, 0, 0.06);
   --text-off-white: #212529; /* Dark text for readability */
   --text-muted: #6c757d; /* Muted text */
   --text-white: #ffffff;
@@ -61,8 +67,8 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -70,6 +76,13 @@ body {
   color: var(--text-off-white);
   line-height: 1.6;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Prevent accidental horizontal scrolling on small devices */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 #root {
@@ -87,6 +100,8 @@ button {
   font-family: inherit;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
 }

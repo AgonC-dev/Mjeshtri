@@ -2,7 +2,7 @@
   max-width: 1200px;
   margin: 3rem auto;
   padding: 0 24px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .title {
@@ -22,7 +22,6 @@
   padding: 2.5rem;
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  
 }
 
 .row {
@@ -41,22 +40,41 @@
   margin: 1.5rem 0 0.5rem;
 }
 
-.input, .textarea {
+.input,
+.textarea {
   width: 100%;
-  
+
   padding: 1rem;
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 255, 133, 0.15);
+  border: 1px solid
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.15
+    );
   border-radius: 12px;
   color: white;
   transition: all 0.3s ease;
 }
 
-.input:focus, .textarea:focus {
+.input:focus,
+.textarea:focus {
   outline: none;
   border-color: var(--accent-emerald);
-  background: rgba(0, 255, 133, 0.05);
-  box-shadow: 0 0 15px rgba(0, 255, 133, 0.1);
+  background: rgba(
+    var(--accent-emerald-r),
+    var(--accent-emerald-g),
+    var(--accent-emerald-b),
+    0.05
+  );
+  box-shadow: 0 0 15px
+    rgba(
+      var(--accent-emerald-r),
+      var(--accent-emerald-g),
+      var(--accent-emerald-b),
+      0.1
+    );
   animation: reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -92,7 +110,6 @@
 
 /* Profile & Portfolio */
 
-
 .portfolioGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -112,20 +129,20 @@
 .status {
   margin-bottom: 2rem;
   padding: 1rem 1.5rem;
-  
+
   /* Modern Glass Look */
   background: rgba(0, 255, 133, 0.08);
   backdrop-filter: blur(8px);
-  
+
   /* Emerald Border & Glow */
   border: 1px solid rgba(0, 255, 133, 0.3);
   border-left: 5px solid var(--accent-emerald);
   color: #e0e0e0;
-  
+
   border-radius: 12px;
   font-weight: 500;
   font-size: 0.95rem;
-  
+
   /* Animation to make it pop */
   animation: slideDown 0.4s ease-out;
   display: flex;
@@ -135,7 +152,7 @@
 
 /* Adding a small checkmark icon via CSS before the text */
 .status::before {
-  content: '✓';
+  content: "✓";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,8 +164,6 @@
   font-size: 0.7rem;
   font-weight: 900;
 }
-
-
 
 /* --- Animation Rich File Inputs --- */
 
@@ -238,9 +253,15 @@
 }
 
 /* Staggered animation for grid items */
-.portItem:nth-child(1) { animation-delay: 0.1s; }
-.portItem:nth-child(2) { animation-delay: 0.2s; }
-.portItem:nth-child(3) { animation-delay: 0.3s; }
+.portItem:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.portItem:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.portItem:nth-child(3) {
+  animation-delay: 0.3s;
+}
 
 .portItem img {
   width: 100%;
@@ -255,7 +276,7 @@
 
 /* Green glow overlay on hover */
 .portItem::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0, 255, 133, 0.3), transparent);
@@ -296,11 +317,21 @@
 
 /* Optional: Add a shake animation if the user tries to save without a photo */
 @keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .deleteBtn:focus {
@@ -310,18 +341,37 @@
 
 /* --- Keyframes --- */
 @keyframes reveal {
-  from { opacity: 0; transform: scale(0.8) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes breathe {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes slideDown {
@@ -345,6 +395,11 @@
 }
 
 @media (max-width: 900px) {
-  .row { grid-template-columns: 1fr; gap: 2rem; }
-  .form { padding: 1.5rem; }
+  .row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .form {
+    padding: 1.5rem;
+  }
 }
