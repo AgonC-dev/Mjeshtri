@@ -77,7 +77,10 @@ function WorkerList() {
     
     return allWorkers.filter((worker) => {
       const matchesCity = selectedCity === 'Të gjitha' || worker.city === selectedCity
-      const matchesCategory = selectedCategory === 'Të gjitha' || worker.category === selectedCategory
+      const matchesCategory =
+       !selectedCategory?.trim() ||
+        selectedCategory === 'Të gjitha' ||
+        worker.category === selectedCategory
       // const matchesPrice = (maxPrice === 0) || (worker.startingPrice >= minPrice && worker.startingPrice <= maxPrice)
       
       const searchStr = debouncedSearchQuery.toLowerCase()

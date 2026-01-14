@@ -73,6 +73,145 @@
   -moz-appearance: textfield;
 }
 
+.sidebar {
+  background-color: var(--bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-card);
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  transition: all 0.3s ease;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 1.5rem;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Base style for Inputs, Selects, and Autocomplete trigger */
+.input, .select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-primary); /* Tinted look */
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.input:focus {
+  border-color: var(--accent-emerald);
+  background-color: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+}
+
+/* Autocomplete Specifics */
+.autocomplete {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdownToggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.dropdownToggle:hover {
+  color: var(--accent-emerald);
+}
+
+/* Suggestion List (The Popover) */
+.suggestionList {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background-color: var(--bg-dropdown);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-medium);
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.suggestionItem {
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--text-off-white);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.suggestionItem:hover {
+  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+  color: var(--accent-emerald);
+  padding-left: 18px;
+}
+
+/* Custom Scrollbar for the Suggestion List */
+.suggestionList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestionList::-webkit-scrollbar-thumb {
+  background-color: var(--card-border);
+  border-radius: 10px;
+}
+
+/* Handling the 'select' arrow for the City dropdown */
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0a0a0'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+/* Responsive adjustments */
+
 @media (max-width: 1024px) {
   .sidebar {
     position: static;

@@ -5,33 +5,40 @@ import { db } from "./firebase";
 // your firebase config
 
 
-export async function fetchUsers(city, category) { 
+export async function fetchUsers(city, category) {
   try {
-    const workersRef = collection(db, "workers");
-    let constraints = [where("isActive", "==", true)];
+    const normalizedCategory =
+      !category?.trim() || category === 'Të gjitha'
+        ? null
+        : category
+
+    const workersRef = collection(db, "workers")
+    let constraints = [where("isActive", "==", true)]
 
     if (city && city !== 'Të gjitha') {
-      constraints.push(where("city", "==", city));
+      constraints.push(where("city", "==", city))
     }
 
-    if (category && category !== 'Të gjitha') {
-      constraints.push(where("category", "==", category));
+    if (normalizedCategory) {
+      constraints.push(where("category", "==", normalizedCategory))
     }
 
-    // Remove the searchQuery constraints from here
-    // Keep ordering so the list is consistent
-    constraints.push(orderBy("fullName", "asc"));
-    constraints.push(limit(100)); // Increase limit slightly to allow frontend filtering
+    constraints.push(orderBy("fullName", "asc"))
+    constraints.push(limit(100))
 
-    const q = query(workersRef, ...constraints);
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const q = query(workersRef, ...constraints)
+    const querySnapshot = await getDocs(q)
+
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
   } catch (error) {
-    console.error("Firebase Fetch Error:", error);
-    return []; 
+    console.error("Firebase Fetch Error:", error)
+    return []
   }
 }
+
 
 // export async function fetchWorkerDetails(id) {
 //     const docRef = doc(db, "workers", id);
