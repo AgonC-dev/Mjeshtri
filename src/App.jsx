@@ -12,12 +12,13 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import styles from "./App.module.css";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import Maintenance from "./pages/Maintenance/Maintenance";
+import UserProfile from './pages/ViewProfile/UserProfile';
 
 const queryClient = new QueryClient();
 
 function App() {
 
- const MAINTENANCE = true;
+ const MAINTENANCE = false ;
 
  if (MAINTENANCE) {
     return <Maintenance />
@@ -32,11 +33,12 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/workers" element={<WorkerList />} />
-              <Route path="/worker/:fullName" element={<WorkerProfile />} />
+              <Route path="/worker/:id" element={<WorkerProfile />} />
               <Route path="/register" element={<WorkerRegister />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/settings" element={<ProfileSettings />} />
+               <Route path="/profile" element={<UserProfile />} />
             </Routes>
           </main>
           <Footer />

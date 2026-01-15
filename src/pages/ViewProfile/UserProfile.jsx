@@ -1,48 +1,84 @@
-import { collection, query, where, getDoc } from 'firebase/firestore';
-import { db } from "../../api/firebase.js";
+import { getDoc, doc } from 'firebase/firestore';
+import { db, auth } from "../../api/firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import WhatsAppButton from '../../components/WhatsAppButton/WhatsAppButton'
-import styles from './WorkerProfile.module.css'
+import styles from './UserProfile.module.css'
 import { useEffect, useState } from 'react';
+import Loading from '../../components/Loading/Loading.jsx';
 
 // Mock data - in a real app, this would come from an API
 
-function WorkerProfile() {
-  const { id } = useParams()
+function UserProfile() {
+const { id: urlId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); // Used to catch passed state
   
-  const [worker, setWorker] = useState(location.state.workerData || null)
+  const [worker, setWorker] = useState(location.state?.workerData || null);
   const [loading, setLoading] = useState(!worker);
+  const [error, setError] = useState('');
+  
 
-  useEffect(() => {
-  window.scroll(0, 0);
+useEffect(() => {
+const unsub = onAuthStateChanged(auth, (currentUser) => {
+    const activeID = urlId || currentUser?.uid
 
-     if (!worker) {
-      const fetchWorkerById = async () => {
-        setLoading(true);
-        try {
-          const docRef = doc(db, "workers", id); 
-          const docSnap = await getDoc(docRef);
-         
-         if (docSnap.exists()) {
-            setWorker(docSnap.data());
-          }
-
-        } catch (err) {
-          console.error("Error fetching worker:", err);
-        } finally {
-          setLoading(false)
+    if(!activeID) {
+        if(!urlId && !location.state?.workerData) {
+            setLoading(false);
+            navigate('/login')
         }
-      }
-      
-      fetchWorkerById();
-  }
+        return;
+    }
 
-  },[id, worker])
+    const fetchWorkerById =  async () => {
+        try {
+            setLoading(true);
+            const docRef = doc(db, "workers", activeID);
+            const docSnap = await getDoc(docRef);
 
-  if (loading) return <div className={styles.loading}>Duke u ngarkuar...</div>;
+            if(docSnap) {
+                setWorker(docSnap.data())
+            }
+        } catch (err) {
+            setError('Ups! Nuk mundëm të gjenim profilin e mjeshtrit. Sigurohuni që linku është i saktë.')
+        } finally {
+            setLoading(false);
+        }
+    } 
 
+    fetchWorkerById();
+});
+
+return () => unsub();
+
+}, [urlId]); // Only watch 'id'
+
+
+if (loading) {
+  return <Loading />
+}
+
+if (error) {
+  return (
+    <div className={styles.errorOverlay}>
+      <div className={styles.errorCard}>
+        {/* Using a simple SVG or Icon that matches the clean theme */}
+        <div style={{fontSize: '3rem'}}>🛠️</div> 
+        <h2 className={styles.errorTitle}>Lidhja dështoi</h2>
+        <p className={styles.errorText}>
+          Nuk mundëm të siguronim të dhënat e mjeshtrit për momentin. 
+          Ju lutem kontrolloni internetin ose provoni përsëri.
+        </p>
+        <button className={styles.refreshBtn} onClick={() => window.location.reload()}>
+          PROVO PËRSËRI
+        </button>
+      </div>
+    </div>
+  );
+}
+
+  
   if (!worker) {
     return (
       <div className={styles.notFound}>
@@ -76,7 +112,7 @@ function WorkerProfile() {
     <div className={styles.profile}>
       <div className={styles.header}>
         <div className={styles.imageContainer}>
-          <img src={worker.profilePic} alt={worker.name} className={styles.image} />
+          <img src={worker.profilePic || worker.profileUrl || 'https://via.placeholder.com/150'} alt={worker.name} className={styles.image} />
           <div className={styles.onlineBadge}></div>
         </div>
         <div className={styles.info}>
@@ -134,4 +170,4 @@ function WorkerProfile() {
   )
 }
 
-export default WorkerProfile
+export default UserProfile

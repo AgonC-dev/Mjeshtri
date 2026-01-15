@@ -76,14 +76,21 @@ const toggleTheme = () => {
           className={styles.dropdownItem}
           onClick={() => setShowDropDown(false)}
         >
-          Dashboard
+          Paneli
         </Link>
          <Link 
           to="/settings" 
           className={styles.dropdownItem}
           onClick={() => setShowDropDown(false)}
         >
-          Profile Settings
+          Cilësimet e Profilit
+        </Link>
+        <Link 
+         to="/profile"
+         className={styles.dropdownItem}
+         onClick={() => setShowDropDown(false)}
+        >
+          Shiko Profilin
         </Link>
         <button 
           onClick={() => {

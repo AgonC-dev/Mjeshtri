@@ -1,0 +1,104 @@
+/* --- LOADING ANIMATIONS --- */
+/* --- THEMED LOADING --- */
+.loaderWrapper {
+  height: 80vh; /* Keeps it centered but not overlapping nav if you have one */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent; /* Let the global body background show */
+}
+
+.pulseCircle {
+  width: 70px;
+  height: 70px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  position: relative;
+  /* Glowing effect using your theme's emerald */
+  box-shadow: 0 0 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
+  animation: themePulse 1.8s infinite ease-in-out;
+}
+
+@keyframes themePulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6); }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.shimmerText {
+  margin-top: 25px;
+  color: var(--text-off-white);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  /* Shimmer effect using your text colors */
+  background: linear-gradient(
+    90deg, 
+    var(--text-muted) 0%, 
+    var(--text-off-white) 50%, 
+    var(--text-muted) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: themeShimmer 2s linear infinite;
+}
+
+@keyframes themeShimmer {
+  to { background-position: 200% center; }
+}
+
+/* --- THEMED ERROR --- */
+.errorOverlay {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.errorCard {
+  background-color: var(--bg-secondary);
+  padding: 3rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  border: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
+  box-shadow: var(--shadow-soft);
+  max-width: 450px;
+  animation: popIn 0.4s cubic-bezier(0.26, 0.53, 0.74, 1.48);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.errorTitle {
+  color: var(--text-off-white);
+  font-size: 1.8rem;
+  margin: 1rem 0;
+}
+
+.errorText {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.refreshBtn {
+  background-color: transparent;
+  color: var(--accent-emerald);
+  border: 2px solid var(--accent-emerald);
+  padding: 0.8rem 2.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refreshBtn:hover {
+  background-color: var(--accent-emerald);
+  color: var(--bg-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+}

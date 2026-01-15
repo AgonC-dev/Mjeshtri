@@ -24,7 +24,7 @@ const navigate = useNavigate();
   }
 
   function handleNavigate() {
-      navigate(`/worker/${worker.fullName}`, {state: {workerData: worker}});
+      navigate(`/worker/${worker.id}`, {state: {workerData: worker}});
   }
 
   return (

@@ -15,6 +15,68 @@
   text-align: left;
 }
 
+/* ===================== STATUS MESSAGES ===================== */
+
+.status {
+  margin-bottom: 2rem;
+  padding: 1.2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  animation: reveal 0.3s ease-out;
+
+
+}
+
+/* Success Variant */
+.success {
+  background: rgba(0, 255, 133, 0.1);
+  border-left: 5px solid var(--accent-emerald);
+  color: #00ff85;
+}
+
+.success::before {
+  content: "✓";
+  background: var(--accent-emerald);
+  color: #04110a;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Error Variant */
+.error {
+  background: rgba(255, 68, 68, 0.1);
+  border-left: 5px solid #ff4444;
+  color: #ff4444;
+}
+
+.error::before {
+  content: "!";
+  background: #ff4444;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Pending/Loading Variant */
+.pending {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 5px solid #3498db;
+  color: #3498db;
+}
+
 /* ===================== FORM ===================== */
 
 .form {
@@ -36,8 +98,6 @@
   min-width: 0;
 }
 
-/* ===================== INPUTS ===================== */
-
 .label {
   display: block;
   color: #a0a0a0;
@@ -50,76 +110,57 @@
 .input,
 .textarea {
   width: 100%;
-   font-size: 16px;
+  font-size: 16px;
   padding: 1rem;
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+  border: 1px solid rgba(0, 255, 133, 0.15);
   border-radius: 12px;
   color: white;
   box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .input:focus,
 .textarea:focus {
   outline: none;
- 
   border-color: var(--accent-emerald);
-  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05);
-  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
-  animation: reveal 0.45s ease;
+  background: rgba(0, 255, 133, 0.05);
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.15);
 }
 
-/* ===================== PHONE INPUT INTEGRATION ===================== */
+/* ===================== PHONE INPUT ===================== */
 
 .phoneContainer {
   width: 100% !important;
-  border: none !important;
 }
 
 .PhoneInput {
   width: 100% !important;
-  background: rgba(0, 0, 0, 0.2) !important;
+  height: 52px !important;
+  background: rgba(var(--black-r), var(--black-g), var(--black-b), 0.2) !important;
   border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15) !important;
   border-radius: 12px !important;
-  color: white !important;
-  padding: 1rem !important;
-  padding-left: 48px !important;
-  font-size: 1rem !important;
-  font-family: inherit !important;
-  height: auto !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-}
-
-.PhoneInput:focus {
-  outline: none !important;
-  border-color: var(--accent-emerald) !important;
-  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15) !important;
+  color: var(--text-off-white) !important;
+  padding-left: 55px !important;
 }
 
 .phoneButton {
   background: transparent !important;
   border: none !important;
   border-radius: 12px 0 0 12px !important;
-  width: 40px !important;
 }
 
-.phoneButton:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-}
-
+/* The List and Flag Dropdown */
 .phoneDropdown {
-  background: #121212 !important;
-  color: white !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  background: var(--bg-dropdown) !important; /* Uses your white/black variable */
+  color: var(--text-off-white) !important;
+  border: 1px solid var(--card-border) !important;
   border-radius: 8px !important;
 }
 
-.phoneDropdown li:hover {
+.phoneDropdown .country:hover {
   background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2) !important;
 }
-
 /* ===================== BUTTONS ===================== */
 
 .saveButton {
@@ -131,14 +172,18 @@
   border-radius: 12px;
   border: none;
   font-weight: 700;
-  font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.saveButton:hover {
+.saveButton:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 255, 133, 0.45);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .proRow {
@@ -156,45 +201,27 @@
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.proButton:hover {
-  background: var(--accent-emerald);
-  color: #04110a;
-}
-
-/* ===================== FILE INPUT (NO TEXT) ===================== */
-
-
-/* ===================== PROFILE ===================== */
+/* ===================== PROFILE & PORTFOLIO ===================== */
 
 .profilePreview {
   width: 180px;
   height: 180px;
   border-radius: 24px;
   border: 3px dashed rgba(0, 255, 133, 0.2);
-  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  overflow: hidden;
 }
 
 .profile {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 18px;
 }
-
-.avatarPlaceholder {
-  color: var(--accent-emerald);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-/* ===================== PORTFOLIO ===================== */
 
 .portfolioGrid {
   display: grid;
@@ -207,7 +234,6 @@
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
-  position: relative;
   animation: popIn 0.35s ease backwards;
 }
 
@@ -215,69 +241,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-.portItem:hover img {
-  transform: scale(1.18);
-}
-
-/* ===================== STATUS ===================== */
-
-.status {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  border-left: 5px solid var(--accent-emerald);
-  background: rgba(0, 255, 133, 0.08);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.status::before {
-  content: "✓";
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent-emerald);
-  color: #04110a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-
-/* ===================== DELETE BUTTON ===================== */
-
-.deleteBtn {
-  width: 100%;
-  margin-top: 10px;
-  background: rgba(255, 68, 68, 0.1);
-  color: #ff4444;
-  border: 1px solid rgba(255, 68, 68, 0.3);
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  margin-bottom: 1.5rem;
-}
-
-.deleteBtn:hover {
-  background: #ff4444;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(255, 68, 68, 0.45);
-}
-
-/* This hides the ugly default browser "Choose File" input completely */
 .hiddenInput {
   display: none;
 }
 
-/* This styles the Label to look exactly like your emerald buttons */
 .customUploadBtn {
   display: block;
   width: 100%;
@@ -289,57 +258,214 @@
   margin-top: 10px;
   cursor: pointer;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   text-align: center;
   transition: all 0.3s ease;
-  box-sizing: border-box;
 }
 
 .customUploadBtn:hover {
   background: rgba(0, 255, 133, 0.25);
   border-color: var(--accent-emerald);
-  transform: translateY(-2px);
 }
+
+.deleteBtn {
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(255, 68, 68, 0.1);
+  color: #ff4444;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+}
+
+.deleteBtn:hover {
+  background: #ff4444;
+  color: white;
+}
+
+/* ===================== VIEW PROFILE BUTTON ===================== */
+
+.selfProfile {
+  width: 100%;
+  margin-top: 1rem; /* Space it away from the Save button */
+  background: transparent;
+  color: var(--text-off-white);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Add an icon effect via pseudo-element */
+.selfProfile::before {
+  content: "👁";
+  font-size: 1.1rem;
+  opacity: 0.7;
+}
+
+.selfProfile:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-emerald);
+  color: var(--accent-emerald);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.selfProfile:active {
+  transform: translateY(0);
+}
+
+/* The base state is hidden (pushed down) */
+/* --- STICKY FOOTER CONTAINER --- */
+.actionFooter {
+  position: fixed;
+  /* Start pushed down so it's hidden */
+  bottom: -120px; 
+  left: 0;
+  right: 0;
+  height: 90px;
+  /* Use secondary background with blur for that modern glass look */
+  background: var(--bg-secondary);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  
+  /* Semi-transparent border using your RGB variables */
+  border-top: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  
+  /* Smooth "Slide Up" transition */
+  transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 1.5rem;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Logic class to slide the footer up */
+.footerVisible {
+  bottom: 0 !important;
+}
+
+.footerContent {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+}
+
+.footerText {
+  color: var(--text-off-white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Add an icon or dot before the text for a professional touch */
+.footerText::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 10px var(--accent-emerald);
+}
+
+.footerRight {
+  display: flex;
+  gap: 1rem;
+}
+
+/* The primary Save button using your Emerald theme */
+.saveButtonSticky {
+  background-color: var(--accent-emerald);
+  color: #000; /* Dark text on bright background */
+  padding: 12px 28px;
+  border-radius: var(--border-radius);
+  border: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
+}
+
+.saveButtonSticky:hover:not(:disabled) {
+  background-color: var(--accent-emerald-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6);
+}
+
+.saveButtonSticky:disabled {
+  filter: grayscale(1);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE FIXES */
+
+
+/* On mobile, stack things or hide the text */
+
 
 /* ===================== ANIMATIONS ===================== */
 
 @keyframes reveal {
-  from { opacity: 0; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.7); }
+  from { opacity: 0; transform: scale(0.8); }
   to { opacity: 1; transform: scale(1); }
-}
-
-/* ===================== RESPONSIVE ===================== */
-
-@media (max-width: 1024px) {
-  .row { gap: 2rem; }
 }
 
 @media (max-width: 900px) {
   .row { grid-template-columns: 1fr; }
-  .col:nth-child(2) {
-    order: -1;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+  .col:nth-child(2) { order: -1; }
+}
+
+@media (max-width: 768px) {
+  .actionFooter {
+    height: auto;
+    padding: 1rem;
   }
-  .title { text-align: center; font-size: 2rem; }
-}
 
-@media (max-width: 600px) {
-  .wrap { padding: 0 15px; margin: 1.5rem auto; }
-  .form { padding: 1.5rem; }
-  .profilePreview { width: 150px; height: 150px; }
-  .proRow { flex-direction: column; align-items: stretch; }
-  .proButton { width: 100%; }
-  .saveButton { font-size: 1.1rem; }
-}
+  .footerText {
+    display: none; /* Hide text on mobile to save space */
+  }
 
-@media (max-width: 380px) {
-  .portfolioGrid { grid-template-columns: repeat(2, 1fr); }
+  .footerContent {
+    justify-content: center;
+  }
+
+  .footerRight {
+    width: 100%;
+    flex-direction: column-reverse; /* Put Save on top on mobile */
+    gap: 0.75rem;
+  }
+
+  .footerRight button {
+    width: 100%;
+    padding: 14px;
+  }
 }
