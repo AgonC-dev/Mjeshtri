@@ -7,6 +7,7 @@ const categories = [
   { id: 3, name: 'Klima/AC', icon: '❄️', slug: 'hvac' },
   { id: 4, name: 'Plastifikim', icon: '🧱', slug: 'tiling' },
   { id: 5, name: 'Pastrim', icon: '🧹', slug: 'cleaning' },
+  { id: 6, name: 'me shume', icon: '...', slug: 'cleaning' },
 ]
 
 function CategoryGrid() {

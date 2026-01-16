@@ -1,0 +1,35 @@
+.modal {
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0;
+  background: var(--bg-secondary);
+  color: var(--text-off-white);
+  box-shadow: var(--shadow-medium);
+  max-width: 450px;
+  width: 90%;
+  margin:  auto;
+  overflow: hidden;
+  outline: none;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Backdrop Blur & Fade */
+.modal::backdrop {
+  background: rgba(var(--black-r), var(--black-g), var(--black-b), 0.7);
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes revealItem {
+  to { opacity: 1; transform: translateX(0); }
+}

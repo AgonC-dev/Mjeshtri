@@ -14,6 +14,7 @@ import {
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
+import Modal from "../../components/Modal/Modal";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ function Dashboard() {
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
   const navigate = useNavigate();
@@ -106,6 +108,7 @@ function Dashboard() {
     }  
   }
 
+  
   function handlePortfolioSelect(e) {
     const files = Array.from(e.target.files || []);
     if (files.length) {
@@ -216,6 +219,12 @@ function Dashboard() {
     }
   }
 
+  function openProModal() {
+    setIsModalOpen(true)
+  }
+
+
+
   async function handleGetPro() {
     if (!user) return;
     setSaving(true);
@@ -226,6 +235,7 @@ function Dashboard() {
         proSubscribedAt: serverTimestamp(),
       });
       setForm((p) => ({ ...p, isPro: true }));
+      setIsModalOpen(false);
       setStatus({ message: "Faleminderit! Tani jeni anëtar PRO.", type: "success" });
     } catch (err) {
       console.error(err);
@@ -233,6 +243,11 @@ function Dashboard() {
     } finally {
       setSaving(false);
     }
+  }
+
+
+  async function generateReviewLink() {
+    
   }
 
   if (loading) return <Loading />
@@ -289,13 +304,46 @@ function Dashboard() {
             <button
               type="button"
               className={styles.proButton}
-              onClick={handleGetPro}
+              onClick={openProModal}
               disabled={form.isPro || saving}
             >
               {form.isPro ? "Jeni PRO" : "Merr PRO"}
             </button>
           </div>
-          
+          <Modal open={isModalOpen} onCLose={() => setIsModalOpen(false)}>
+  <div className={styles.proContent}>
+    <h2>PRO Membership</h2>
+    <p style={{ color: 'var(--text-muted)' }}>Zhblloko të gjitha mundësitë</p>
+    
+    <ul className={styles.benefitList}>
+  <li className={styles.benefitItem}>
+    <span className={styles.checkIcon}>🚀</span> 
+    <strong>Renditje Prioritare</strong> — Shfaquni i pari në kërkime.
+  </li>
+  <li className={styles.benefitItem}>
+    <span className={styles.checkIcon}>💎</span> 
+    <strong>Distinktiv i Verifikuar</strong> — Rritni besimin te klientët.
+  </li>
+  <li className={styles.benefitItem}>
+    <span className={styles.checkIcon}>🔗</span> 
+    <strong>Link i Personalizuar</strong> — Adresë unike për ta ndarë në rrjete sociale.
+  </li>
+  <li className={styles.benefitItem}>
+    <span className={styles.checkIcon}>🖼️</span> 
+    <strong>Portofolio pa Limit</strong> — Ngarkoni të gjitha punët tuaja.
+  </li>
+</ul>
+<div className={styles.actions}>
+    <button className={styles.purchaseBtn} onClick={handleGetPro}>
+      Vazhdo te Pagesa (€14.99)
+    </button>
+    <button className={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>
+      Më vonë
+    </button>
+  </div>
+  </div>
+</Modal>
+  
           {/* REMOVED: The old save button was here */}
         </div>
 

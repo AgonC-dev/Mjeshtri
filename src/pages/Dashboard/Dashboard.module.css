@@ -1,3 +1,10 @@
+/* ===================== BASE & THEME ===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .wrap {
   max-width: 1200px;
   margin: 3rem auto;
@@ -16,7 +23,6 @@
 }
 
 /* ===================== STATUS MESSAGES ===================== */
-
 .status {
   margin-bottom: 2rem;
   padding: 1.2rem;
@@ -26,11 +32,8 @@
   gap: 12px;
   font-weight: 600;
   animation: reveal 0.3s ease-out;
-
-
 }
 
-/* Success Variant */
 .success {
   background: rgba(0, 255, 133, 0.1);
   border-left: 5px solid var(--accent-emerald);
@@ -50,7 +53,6 @@
   font-size: 12px;
 }
 
-/* Error Variant */
 .error {
   background: rgba(255, 68, 68, 0.1);
   border-left: 5px solid #ff4444;
@@ -70,7 +72,6 @@
   font-size: 12px;
 }
 
-/* Pending/Loading Variant */
 .pending {
   background: rgba(255, 255, 255, 0.05);
   border-left: 5px solid #3498db;
@@ -78,7 +79,6 @@
 }
 
 /* ===================== FORM ===================== */
-
 .form {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
@@ -94,10 +94,6 @@
   gap: 3rem;
 }
 
-.col {
-  min-width: 0;
-}
-
 .label {
   display: block;
   color: #a0a0a0;
@@ -107,8 +103,7 @@
   margin: 1.5rem 0 0.5rem;
 }
 
-.input,
-.textarea {
+.input, .textarea {
   width: 100%;
   font-size: 16px;
   padding: 1rem;
@@ -116,12 +111,10 @@
   border: 1px solid rgba(0, 255, 133, 0.15);
   border-radius: 12px;
   color: white;
-  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
-.input:focus,
-.textarea:focus {
+.input:focus, .textarea:focus {
   outline: none;
   border-color: var(--accent-emerald);
   background: rgba(0, 255, 133, 0.05);
@@ -129,11 +122,7 @@
 }
 
 /* ===================== PHONE INPUT ===================== */
-
-.phoneContainer {
-  width: 100% !important;
-}
-
+.phoneContainer { width: 100% !important; }
 .PhoneInput {
   width: 100% !important;
   height: 52px !important;
@@ -143,49 +132,14 @@
   color: var(--text-off-white) !important;
   padding-left: 55px !important;
 }
-
-.phoneButton {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 12px 0 0 12px !important;
-}
-
-/* The List and Flag Dropdown */
+.phoneButton { background: transparent !important; border: none !important; }
 .phoneDropdown {
-  background: var(--bg-dropdown) !important; /* Uses your white/black variable */
+  background: var(--bg-dropdown) !important;
   color: var(--text-off-white) !important;
   border: 1px solid var(--card-border) !important;
-  border-radius: 8px !important;
 }
 
-.phoneDropdown .country:hover {
-  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2) !important;
-}
-/* ===================== BUTTONS ===================== */
-
-.saveButton {
-  width: 100%;
-  margin-top: 2.5rem;
-  background: var(--accent-emerald);
-  color: #04110a;
-  padding: 1rem;
-  border-radius: 12px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.saveButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.45);
-}
-
-.saveButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
+/* ===================== BUTTONS & PRO ===================== */
 .proRow {
   display: flex;
   justify-content: space-between;
@@ -203,8 +157,17 @@
   cursor: pointer;
 }
 
-/* ===================== PROFILE & PORTFOLIO ===================== */
+.saveButton {
+  width: 100%;
+  margin-top: 2.5rem;
+  background: var(--accent-emerald);
+  color: #04110a;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
 
+/* ===================== PROFILE & PORTFOLIO ===================== */
 .profilePreview {
   width: 180px;
   height: 180px;
@@ -217,17 +180,12 @@
   overflow: hidden;
 }
 
-.profile {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.profile { width: 100%; height: 100%; object-fit: cover; }
 
 .portfolioGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 12px;
-  margin-bottom: 10px;
 }
 
 .portItem {
@@ -237,15 +195,8 @@
   animation: popIn 0.35s ease backwards;
 }
 
-.portItem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hiddenInput {
-  display: none;
-}
+.portItem img { width: 100%; height: 100%; object-fit: cover; }
+.hiddenInput { display: none; }
 
 .customUploadBtn {
   display: block;
@@ -256,15 +207,9 @@
   color: var(--accent-emerald);
   padding: 10px 16px;
   margin-top: 10px;
-  cursor: pointer;
   font-weight: 600;
   text-align: center;
-  transition: all 0.3s ease;
-}
-
-.customUploadBtn:hover {
-  background: rgba(0, 255, 133, 0.25);
-  border-color: var(--accent-emerald);
+  cursor: pointer;
 }
 
 .deleteBtn {
@@ -276,85 +221,105 @@
   padding: 10px 20px;
   border-radius: 12px;
   font-weight: 600;
-  cursor: pointer;
   margin-bottom: 1.5rem;
+  cursor: pointer;
 }
-
-.deleteBtn:hover {
-  background: #ff4444;
-  color: white;
-}
-
-/* ===================== VIEW PROFILE BUTTON ===================== */
 
 .selfProfile {
   width: 100%;
-  margin-top: 1rem; /* Space it away from the Save button */
+  margin-top: 1rem;
   background: transparent;
   color: var(--text-off-white);
   padding: 1rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-/* Add an icon effect via pseudo-element */
-.selfProfile::before {
-  content: "👁";
-  font-size: 1.1rem;
-  opacity: 0.7;
+.selfProfile::before { content: "👁"; opacity: 0.7; }
+
+/* ===================== PRO MODAL ===================== */
+.proContent {
+  padding: 2.5rem;
+  text-align: center;
+  animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.selfProfile:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--accent-emerald);
+.proContent h2 {
   color: var(--accent-emerald);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 800;
 }
 
-.selfProfile:active {
-  transform: translateY(0);
+.benefitList {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
 }
 
-/* The base state is hidden (pushed down) */
-/* --- STICKY FOOTER CONTAINER --- */
+.benefitItem {
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.5rem;
+  background: rgba(var(--white-r), var(--white-g), var(--white-b), 0.03);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: revealItem 0.4s ease forwards;
+}
+
+.benefitItem:nth-child(1) { animation-delay: 0.2s; }
+.benefitItem:nth-child(2) { animation-delay: 0.3s; }
+.benefitItem:nth-child(3) { animation-delay: 0.4s; }
+.benefitItem:nth-child(4) { animation-delay: 0.5s; }
+
+.purchaseBtn {
+  background: var(--accent-emerald);
+  color: var(--bg-black);
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  width: 100%;
+  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* ===================== STICKY FOOTER ===================== */
 .actionFooter {
   position: fixed;
-  /* Start pushed down so it's hidden */
-  bottom: -120px; 
+  bottom: -120px;
   left: 0;
   right: 0;
   height: 90px;
-  /* Use secondary background with blur for that modern glass look */
   background: var(--bg-secondary);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  
-  /* Semi-transparent border using your RGB variables */
   border-top: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  
-  /* Smooth "Slide Up" transition */
   transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0 1.5rem;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Logic class to slide the footer up */
-.footerVisible {
-  bottom: 0 !important;
-}
+.footerVisible { bottom: 0 !important; }
 
 .footerContent {
   width: 100%;
@@ -362,110 +327,111 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
 }
 
-.footerLeft {
-  display: flex;
-  align-items: center;
-}
-
-.footerText {
-  color: var(--text-off-white);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-/* Add an icon or dot before the text for a professional touch */
 .footerText::before {
   content: "";
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   background-color: var(--accent-emerald);
   border-radius: 50%;
   margin-right: 10px;
-  box-shadow: 0 0 10px var(--accent-emerald);
 }
 
-.footerRight {
-  display: flex;
-  gap: 1rem;
-}
-
-/* The primary Save button using your Emerald theme */
 .saveButtonSticky {
   background-color: var(--accent-emerald);
-  color: #000; /* Dark text on bright background */
+  color: #000;
   padding: 12px 28px;
   border-radius: var(--border-radius);
-  border: none;
   font-weight: 700;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
 }
 
-.saveButtonSticky:hover:not(:disabled) {
-  background-color: var(--accent-emerald-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6);
+/* ===================== REVIEWS ===================== */
+.reviewsSection { margin-top: 4rem; padding-bottom: 5rem; }
+.reviewCard {
+  background: rgba(255,255,255,0.03);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
 }
-
-.saveButtonSticky:disabled {
-  filter: grayscale(1);
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* RESPONSIVE FIXES */
-
-
-/* On mobile, stack things or hide the text */
-
+.reviewHead { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.rating { color: #f1c40f; }
 
 /* ===================== ANIMATIONS ===================== */
+@keyframes reveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes revealItem { to { opacity: 1; transform: translateX(0); } }
 
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* ===================== RESPONSIVE MEDIA QUERIES ===================== */
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+@media (max-width: 1024px) {
+  .row {
+    gap: 2rem;
+  }
 }
 
 @media (max-width: 900px) {
-  .row { grid-template-columns: 1fr; }
-  .col:nth-child(2) { order: -1; }
+  .row { 
+    grid-template-columns: 1fr; 
+  }
+  .col:nth-child(2) { 
+    order: -1; /* Puts profile photo and portfolio on top on tablets */
+  }
+  .profilePreview {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .title {
+    font-size: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .actionFooter {
-    height: auto;
-    padding: 1rem;
+  .wrap {
+    margin: 1.5rem auto;
   }
-
-  .footerText {
-    display: none; /* Hide text on mobile to save space */
+  .form {
+    padding: 1.5rem;
   }
-
+  .footerText { 
+    display: none; 
+  }
   .footerContent {
     justify-content: center;
   }
-
-  .footerRight {
-    width: 100%;
-    flex-direction: column-reverse; /* Put Save on top on mobile */
-    gap: 0.75rem;
+  .footerRight { 
+    width: 100%; 
+    flex-direction: column-reverse; 
+    gap: 0.75rem; 
   }
-
-  .footerRight button {
+  .saveButtonSticky, .selfProfile {
     width: 100%;
     padding: 14px;
+  }
+  .actionFooter { 
+    height: auto; 
+    padding: 1.2rem; 
+  }
+  .proContent {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.75rem;
+  }
+  .portfolioGrid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for small phones */
+  }
+  .proRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .proButton {
+    width: 100%;
+    margin-top: 0.5rem;
   }
 }

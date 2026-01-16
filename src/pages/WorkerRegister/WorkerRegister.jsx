@@ -101,7 +101,6 @@ function WorkerRegister() {
         bio: "",
         isActive: true,
         joinedDate: new Date().toLocaleDateString('sq-AL'),
-        ratingsNum: 0,
         isPro: false,
         startingPrice: 0,
         experienceYears: 0, 
