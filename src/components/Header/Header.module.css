@@ -50,23 +50,28 @@
   white-space: nowrap;
 }
 
-.navLink:hover {
-  color: var(--accent-emerald);
-}
-
+/* 2. The Underline (Hidden by default) */
 .navLink::after {
   content: "";
   position: absolute;
   bottom: -4px;
   left: 0;
-  width: 0;
+  width: 0; /* Starts at zero */
   height: 2px;
   background-color: var(--accent-emerald);
   transition: width 0.3s ease;
 }
 
-.navLink:hover::after {
-  width: 100%;
+/* 3. Hover AND Active States (Text Color) */
+.navLink:hover,
+.navLink.active {
+  color: var(--accent-emerald);
+}
+
+/* 4. Hover AND Active States (Underline Width) */
+.navLink:hover::after,
+.navLink.active::after {
+  width: 100%; /* Overrides the width: 0 from above */
 }
 
 .themeToggle {

@@ -70,6 +70,8 @@
   --bg-dropdown: #ffffff;
 }
 
+
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -83,14 +85,28 @@ body {
 }
 
 /* Prevent accidental horizontal scrolling on small devices */
-html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden; /* Stops that annoying side-to-side wiggle */
+  background-color: var(--bg-primary);
+  color: var(--text-off-white);
 }
 
 #root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NEW: THE CONTENT LIMITER 
+   Apply this class to your MainLayout or wrap the <Outlet /> in it
+*/
+.container {
+  width: 95%;          /* Mobile width */
+  max-width: 1450px;   /* Desktop max-width */
+  margin: 0 auto;      /* Centers the content */
+  position: relative;
 }
 
 a {

@@ -1,18 +1,22 @@
+/* Error.module.css */
 .wrapper {
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw; /* Crucial: ensures 3D transforms don't stretch the page */
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 1200px;
+  background-color: #000; /* Fallback for the error page */
 }
-
-/* ---------- BACKGROUND ---------- */
 
 .background {
   position: absolute;
   inset: 0;
+  overflow: hidden; /* Contains the floating orbs */
+  pointer-events: none;
 }
 
 .orb {
@@ -27,7 +31,35 @@
   );
   filter: blur(90px);
   animation: float 22s infinite alternate ease-in-out;
+  will-change: transform;
 }
+
+/* Rest of your card/glitch styles remain the same but use relative units */
+.card {
+  position: relative;
+  z-index: 2;
+  width: 90%; /* Ensures it doesn't hit edges on mobile */
+  max-width: 600px;
+  padding: 3rem;
+  border-radius: 24px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(18px);
+  text-align: center;
+  transform-style: preserve-3d;
+}
+
+.glitch {
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 900;
+  position: relative;
+  color: #fff;
+}
+/* ... rest of your CSS ... */
+
+/* ---------- BACKGROUND ---------- */
+
+
+
 
 .orb:nth-child(1) { top: -15%; left: -15%; }
 .orb:nth-child(2) { bottom: -20%; right: -10%; animation-duration: 28s; }
@@ -65,24 +97,8 @@
 
 /* ---------- CARD ---------- */
 
-.card {
-  position: relative;
-  z-index: 2;
-  padding: 3rem 4rem;
-  border-radius: 24px;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(18px);
-  text-align: center;
-  transform-style: preserve-3d;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-}
 
-.glitch {
-  font-size: clamp(6rem, 18vw, 11rem);
-  font-weight: 900;
-  position: relative;
-  color: var(--text-white);
-}
+
 
 .glitch::before,
 .glitch::after {

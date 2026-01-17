@@ -6,7 +6,7 @@ const MainLayout = () => {
   return (
     <>
       <Header />
-      <main>
+      <main className="container" style={{ flex: 1, padding: "2rem 0" }}>
         <Outlet /> {/* This is where WorkerList, Dashboard, etc. will show up */}
       </main>
       <Footer />
