@@ -131,6 +131,20 @@ function Dashboard() {
      setIsDirty(true);
   }
 
+  function handleDeleteExistingPortfolio(urlToDelete) {
+    setIsDirty(true);
+    setForm(prev => ({
+      ...prev,
+      portfolio: prev.portfolio.filter(url => url !== urlToDelete)
+    }))
+  }
+
+  function handleDeleteNewPortfolio(indexToDelete) {
+    setPortfolioFiles(prev => prev.filter((_, i) => i !== indexToDelete));
+    // If no files left and nothing else changed, you might want to check dirty state
+    // but usually, adding then removing still counts as a "change" session
+  }
+
   function handleProfileView() {
   if (!user) return;
 
@@ -253,173 +267,168 @@ function Dashboard() {
   if (loading) return <Loading />
   if (!user) return <div className={styles.wrap}><p>Ju lutem hyni në llogari.</p></div>;
 
-  return (
-  <div className={styles.wrap}>
-    <h1 className={styles.title} ref={topRef}>Paneli i Mjeshtrit</h1>
-    
-    {status.message && (
-      <div className={`${styles.status} ${styles[status.type]}`}>
-        {status.message}
-      </div>
-    )}
+return (
+    <div className={styles.wrap}>
+      <h1 className={styles.title} ref={topRef}>Paneli i Mjeshtrit</h1>
 
-    <form className={styles.form} onSubmit={handleSave}>
-      <div className={styles.row}>
-        {/* Left Column: Info */}
-        <div className={styles.col}>
-          <label className={styles.label}>Emri dhe Mbiemri</label>
-          <input name="name" value={form.name} onChange={handleChange} className={styles.input} />
+      {status.message && (
+        <div className={`${styles.status} ${styles[status.type]}`}>
+          {status.message}
+        </div>
+      )}
 
-          <label className={styles.label}>Numri i Telefonit (WhatsApp) *</label>
-          <PhoneInput
-            country={'xk'}
-            value={form.phoneNumber}
-            onChange={handlePhoneNum}
-            containerClass={styles.phoneContainer}
-            inputClass={styles.PhoneInput}
-          />
+      <form className={styles.form} onSubmit={handleSave}>
+        <div className={styles.row}>
+          {/* Left Column: Info */}
+          <div className={styles.col}>
+            <label className={styles.label}>Emri dhe Mbiemri</label>
+            <input name="name" value={form.name} onChange={handleChange} className={styles.input} />
 
-          <label className={styles.label}>Kategoria</label>
-          <input name="category" value={form.category} onChange={handleChange} className={styles.input} />
+            <label className={styles.label}>Numri i Telefonit (WhatsApp) *</label>
+            <PhoneInput
+              country={'xk'}
+              value={form.phoneNumber}
+              onChange={handlePhoneNum}
+              containerClass={styles.phoneContainer}
+              inputClass={styles.PhoneInput}
+            />
 
-          <label className={styles.label}>Vite përvojë</label>
-          <input name="yearsExperience" value={form.yearsExperience} onChange={handleChange} className={styles.input} />
+            <label className={styles.label}>Kategoria</label>
+            <input name="category" value={form.category} onChange={handleChange} className={styles.input} />
 
-          <label className={styles.label}>Çmimi fillestar (€)</label>
-          <input
-            name="hourlyRate"
-            type="number"
-            min="0"
-            value={form.hourlyRate}
-            onChange={handleChange}
-            className={styles.input}
-            placeholder="0"
-          />
+            <label className={styles.label}>Vite përvojë</label>
+            <input name="yearsExperience" value={form.yearsExperience} onChange={handleChange} className={styles.input} />
 
-          <label className={styles.label}>Bio</label>
-          <textarea name="bio" value={form.bio} onChange={handleChange} className={styles.textarea} />
+            <label className={styles.label}>Çmimi fillestar (€)</label>
+            <input
+              name="hourlyRate"
+              type="number"
+              min="0"
+              value={form.hourlyRate}
+              onChange={handleChange}
+              className={styles.input}
+              placeholder="0"
+            />
 
-          <div className={styles.proRow}>
-            <label className={styles.label}>Statusi PRO</label>
-            <button
-              type="button"
-              className={styles.proButton}
-              onClick={openProModal}
-              disabled={form.isPro || saving}
-            >
-              {form.isPro ? "Jeni PRO" : "Merr PRO"}
+            <label className={styles.label}>Bio</label>
+            <textarea name="bio" value={form.bio} onChange={handleChange} className={styles.textarea} />
+
+            <div className={styles.proRow}>
+              <label className={styles.label}>Statusi PRO</label>
+              <button
+                type="button"
+                className={styles.proButton}
+                onClick={openProModal}
+                disabled={form.isPro || saving}
+              >
+                {form.isPro ? "Jeni PRO" : "Merr PRO"}
+              </button>
+            </div>
+
+            <Modal open={isModalOpen} onCLose={() => setIsModalOpen(false)}>
+              <div className={styles.proContent}>
+                <h2>PRO Membership</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Zhblloko të gjitha mundësitë</p>
+                <ul className={styles.benefitList}>
+                  <li className={styles.benefitItem}><span className={styles.checkIcon}>🚀</span> <strong>Renditje Prioritare</strong></li>
+                  <li className={styles.benefitItem}><span className={styles.checkIcon}>💎</span> <strong>Distinktiv i Verifikuar</strong></li>
+                  <li className={styles.benefitItem}><span className={styles.checkIcon}>🔗</span> <strong>Link i Personalizuar</strong></li>
+                  <li className={styles.benefitItem}><span className={styles.checkIcon}>🖼️</span> <strong>Portofolio pa Limit</strong></li>
+                </ul>
+                <div className={styles.actions}>
+                  <button className={styles.purchaseBtn} onClick={handleGetPro}>Vazhdo te Pagesa (€14.99)</button>
+                  <button className={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>Më vonë</button>
+                </div>
+              </div>
+            </Modal>
+          </div>
+
+          {/* Right Column: Media */}
+          <div className={styles.col}>
+            <label className={styles.label}>Foto Profili</label>
+            <div className={styles.profilePreview}>
+              {profileFile ? (
+                <img src={URL.createObjectURL(profileFile)} alt="preview" className={styles.profile} />
+              ) : form.profileUrl ? (
+                <img src={form.profileUrl} alt="profile" className={styles.profile} />
+              ) : (
+                <div className={styles.avatarPlaceholder}>Foto</div>
+              )}
+            </div>
+
+            <input type="file" id="profile-upload" accept="image/*" onChange={handleProfileSelect} className={styles.hiddenInput} />
+            <label htmlFor="profile-upload" className={styles.customUploadBtn}>NGARKO FOTO</label>
+            <button onClick={handleDeleteProfile} type="button" className={styles.deleteBtn}>Fshi Foton</button>
+
+            <label className={styles.label}>Portofoli</label>
+            <div className={styles.portfolioGrid}>
+              {/* Existing Photos from Firebase */}
+              {(form.portfolio || []).map((url, i) => (
+                <div key={`old-${i}`} className={styles.portItem}>
+                  <img src={url} alt={`pf-${i}`} />
+                  <button 
+                    type="button" 
+                    className={styles.deletePhotoBtn} 
+                    onClick={() => handleDeleteExistingPortfolio(url)}
+                  >✕</button>
+                </div>
+              ))}
+              {/* New Photos selected locally */}
+              {portfolioFiles.map((f, i) => (
+                <div key={`new-${i}`} className={styles.portItem}>
+                  <img src={URL.createObjectURL(f)} alt={`new-${i}`} />
+                  <button 
+                    type="button" 
+                    className={styles.deletePhotoBtn} 
+                    onClick={() => handleDeleteNewPortfolio(i)}
+                  >✕</button>
+                </div>
+              ))}
+            </div>
+
+            <input type="file" id="portfolio-upload" accept="image/*" multiple onChange={handlePortfolioSelect} className={styles.hiddenInput} />
+            <label htmlFor="portfolio-upload" className={styles.customUploadBtn}>SHTO FOTO NË PORTOFOL</label>
+          </div>
+        </div>
+
+        {!isDirty && (
+          <button onClick={handleProfileView} type="button" className={styles.selfProfile}>
+            Shiko Profilin Publik
+          </button>
+        )}
+      </form>
+
+      {/* Sticky Footer for Unsaved Changes */}
+      <div className={`${styles.actionFooter} ${isDirty ? styles.footerVisible : ''}`}>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLeft}>
+            <span className={styles.footerText}>Keni ndryshime të paruajtura</span>
+          </div>
+          <div className={styles.footerRight}>
+            <button onClick={handleProfileView} type="button" className={styles.selfProfile} style={{ margin: 0 }}>
+              Shiko si duket
+            </button>
+            <button onClick={handleSave} className={styles.saveButtonSticky} disabled={saving}>
+              {saving ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
             </button>
           </div>
-          <Modal open={isModalOpen} onCLose={() => setIsModalOpen(false)}>
-  <div className={styles.proContent}>
-    <h2>PRO Membership</h2>
-    <p style={{ color: 'var(--text-muted)' }}>Zhblloko të gjitha mundësitë</p>
-    
-    <ul className={styles.benefitList}>
-  <li className={styles.benefitItem}>
-    <span className={styles.checkIcon}>🚀</span> 
-    <strong>Renditje Prioritare</strong> — Shfaquni i pari në kërkime.
-  </li>
-  <li className={styles.benefitItem}>
-    <span className={styles.checkIcon}>💎</span> 
-    <strong>Distinktiv i Verifikuar</strong> — Rritni besimin te klientët.
-  </li>
-  <li className={styles.benefitItem}>
-    <span className={styles.checkIcon}>🔗</span> 
-    <strong>Link i Personalizuar</strong> — Adresë unike për ta ndarë në rrjete sociale.
-  </li>
-  <li className={styles.benefitItem}>
-    <span className={styles.checkIcon}>🖼️</span> 
-    <strong>Portofolio pa Limit</strong> — Ngarkoni të gjitha punët tuaja.
-  </li>
-</ul>
-<div className={styles.actions}>
-    <button className={styles.purchaseBtn} onClick={handleGetPro}>
-      Vazhdo te Pagesa (€14.99)
-    </button>
-    <button className={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>
-      Më vonë
-    </button>
-  </div>
-  </div>
-</Modal>
-  
-          {/* REMOVED: The old save button was here */}
-        </div>
-
-        {/* Right Column: Media */}
-        <div className={styles.col}>
-          <label className={styles.label}>Foto Profili</label>
-          <div className={styles.profilePreview}>
-            {profileFile ? (
-              <img src={URL.createObjectURL(profileFile)} alt="preview" className={styles.profile} />
-            ) : form.profileUrl ? (
-              <img src={form.profileUrl} alt="profile" className={styles.profile}/>
-            ) : (
-              <div className={styles.avatarPlaceholder}>Foto</div>
-            )}
-          </div>
-
-          <input type="file" id="profile-upload" accept="image/*" onChange={handleProfileSelect} className={styles.hiddenInput} />
-          <label htmlFor="profile-upload" className={styles.customUploadBtn}>NGARKO FOTO</label>
-          <button onClick={handleDeleteProfile} type="button" className={styles.deleteBtn}>Fshi Foton</button>
-
-          <label className={styles.label}>Portofoli</label>
-          <div className={styles.portfolioGrid}>
-            {(form.portfolio || []).map((url, i) => (
-              <div key={i} className={styles.portItem}><img src={url} alt={`pf-${i}`} /></div>
-            ))}
-            {portfolioFiles.map((f, i) => (
-              <div key={`new-${i}`} className={styles.portItem}><img src={URL.createObjectURL(f)} alt={`new-${i}`} /></div>
-            ))}
-          </div>
-
-          <input type="file" id="portfolio-upload" accept="image/*" multiple onChange={handlePortfolioSelect} className={styles.hiddenInput} />
-          <label htmlFor="portfolio-upload" className={styles.customUploadBtn}>SHTO FOTO NË PORTOFOL</label>
         </div>
       </div>
-      
-      {!isDirty && (
-        <button onClick={handleProfileView} type="button" className={styles.selfProfile}>
-          Shiko Profilin Publik
-        </button>
-      )}
-    </form>
 
-    <div className={`${styles.actionFooter} ${isDirty ? styles.footerVisible : ''}`}>
-      <div className={styles.footerContent}>
-        <div className={styles.footerLeft}>
-          <span className={styles.footerText}>Keni ndryshime të paruajtura</span>
-        </div>
-        <div className={styles.footerRight}>
-          <button onClick={handleProfileView} type="button" className={styles.selfProfile} style={{ margin: 0 }}>
-            Shiko si duket
-          </button>
-          <button 
-            onClick={handleSave} 
-            className={styles.saveButtonSticky} 
-            disabled={saving}
-          >
-            {saving ? "Duke ruajtur..." : "Ruaj Ndryshimet"}
-          </button>
-        </div>
-      </div>
+      <section className={styles.reviewsSection}>
+        <h2 className={styles.sectionTitle}>Vlerësimet</h2>
+        {reviews.length === 0 ? <p>Nuk ka vlerësime ende.</p> : reviews.map((r) => (
+          <div key={r.id} className={styles.reviewCard}>
+            <div className={styles.reviewHead}>
+              <strong>{r.customerName || "Klient"}</strong>
+              <span className={styles.rating}>{r.rating} ★</span>
+            </div>
+            <p>{r.comment}</p>
+          </div>
+        ))}
+      </section>
     </div>
-
-    <section className={styles.reviewsSection}>
-      <h2 className={styles.sectionTitle}>Vlerësimet</h2>
-      {reviews.length === 0 ? <p>Nuk ka vlerësime ende.</p> : reviews.map((r) => (
-        <div key={r.id} className={styles.reviewCard}>
-          <div className={styles.reviewHead}>
-            <strong>{r.customerName || "Klient"}</strong>
-            <span className={styles.rating}>{r.rating} ★</span>
-          </div>
-          <p>{r.comment}</p>
-        </div>
-      ))}
-    </section>
-  </div>
-);
+  );
 }
 
 export default Dashboard;
