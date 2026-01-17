@@ -36,8 +36,10 @@ function WorkerList() {
   const [selectedCategory, setSelectedCategory] = useState('Të gjitha')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
-  const [minPrice, setMinPrice] = useState(0)
-  const [maxPrice, setMaxPrice] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+
 
   // Fetching data with TanStack Query
   const { data: allWorkers, isLoading, isFetching } = useQuery({
@@ -46,6 +48,10 @@ function WorkerList() {
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 5,
   })
+
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [selectedCity, selectedCategory, debouncedSearchQuery])
 
   // Sync URL params with state
   useEffect(() => {
@@ -119,7 +125,15 @@ function WorkerList() {
 
       return matchesCity && matchesCategory  && matchesSearch
     })
-  }, [allWorkers, debouncedSearchQuery, selectedCity, selectedCategory, minPrice, maxPrice])
+  }, [allWorkers, debouncedSearchQuery, selectedCity, selectedCategory])
+
+  const totalPages = Math.ceil(filteredWorkers.length / itemsPerPage) || 1;
+
+  const paginatedWorkers = useMemo(() => {
+    const lastIndex = currentPage * itemsPerPage;
+    const firstIndex = lastIndex - itemsPerPage;
+    return filteredWorkers.slice(firstIndex, lastIndex)
+  }, [filteredWorkers, currentPage])
 
   const workersCount = () => {
     if(filteredWorkers.length === 1) {
@@ -148,8 +162,6 @@ function WorkerList() {
           onCategoryChange={setSelectedCategory}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onMinPriceChange={setMinPrice}
-          onMaxPriceChange={setMaxPrice}
         />
         
         <div className={styles.results}>
@@ -158,36 +170,64 @@ function WorkerList() {
     {isLoading ? "Duke kërkuar mjeshtrit..." : workersCount()}
   </p>
 
-  <div className={styles.resultsWrapper}>
-    {isLoading ? (
-      /* INITIAL REFRESH: A clean, brand-centered loader instead of skeletons */
-      <div className={styles.initialLoader}>
-        <div className={styles.spinner} />
-        <p className={styles.loadingText}>Duke u sinkronizuar me Mjeshtri.ks...</p>
-      </div>
-    ) : (
-      <>
-        {filteredWorkers.length > 0 ? (
-          /* CATEGORY CHANGE: Uses the blur/dimmed effect you like */
+ <div className={styles.resultsWrapper}>
+  {isLoading ? (
+    <div className={styles.initialLoader}>
+      <div className={styles.spinner} />
+      <p className={styles.loadingText}>Duke u sinkronizuar me Mjeshtri.ks...</p>
+    </div>
+  ) : (
+    <>
+      {/* Use the paginated array for rendering cards */}
+      {paginatedWorkers.length > 0 ? (
+        <>
           <div className={`${styles.grid} ${isFetching ? styles.dimmed : ''}`}>
-            {filteredWorkers.map((worker) => (
-              <WorkerCard
-                key={worker.id}
-                worker={worker}
-              />
+            {paginatedWorkers.map((worker) => (
+              <WorkerCard key={worker.id} worker={worker} />
             ))}
           </div>
-        ) : (
-          /* NO RESULTS: Only if not fetching */
-          !isFetching && (
-            <div className={styles.noResults}>
-              <p>Nuk u gjet asnjë mjeshtër me këto kritere.</p>
+
+          {/* Pagination UI - Only shows if there is more than 1 page */}
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              <button
+                className={styles.pageBtn}
+                onClick={() => {
+                  setCurrentPage((prev) => prev - 1);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={currentPage === 1}
+              >
+                Mbrapa
+              </button>
+
+              <span className={styles.pageInfo}>
+                Faqja <strong>{currentPage}</strong> nga <strong>{totalPages}</strong>
+              </span>
+
+              <button
+                className={styles.pageBtn}
+                onClick={() => {
+                  setCurrentPage((prev) => prev + 1);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={currentPage === totalPages}
+              >
+                Para
+              </button>
             </div>
-          )
-        )}
-      </>
-    )}
-  </div>
+          )}
+        </>
+      ) : (
+        !isFetching && (
+          <div className={styles.noResults}>
+            <p>Nuk u gjet asnjë mjeshtër me këto kritere.</p>
+          </div>
+        )
+      )}
+    </>
+  )}
+</div>
 </div>
       
       </div>

@@ -143,6 +143,79 @@
   pointer-events: none;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.05);
+}
+
+.pageBtn {
+  padding: 10px 24px;
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-off-white);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-soft);
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--accent-emerald);
+  color: var(--bg-black); /* High contrast text on emerald background */
+  border-color: var(--accent-emerald);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+}
+
+.pageBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pageBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(1);
+  border-color: var(--text-muted);
+}
+
+.pageInfo {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+
+.pageInfo strong {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  margin: 0 4px;
+}
+
+/* Light Theme Adjustments */
+:global([data-theme="light"]) :local(.pageBtn) {
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-secondary);
+}
+
+:global([data-theme="light"]) :local(.pageBtn:hover:not(:disabled)) {
+  background-color: var(--accent-emerald);
+  color: var(--text-white);
+}
+/* The "Blur" effect for background updates */
+.dimmed {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(1px);
+  transition: opacity 0.3s ease;
+}
+
 /* --- Animations --- */
 @keyframes spin {
   to {
@@ -207,12 +280,15 @@
   }
 
   .title {
-    font-size: 1.6rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
   }
 
+ 
+
   .grid {
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -225,15 +301,18 @@
     grid-template-columns: 1fr;
     gap: 0.9rem;
   }
-}
 
-@media (max-width: 768px) {
-  .title {
-    font-size: 2rem;
+  .pagination {
+    gap: 10px;
+    margin-top: 2rem;
   }
 
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .pageBtn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .pageInfo {
+    font-size: 0.85rem;
   }
 }
