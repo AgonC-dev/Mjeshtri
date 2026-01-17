@@ -1,12 +1,23 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HelmetProvider, Helmet } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 
+// Layouts & Components
 import MainLayout from "./components/MainLayout";
 import ErrorPage from "./components/Error/Error";
 import Maintenance from "./pages/Maintenance/Maintenance";
-// ... other imports
+
+// Pages
+import Home from "./pages/Home/Home";
+import WorkerList from "./pages/WorkerList/WorkerList";
+import WorkerProfile from "./pages/WorkerProfile/WorkerProfile";
+import WorkerRegister from "./pages/WorkerRegister/WorkerRegister";
+import Login from "./pages/Login/Login";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
+import UserProfile from './pages/ViewProfile/UserProfile';
+
 
 const queryClient = new QueryClient();
 
