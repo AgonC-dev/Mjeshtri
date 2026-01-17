@@ -14,6 +14,17 @@ const categories = [
   'Klima/AC',
   'Plastifikim',
   'Pastrim',
+  'Fotograf',
+  'Përkthyes',
+  'Avokat',
+  'Kontabilist',
+  'Kopshtar',
+  'Mekanik',
+  'Moler',
+  'Murator',
+  'Vullkanizer',
+  'Programer',
+  'Dizajner Grafik'
 ]
 
 function WorkerList() {
@@ -43,12 +54,29 @@ function WorkerList() {
 
     if (categoryParam) {
       const categoryMap = {
-        plumber: 'Instalues',
-        electrician: 'Elektricist',
-        hvac: 'Klima/AC',
-        tiling: 'Plastifikim',
-        cleaning: 'Pastrim',
-      }
+  // Original categories
+     plumber: 'Instalues',
+     electrician: 'Elektricist',
+     hvac: 'Klima/AC',
+     tiling: 'Plastifikim',
+     cleaning: 'Pastrim',
+  
+  // Your new categories
+     photography: 'Fotograf',
+     translator: 'Përkthyes',
+     lawyer: 'Avokat',
+     accountant: 'Kontabilist',
+     gardener: 'Kopshtar',
+     mechanic: 'Mekanik',
+     painter: 'Moler',
+     mason: 'Murator',
+    'tire-service': 'Vullkanizer', // or 'gomister'
+     developer: 'Programer',
+     'graphic-design': 'Dizajner Grafik',
+  
+    // All/Reset
+     all: "Të gjitha"
+}
       setSelectedCategory(categoryMap[categoryParam] || 'Të gjitha')
     }
 

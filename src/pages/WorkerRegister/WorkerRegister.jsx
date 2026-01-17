@@ -17,11 +17,23 @@ const cities = [
   "Gjilan",
 ];
 const categories = [
-  "Instalues",
-  "Elektricist",
-  "Klima/AC",
-  "Plastifikim",
-  "Pastrim",
+  'Të gjitha',
+  'Instalues',
+  'Elektricist',
+  'Klima/AC',
+  'Plastifikim',
+  'Pastrim',
+  'Fotograf',
+  'Përkthyes',
+  'Avokat',
+  'Kontabilist',
+  'Kopshtar',
+  'Mekanik',
+  'Moler',
+  'Murator',
+  'Vullkanizer',
+  'Programer',
+  'Dizajner Grafik'
 ];
 
 function WorkerRegister() {
