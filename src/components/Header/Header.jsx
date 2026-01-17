@@ -119,13 +119,12 @@ function Header() {
             </div>
           ) : (
             <>
+              
               <NavLink 
-                to="/login" 
-                className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}
-              >
-                Kyçu
+                to="/register" 
+                 className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}>
+                  Regjistrohu
               </NavLink>
-              <Link to="/register" className={styles.navLink}>Regjistrohu</Link>
             </>
           )}
         </nav>
