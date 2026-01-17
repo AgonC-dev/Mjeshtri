@@ -38,8 +38,12 @@
 
 [data-theme="light"] {
   /* Light Theme Colors - Adjusted for better readability */
-  --bg-primary: #e9ecef; /* Darker gray for primary background */
-  --bg-secondary: #dee2e6; /* Slightly off-white for secondary */
+--bg-primary: #e9e8e3ad;
+--bg-secondary: #e3e1dc;
+
+
+
+ /* Slightly off-white for secondary */
   --bg-black: #495057; /* Dark gray for accents */
   --accent-emerald: #00b36a; /* slightly darker emerald for better contrast */
   --accent-emerald-r: 0;

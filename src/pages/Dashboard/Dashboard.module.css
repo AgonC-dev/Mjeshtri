@@ -329,6 +329,11 @@
   align-items: center;
 }
 
+.footerRight {
+  display: flex;
+  gap: 1em;
+}
+
 .footerText::before {
   content: "";
   display: inline-block;
@@ -393,74 +398,115 @@
 @keyframes slideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes revealItem { to { opacity: 1; transform: translateX(0); } }
 
+/* ===================== LIGHT THEME OPTIMIZATIONS ===================== */
+:global([data-theme="light"]) :local(.title) {
+  background: linear-gradient(to right, #111, var(--accent-emerald-dark));
+  -webkit-background-clip: text;
+}
+
+:global([data-theme="light"]) :local(.form) {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:global([data-theme="light"]) :local(.label) {
+  color: #555;
+  font-weight: 600;
+}
+
+:global([data-theme="light"]) :local(.input),
+:global([data-theme="light"]) :local(.textarea) {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #212529;
+}
+
+:global([data-theme="light"]) :local(.input:focus),
+:global([data-theme="light"]) :local(.textarea:focus) {
+  background: #fff;
+  border-color: var(--accent-emerald);
+}
+
+:global([data-theme="light"]) :local(.PhoneInput) {
+  background: #f8f9fa !important;
+  border: 1px solid #dee2e6 !important;
+  color: #212529 !important;
+}
+
+:global([data-theme="light"]) :local(.selfProfile) {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+:global([data-theme="light"]) :local(.selfProfile:hover) {
+  background: #f1f3f5;
+  border-color: #ced4da;
+}
+
+:global([data-theme="light"]) :local(.reviewCard) {
+  background: white;
+  border: 1px solid #dee2e6;
+}
+
+:global([data-theme="light"]) :local(.benefitItem) {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+:global([data-theme="light"]) :local(.actionFooter) {
+  background: white;
+  border-top: 1px solid #dee2e6;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+}
+
+:global([data-theme="light"]) :local(.footerText) {
+  color: #495057;
+  font-weight: 500;
+}
+
+:global([data-theme="light"]) :local(.saveButtonSticky) {
+  color: white;
+  background-color: var(--accent-emerald-dark);
+}
+
+:global([data-theme="light"]) :local(.profilePreview) {
+  border: 3px dashed #dee2e6;
+  background: #f8f9fa;
+}
+
+:global([data-theme="light"]) :local(.avatarPlaceholder) {
+  color: #adb5bd;
+}
+
 /* ===================== RESPONSIVE MEDIA QUERIES ===================== */
 
 @media (max-width: 1024px) {
-  .row {
-    gap: 2rem;
-  }
+  .row { gap: 2rem; }
 }
 
 @media (max-width: 900px) {
-  .row { 
-    grid-template-columns: 1fr; 
-  }
-  .col:nth-child(2) { 
-    order: -1; /* Puts profile photo and portfolio on top on tablets */
-  }
-  .profilePreview {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .title {
-    font-size: 2rem;
-  }
+  .row { grid-template-columns: 1fr; }
+  .col:nth-child(2) { order: -1; }
+  .profilePreview { margin-left: auto; margin-right: auto; }
+  .title { font-size: 2rem; }
 }
 
 @media (max-width: 768px) {
-  .wrap {
-    margin: 1.5rem auto;
-  }
-  .form {
-    padding: 1.5rem;
-  }
-  .footerText { 
-    display: none; 
-  }
-  .footerContent {
-    justify-content: center;
-  }
-  .footerRight { 
-    width: 100%; 
-    flex-direction: column-reverse; 
-    gap: 0.75rem; 
-  }
-  .saveButtonSticky, .selfProfile {
-    width: 100%;
-    padding: 14px;
-  }
-  .actionFooter { 
-    height: auto; 
-    padding: 1.2rem; 
-  }
-  .proContent {
-    padding: 1.5rem;
-  }
+  .wrap { margin: 1.5rem auto; }
+  .form { padding: 1.5rem; }
+  .footerText { display: none; }
+  .footerContent { justify-content: center; }
+  .footerRight { width: 100%; flex-direction: column-reverse; gap: 0.75rem; }
+  .saveButtonSticky, .selfProfile { width: 100%; padding: 14px; }
+  .actionFooter { height: auto; padding: 1.2rem; }
+  .proContent { padding: 1.5rem; }
 }
 
 @media (max-width: 480px) {
-  .title {
-    font-size: 1.75rem;
-  }
-  .portfolioGrid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for small phones */
-  }
-  .proRow {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .proButton {
-    width: 100%;
-    margin-top: 0.5rem;
-  }
+  .title { font-size: 1.75rem; }
+  .portfolioGrid { grid-template-columns: repeat(2, 1fr); }
+  .proRow { flex-direction: column; align-items: flex-start; }
+  .proButton { width: 100%; margin-top: 0.5rem; }
 }

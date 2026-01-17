@@ -50,6 +50,7 @@ function WorkerList() {
   })
 
     useEffect(() => {
+      window.scroll(0, 0)
       setCurrentPage(1);
     }, [selectedCity, selectedCategory, debouncedSearchQuery])
 
