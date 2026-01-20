@@ -101,25 +101,40 @@ function WorkerRegister() {
       );
       const user = userCrendentials.user;
 
-      await setDoc(doc(db, "workers", user.uid), {
-        uid: user.uid,
-        fullName: formData.name,
-        email: formData.email,
-        city: formData.city,
-        phoneNumber: formData.phoneNumber,
-        category: formData.skills,
-        profilePic: `https://ui-avatars.com/api/?name=${formData.name}&background=random`,
-        rating: 5.0,
-        bio: "",
-        isActive: true,
-        joinedDate: new Date().toLocaleDateString('sq-AL'),
-        isPro: false,
-        startingPrice: 0,
-        experienceYears: 0, 
-        completedJobs: 0,
-        portfolio: [],
-        createdAt: serverTimestamp(),
-      });
+   await setDoc(doc(db, "workers", user.uid), {
+  uid: user.uid,
+
+  // Identity
+  fullName: formData.name,
+  email: formData.email,
+  phoneNumber: formData.phoneNumber,
+
+  // Marketplace info
+  city: formData.city,
+  category: formData.skills,
+
+  // Profile
+  bio: "",
+  profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.name)}&background=random`,
+  portfolio: [],
+
+  // Pricing & experience
+  startingPrice: 0,
+  experienceYears: 0,
+
+  // 🔴 REVIEW STATS (IMPORTANT)
+  avgRating: null,        // no reviews yet
+  reviewCount: 0,
+  lastReviewAt: null,
+
+  // Status
+  isPro: false,
+  isActive: true,
+
+  // Metadata
+  createdAt: serverTimestamp(),
+});
+
 
       alert("Llogaria u krijua me sukses");
       navigate("/");
