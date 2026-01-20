@@ -274,7 +274,7 @@ function Dashboard() {
 
     try {
       const { data } = await generateToken({workerId: user.uid, customerPhone})
-      const reviewLink = `https://mjeshtri.ks/review/${data.token}`;
+      const reviewLink = `https://mjeshtri-blue-vercel.app/review/${data.token}`;
 
       const message = `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`;
       const waLink = `https://wa.me/${customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
