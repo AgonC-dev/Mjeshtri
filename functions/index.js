@@ -9,7 +9,6 @@
 
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
-const { Timestamp } = require("firebase-admin/firestore");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
 
@@ -58,7 +57,7 @@ exports.generateReviewRequest = onCall(async (request) => {
       customerPhone,
       token,
       status: "pending",
-      createdAt: Timestamp.now(),
+      createdAt:  admin.firestore.Timestamp.now(),
     });
     console.log("Token created:", token);
 

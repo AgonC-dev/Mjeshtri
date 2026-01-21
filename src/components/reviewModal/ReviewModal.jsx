@@ -20,20 +20,13 @@ const handlePrepareLink = async () => {
     const generateToken = httpsCallable(functions, "generateReviewRequest");
     const { data } = await generateToken({ customerPhone });
 
-    console.log("Generated token:", data.token);
-
-    const baseUrl =
-      window.location.hostname === "localhost"
-        ? "http://localhost:3000"
-        : "https://mjeshtri-blue-vercel.app";
+    const baseUrl = window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://mjeshtri-blue-vercel.app";
 
     const reviewLink = `${baseUrl}/review/${data.token}`;
-    console.log("Review link:", reviewLink);
-
-    const message = `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`;
-    const waUrl = `https://wa.me/${customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
-
-    console.log("WhatsApp URL:", waUrl);
+    const phoneNumber = customerPhone.replace(/\D/g, ""); // Remove + and spaces
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(`Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`)}`;
 
     setWhatsAppUrl(waUrl);
   } catch (error) {
@@ -42,7 +35,6 @@ const handlePrepareLink = async () => {
     setLoadingLink(false);
   }
 };
-
  return (
     <div className={styles.proContent}>
       <h2>Kërko Vlerësim</h2>
