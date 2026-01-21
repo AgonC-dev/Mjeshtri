@@ -10,46 +10,39 @@
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const admin = require("firebase-admin");
+// Destructure FieldValue specifically for Admin v13
+const { FieldValue } = require("firebase-admin/firestore"); 
 const crypto = require("crypto");
 
 admin.initializeApp();
 const db = admin.firestore();
 
-// Optional: set global options for all v2 functions
 setGlobalOptions({
   maxInstances: 5,
   memory: "128MB",
 });
 
-// Use **named export** for v2
 exports.generateReviewRequest = onCall(async (request) => {
-  console.log("generateReviewRequest called with data:", request.data);
-
   if (!request.auth) {
-    console.log("User not authenticated");
     throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
   }
 
   const { customerPhone } = request.data;
   const workerId = request.auth.uid;
-  console.log("Authenticated user:", workerId);
 
   if (!customerPhone) {
-    console.log("No customerPhone provided");
     throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
   }
 
   try {
     const workerSnap = await db.collection("workers").doc(workerId).get();
-    console.log("workerSnap:", workerSnap.exists);
     if (!workerSnap.exists) {
-      console.log("Worker not found in Firestore");
       throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
     }
+    
     const workerData = workerSnap.data();
-    console.log("workerData:", workerData);
-
     const token = crypto.randomBytes(16).toString("hex");
+
     await db.collection("reviewRequests").doc(token).set({
       workerId,
       workerName: workerData.fullName || "Mjeshtër",
@@ -57,14 +50,12 @@ exports.generateReviewRequest = onCall(async (request) => {
       customerPhone,
       token,
       status: "pending",
-      createdAt:  admin.firestore.Timestamp.now(),
+      createdAt: FieldValue.serverTimestamp(), // This will now work
     });
-    console.log("Token created:", token);
 
     return { token };
   } catch (err) {
-    console.error("generateReviewRequest error:", err);
-    console.error("stack:", err.stack);
+    console.error("Error:", err);
     throw new HttpsError("internal", "Ndodhi një gabim në server.");
   }
 });
