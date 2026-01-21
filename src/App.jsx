@@ -17,6 +17,7 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
 import UserProfile from './pages/ViewProfile/UserProfile';
+import ReviewPage from "./pages/Review/ReviewPage";
 
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "settings", element: <ProfileSettings /> },
       { path: "profile", element: <UserProfile /> },
+      {path: "review/:token", element: <ReviewPage />}
     ],
   },
   {

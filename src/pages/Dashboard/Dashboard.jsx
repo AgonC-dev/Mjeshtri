@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db, storage } from "../../api/firebase";
 import imageCompression from 'browser-image-compression';
 import PhoneInput from 'react-phone-input-2';
-import { getFunctions, httpsCallable } from "firebase/functions";
+
 import 'react-phone-input-2/lib/style.css';
 import {
   doc,
@@ -16,6 +16,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
 import Modal from "../../components/Modal/Modal";
+import ReviewModalContent from "../../components/reviewModal/reviewModal";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -41,8 +42,7 @@ function Dashboard() {
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState({ pro: false, review:false});
-  const [ customerPhone, setCustomerPhone] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
   const navigate = useNavigate();
@@ -236,7 +236,7 @@ function Dashboard() {
   }
 
   function openProModal() {
-    setIsModalOpen((prev) => ({...prev, pro:true}))
+    setIsModalOpen(true)
   }
 
 
@@ -251,7 +251,7 @@ function Dashboard() {
         proSubscribedAt: serverTimestamp(),
       });
       setForm((p) => ({ ...p, isPro: true }));
-      setIsModalOpen((prev) => ({...prev, pro:false}));
+      setIsModalOpen(false);
       setStatus({ message: "Faleminderit! Tani jeni anëtar PRO.", type: "success" });
     } catch (err) {
       console.error(err);
@@ -262,28 +262,6 @@ function Dashboard() {
   }
 
 
-  async function generateReviewLink() {
-    if(!user) {
-      return;
-    }
-
-    if(!customerPhone) return;
-
-    const functions = getFunctions();
-    const generateToken = httpsCallable(functions, "generateReviewRequest");
-
-    try {
-      const { data } = await generateToken({workerId: user.uid, customerPhone})
-      const reviewLink = `https://mjeshtri-blue-vercel.app/review/${data.token}`;
-
-      const message = `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`;
-      const waLink = `https://wa.me/${customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
-      window.open(waLink, "_blank");
-    
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   if (loading) return <Loading />
   if (!user) return <div className={styles.wrap}><p>Ju lutem hyni në llogari.</p></div>;
@@ -402,29 +380,13 @@ function Dashboard() {
 
     {/* Modals placed outside form to avoid interference */}
     <Modal open={isModalOpen.review} onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}>
-      <div className={styles.proContent}>
-        <h2>Kërko Vlerësim</h2>
-        <p>Dërgoni një link klientit tuaj për të marrë një vlerësim me yje.</p>
-        <div style={{ textAlign: 'left', marginTop: '1.5rem' }}>
-          <label className={styles.label}>Numri i Klientit (WhatsApp)</label>
-          <PhoneInput
-            country={'xk'}
-            value={customerPhone}
-            onChange={(val) => setCustomerPhone(val)}
-            containerClass={styles.phoneContainer}
-            inputClass={styles.PhoneInput}
-          />
-        </div>
-        <div className={styles.actions}>
-          <button className={styles.purchaseBtn} onClick={generateReviewLink} disabled={!customerPhone}>
-            Dërgo në WhatsApp 💬
-          </button>
-          <button className={styles.cancelBtn} onClick={() => setIsModalOpen(prev => ({ ...prev, review: false }))}>Anulo</button>
-        </div>
-      </div>
+     <ReviewModalContent 
+       user={user}
+       onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}
+      />
     </Modal>
 
-    <Modal open={isModalOpen.pro} onClose={() => setIsModalOpen(prev => ({ ...prev, pro: false }))}>
+    <Modal open={isModalOpen.pro} onClose={() => setIsModalOpen(false)}>
       <div className={styles.proContent}>
         <h2>PRO Membership</h2>
         <p>Zhblloko të gjitha mundësitë</p>
@@ -435,7 +397,7 @@ function Dashboard() {
         </ul>
         <div className={styles.actions}>
           <button className={styles.purchaseBtn} onClick={handleGetPro}>Vazhdo te Pagesa (€14.99)</button>
-          <button className={styles.cancelBtn} onClick={() => setIsModalOpen(prev => ({ ...prev, pro: false }))}>Më vonë</button>
+          <button className={styles.cancelBtn} onClick={() => setIsModalOpen(true)}>Më vonë</button>
         </div>
       </div>
     </Modal>

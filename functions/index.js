@@ -41,7 +41,15 @@ exports.generateReviewRequest = onCall(async (request) => {
         throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
     }
 
+    
+
     try {
+
+      const workerSnap = await admin.firestore().collection("workers").doc(workerId).get();
+        if (!workerSnap.exists) {
+            throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
+        }
+        const workerData = workerSnap.data();
         // 3. Logic: Generate secure random token
         const token = crypto.randomBytes(16).toString("hex");
         const docRef = db.collection("reviewRequests").doc(token);
@@ -49,6 +57,8 @@ exports.generateReviewRequest = onCall(async (request) => {
         // 4. Save to Firestore
         await docRef.set({
             workerId,
+            workerName: workerData.fullName || "Mjeshtër",
+            workerPic: workerData.profilePic || "",
             customerPhone,
             token,
             status: "pending",
