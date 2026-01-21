@@ -1,7 +1,9 @@
-import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { serverTimestamp } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { db } from "../../api/firebase";
+import styles from './ReviewPage.module.css';
 
 export default function ReviewPage() {
     const { token } = useParams();
@@ -13,35 +15,34 @@ export default function ReviewPage() {
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-
   useEffect(() => {
-    async function load() {
-        try {
-            const tokenRef = doc(db, "reaviewRequests", token);
-            const snap = await getDoc(tokenRef);
+  async function load() {
+    try {
+      const tokenRef = doc(db, "reviewRequests", token); // FIXED typo
+      const snap = await getDoc(tokenRef);
 
-            if(!snap.exists()) {
-                setError("Link i pavlefshëm.");
-                return;
-            }
+      if (!snap.exists()) {
+        setError("Link i pavlefshëm.");
+        return;
+      }
 
-            const data = snap.data();
-            if (data.status === "used") {
-                setError("Ky link është përdorur tashmë.");
-               return;
-            }
+      const data = snap.data();
+      if (data.status === "used") {
+        setError("Ky link është përdorur tashmë.");
+        return;
+      }
 
-            setTokenData(data);
-        } catch (err) {
-            console.error(err);
-            setError("Ndodhi një gabim.");
-        } finally {
-            setLoading(false)
-        }
+      setTokenData(data);
+    } catch (err) {
+      console.error(err);
+      setError("Ndodhi një gabim.");
+    } finally {
+      setLoading(false);
     }
+  }
 
-    load();
-  }, [token])
+  load();
+}, [token]);
 
 
   async function handleSubmit(e) {
