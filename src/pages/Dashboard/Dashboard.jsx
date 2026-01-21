@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db, storage } from "../../api/firebase";
 import imageCompression from 'browser-image-compression';
 import PhoneInput from 'react-phone-input-2';
+import ReviewModal from "../../components/reviewModal/reviewModal";
 
 import 'react-phone-input-2/lib/style.css';
 import {
@@ -16,7 +17,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
 import Modal from "../../components/Modal/Modal";
-import ReviewModalContent from "../../components/reviewModal/reviewModal";
+
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -380,7 +381,7 @@ function Dashboard() {
 
     {/* Modals placed outside form to avoid interference */}
     <Modal open={isModalOpen.review} onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}>
-     <ReviewModalContent 
+     <ReviewModal 
        user={user}
        onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}
       />

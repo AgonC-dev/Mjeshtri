@@ -1,10 +1,10 @@
 
-import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from "firebase/functions";
 import { useState } from "react";
 import PhoneInput from 'react-phone-input-2';
 import styles from './ReviewModal.module.css';
 
-export default function ReviewModalContent({ onClose }) {
+export default function ReviewModal({ onClose }) {
     const [ customerPhone, setCustomerPhone] = useState(null);
     const [ loadingLink, setLoadingLink ] = useState(false);
     const [ whatsappUrl, setWhatsAppUrl] = useState(null);
@@ -15,6 +15,7 @@ export default function ReviewModalContent({ onClose }) {
 
     try {
         const functions = getFunctions();
+        connectFunctionsEmulator(functions, "127.0.0.1", 5001);
         const generateToken = httpsCallable(functions, "generateReviewRequest");
         const { data } = await generateToken( { customerPhone});
 

@@ -9,6 +9,7 @@
 
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
+const { Timestamp } = require("firebase-admin/firestore");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
 
@@ -22,45 +23,52 @@ setGlobalOptions({
 });
 
 // Use **named export** for v2
-exports.generateReviewRequest = onCall(
+exports.generateReviewRequest = onCall(async (request) => {
+  console.log("generateReviewRequest called with data:", request.data);
 
-  async (request) => {
-    if (!request.auth) {
-      throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
-    }
-
-    const { customerPhone } = request.data;
-    const workerId = request.auth.uid;
-
-    if (!customerPhone) {
-      throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
-    }
-
-    try {
-      const workerSnap = await db.collection("workers").doc(workerId).get();
-      if (!workerSnap.exists()) {
-        throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
-      }
-      const workerData = workerSnap.data();
-
-      const token = crypto.randomBytes(16).toString("hex");
-      await db.collection("reviewRequests").doc(token).set({
-        workerId,
-        workerName: workerData.fullName || "Mjeshtër",
-        workerPic: workerData.profilePic || "",
-        customerPhone,
-        token,
-        status: "pending",
-        createdAt: admin.firestore.Timestamp.now(),
-      });
-
-      return { token };
-    } catch (err) {
-      console.error(err);
-      throw new HttpsError("internal", "Ndodhi një gabim në server.");
-    }
+  if (!request.auth) {
+    console.log("User not authenticated");
+    throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
   }
-);
+
+  const { customerPhone } = request.data;
+  const workerId = request.auth.uid;
+  console.log("Authenticated user:", workerId);
+
+  if (!customerPhone) {
+    console.log("No customerPhone provided");
+    throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
+  }
+
+  try {
+    const workerSnap = await db.collection("workers").doc(workerId).get();
+    console.log("workerSnap:", workerSnap.exists);
+    if (!workerSnap.exists) {
+      console.log("Worker not found in Firestore");
+      throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
+    }
+    const workerData = workerSnap.data();
+    console.log("workerData:", workerData);
+
+    const token = crypto.randomBytes(16).toString("hex");
+    await db.collection("reviewRequests").doc(token).set({
+      workerId,
+      workerName: workerData.fullName || "Mjeshtër",
+      workerPic: workerData.profilePic || "",
+      customerPhone,
+      token,
+      status: "pending",
+      createdAt: Timestamp.now(),
+    });
+    console.log("Token created:", token);
+
+    return { token };
+  } catch (err) {
+    console.error("generateReviewRequest error:", err);
+    console.error("stack:", err.stack);
+    throw new HttpsError("internal", "Ndodhi një gabim në server.");
+  }
+});
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
 // traffic spikes by instead downgrading performance. This limit is a
