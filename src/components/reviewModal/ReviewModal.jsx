@@ -9,28 +9,39 @@ export default function ReviewModal({ onClose }) {
     const [ loadingLink, setLoadingLink ] = useState(false);
     const [ whatsappUrl, setWhatsAppUrl] = useState(null);
 
- const handlePrepareLink = async () => {
-    if(!customerPhone) return;
-    setLoadingLink(true);
+const handlePrepareLink = async () => {
+  if (!customerPhone) return;
+  setLoadingLink(true);
 
-    try {
-        const functions = getFunctions();
-        connectFunctionsEmulator(functions, "127.0.0.1", 5001);
-        const generateToken = httpsCallable(functions, "generateReviewRequest");
-        const { data } = await generateToken( { customerPhone});
+  try {
+    const functions = getFunctions();
+    connectFunctionsEmulator(functions, "127.0.0.1", 5001);
 
-        const reviewLink = `https://mjeshtri-blue-vercel.app/review/${data.token}`;
-        const message = `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`
-   
-        const waUrl = `https://wa.me/${customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
-        setWhatsAppUrl(waUrl);
+    const generateToken = httpsCallable(functions, "generateReviewRequest");
+    const { data } = await generateToken({ customerPhone });
 
-    } catch (error) {
-       console.log(error)
-    } finally {
-        setLoadingLink(false);
-    }
- }
+    console.log("Generated token:", data.token);
+
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://mjeshtri-blue-vercel.app";
+
+    const reviewLink = `${baseUrl}/review/${data.token}`;
+    console.log("Review link:", reviewLink);
+
+    const message = `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`;
+    const waUrl = `https://wa.me/${customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+
+    console.log("WhatsApp URL:", waUrl);
+
+    setWhatsAppUrl(waUrl);
+  } catch (error) {
+    console.error("Error generating token:", error);
+  } finally {
+    setLoadingLink(false);
+  }
+};
 
  return (
     <div className={styles.proContent}>
