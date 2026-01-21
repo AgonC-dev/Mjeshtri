@@ -12,66 +12,55 @@ const { setGlobalOptions } = require("firebase-functions/v2");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
 
-// Initialize Firebase Admin SDK
 admin.initializeApp();
 const db = admin.firestore();
 
-// Set global options for all functions (Cost & Performance Control)
-setGlobalOptions({ 
-  maxInstances: 5, 
+// Optional: set global options for all v2 functions
+setGlobalOptions({
+  maxInstances: 5,
   memory: "128MB",
-  
 });
 
-/**
- * This function generates a review request token for a worker.
- * Accesses auth context automatically via Firebase SDK.
- */
-exports.generateReviewRequest = onCall(async (request) => {
-    // 1. Authentication Check (Injected by Firebase)
+// Use **named export** for v2
+exports.generateReviewRequest = onCall(
+
+  async (request) => {
     if (!request.auth) {
-        throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
+      throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
     }
 
-    // 2. Data Extraction (Passed from Frontend)
     const { customerPhone } = request.data;
-    const workerId = request.auth.uid; // Securely pulled from Auth token
+    const workerId = request.auth.uid;
 
     if (!customerPhone) {
-        throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
+      throw new HttpsError("invalid-argument", "Numri i telefonit mungon.");
     }
-
-    
 
     try {
+      const workerSnap = await db.collection("workers").doc(workerId).get();
+      if (!workerSnap.exists()) {
+        throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
+      }
+      const workerData = workerSnap.data();
 
-      const workerSnap = await admin.firestore().collection("workers").doc(workerId).get();
-        if (!workerSnap.exists) {
-            throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
-        }
-        const workerData = workerSnap.data();
-        // 3. Logic: Generate secure random token
-        const token = crypto.randomBytes(16).toString("hex");
-        const docRef = db.collection("reviewRequests").doc(token);
+      const token = crypto.randomBytes(16).toString("hex");
+      await db.collection("reviewRequests").doc(token).set({
+        workerId,
+        workerName: workerData.fullName || "Mjeshtër",
+        workerPic: workerData.profilePic || "",
+        customerPhone,
+        token,
+        status: "pending",
+        createdAt: admin.firestore.Timestamp.now(),
+      });
 
-        // 4. Save to Firestore
-        await docRef.set({
-            workerId,
-            workerName: workerData.fullName || "Mjeshtër",
-            workerPic: workerData.profilePic || "",
-            customerPhone,
-            token,
-            status: "pending",
-            createdAt: admin.firestore.Timestamp.now(),
-        });
-
-        // 5. Return data to Frontend
-        return { token };
-    } catch (error) {
-        console.error("Error generating token:", error);
-        throw new HttpsError("internal", "Ndodhi një gabim në server.");
+      return { token };
+    } catch (err) {
+      console.error(err);
+      throw new HttpsError("internal", "Ndodhi një gabim në server.");
     }
-});
+  }
+);
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
 // traffic spikes by instead downgrading performance. This limit is a
