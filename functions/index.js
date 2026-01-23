@@ -23,7 +23,7 @@ const db = admin.firestore();
 
 setGlobalOptions({
   maxInstances: 5,
-  memory: "128MiB", // Updated to MiB (standard for v2)
+  memory: "256MiB", // Updated to MiB (standard for v2)
   region: "us-central1" // Recommended to specify your region explicitly
 });
 
