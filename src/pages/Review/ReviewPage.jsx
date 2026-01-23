@@ -54,6 +54,7 @@ export default function ReviewPage() {
           workerId: tokenData.workerId,
           rating,
           comment,
+          token: token,
           createdAt: serverTimestamp(),
         })
 

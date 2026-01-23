@@ -43,7 +43,10 @@ function Dashboard() {
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState({
+  review: false,
+  pro: false,
+});
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
   const navigate = useNavigate();

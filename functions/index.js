@@ -7,22 +7,27 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { setGlobalOptions } = require("firebase-functions/v2");
-const admin = require("firebase-admin");
+import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { setGlobalOptions } from "firebase-functions/v2";
+import admin from "firebase-admin";
 // Destructure FieldValue specifically for Admin v13
-const { FieldValue } = require("firebase-admin/firestore"); 
-const crypto = require("crypto");
+import { FieldValue } from "firebase-admin/firestore"; 
+import crypto from "crypto";
 
-admin.initializeApp();
+// Initialize admin only if it hasn't been initialized already
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+
 const db = admin.firestore();
 
 setGlobalOptions({
   maxInstances: 5,
-  memory: "128MB",
+  memory: "128MiB", // Updated to MiB (standard for v2)
+  region: "us-central1" // Recommended to specify your region explicitly
 });
 
-exports.generateReviewRequest = onCall(async (request) => {
+export const generateReviewRequest = onCall(async (request) => {
   if (!request.auth) {
     throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
   }
@@ -55,8 +60,8 @@ exports.generateReviewRequest = onCall(async (request) => {
 
     return { token };
   } catch (err) {
-    console.error("Error:", err);
-    throw new HttpsError("internal", "Ndodhi një gabim në server.");
+    console.error("Actual Server Error:", err); // Look at Firebase Console Logs for this!
+    throw new HttpsError("internal", err.message || "Ndodhi një gabim në server.");
   }
 });
 // For cost control, you can set the maximum number of containers that can be

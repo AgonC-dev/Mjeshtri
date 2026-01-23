@@ -36,9 +36,10 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "settings", element: <ProfileSettings /> },
       { path: "profile", element: <UserProfile /> },
-      {path: "review/:token", element: <ReviewPage />}
+    
     ],
   },
+    {path: "review/:token", element: <ReviewPage />},
   {
     path: "*",
     element: <ErrorPage />,
