@@ -30,7 +30,9 @@ const handlePrepareLink = async () => {
     const { data } = await generateToken({ customerPhone });
 
     // ✅ ALWAYS production URL here
-  const baseUrl = window.location.origin; // This gets 'https://mjeshtri-blue.vercel.app' automatically
+  const baseUrl = window.location.hostname.includes("localhost") 
+  ? window.location.origin 
+  : "https://mjeshtri-blue.vercel.app"; // This gets 'https://mjeshtri-blue.vercel.app' automatically
   const reviewLink = `${baseUrl}/review/${data.token}`;
 
     const phoneNumber = customerPhone.replace(/\D/g, "");
