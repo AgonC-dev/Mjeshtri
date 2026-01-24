@@ -15,14 +15,15 @@ function WorkerProfile() {
   const [worker, setWorker] = useState(location.state.workerData || null)
   const [loading, setLoading] = useState(!worker);
   const [reviews, setReviews] = useState([]);
-
- useEffect(() => {
+useEffect(() => { 
   window.scroll(0, 0);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchWorkerAndReviews = async () => {
+    // We only set loading to true if we don't have worker data yet
+    if (!worker) setLoading(true); 
+
     try {
-      // 1. Fetch Worker Details (if not passed via state)
+      // 1. Fetch Worker Details only if missing
       if (!worker) {
         const docRef = doc(db, "workers", id);
         const docSnap = await getDoc(docRef);
@@ -31,29 +32,33 @@ function WorkerProfile() {
         }
       }
 
-      // 2. Fetch Reviews for this Worker
-      const q = query(
-        collection(db, "reviews"),
-        where("workerId", "==", id),
-        orderBy("createdAt", "desc")
-      );
+      // 2. Fetch Reviews (ALWAYS run this)
+      console.log("Fetching reviews for worker:", id); // Debug log
+      
+            const q = query(
+             collection(db, "reviews"),
+             where("workerId", "==", id),
+             orderBy("createdAt", "desc")
+            );
       
       const querySnapshot = await getDocs(q);
       const reviewsData = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
+      
       setReviews(reviewsData);
 
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.error("Error fetching reviews:", err);
+      // If you get an error here, it's likely the missing Index link!
     } finally {
       setLoading(false);
     }
   };
 
-  fetchData();
-}, [id]);
+  fetchWorkerAndReviews();
+}, [id]); // Only re-run if the ID in the URL changes
 
   if (loading) return <div className={styles.loading}>Duke u ngarkuar...</div>;
 
@@ -141,7 +146,7 @@ function WorkerProfile() {
 </section>
 </div>
 {/* REVIEWS SECTION */}
-<section className={styles.reviewsSection}>
+ <section className={styles.reviewsSection}>
   <div className={styles.reviewHeaderMain}>
     <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
     <span className={styles.reviewCount}>{reviews.length} Vlerësime</span>
@@ -149,14 +154,10 @@ function WorkerProfile() {
 
   <div className={styles.reviewsGrid}>
     {reviews.length === 0 ? (
-      <div className={styles.emptyState}>Nuk ka vlerësime ende për këtë mjeshtër.</div>
+      <div className={styles.emptyState}>Nuk ka vlerësime ende.</div>
     ) : (
       reviews.map((r, index) => (
-        <div 
-          key={r.id} 
-          className={styles.reviewCard} 
-          style={{ "--delay": `${index * 0.1}s` }}
-        >
+        <div key={r.id} className={styles.reviewCard} style={{ "--delay": `${index * 0.1}s` }}>
           <div className={styles.reviewTop}>
             <div className={styles.starBadge}>
               <span className={styles.starIcon}>★</span>
@@ -165,17 +166,15 @@ function WorkerProfile() {
             <div className={styles.verifiedTag}>I Verifikuar</div>
           </div>
           
-          <p className={styles.comment}>"{r.comment}"</p>
+          <p className={styles.comment}>{r.comment}</p>
           
           <div className={styles.reviewFooter}>
             <div className={styles.customerInfo}>
-              <div className={styles.avatarMini}>
-                {r.customerName ? r.customerName[0].toUpperCase() : "K"}
-              </div>
-              <strong>{r.customerName || "Klient i Verifikuar"}</strong>
+              <div className={styles.avatarMini}>{r.customerName?.[0] || "K"}</div>
+              <strong>{r.customerName || "Klient"}</strong>
             </div>
             <span className={styles.reviewDate}>
-              {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
+               {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
             </span>
           </div>
         </div>
