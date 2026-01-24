@@ -1,4 +1,4 @@
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, query, collection, orderBy, where, getDocs } from 'firebase/firestore';
 import { db, auth } from "../../api/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
@@ -17,6 +17,7 @@ const { id: urlId } = useParams();
   const [worker, setWorker] = useState(location.state?.workerData || null);
   const [loading, setLoading] = useState(!worker);
   const [error, setError] = useState('');
+  const [reviews, setReviews] = useState([]);
   
 
 useEffect(() => {
@@ -40,6 +41,16 @@ const unsub = onAuthStateChanged(auth, (currentUser) => {
             if(docSnap) {
                 setWorker(docSnap.data())
             }
+
+            const q = query(
+             collection(db, "reviews"),
+             where("workerId", "==", activeID),
+             orderBy("createdAt", "desc")
+            );
+
+            const querySnapshot = await getDocs(q);
+            setReviews(querySnapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+
         } catch (err) {
             setError('Ups! Nuk mundëm të gjenim profilin e mjeshtrit. Sigurohuni që linku është i saktë.')
         } finally {
@@ -162,6 +173,42 @@ if (error) {
   )}
 </section>
 </div>
+     <section className={styles.reviewsSection}>
+   <div className={styles.reviewHeaderMain}>
+     <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
+     <span className={styles.reviewCount}>{reviews.length} Vlerësime</span>
+   </div>
+ 
+   <div className={styles.reviewsGrid}>
+     {reviews.length === 0 ? (
+       <div className={styles.emptyState}>Nuk ka vlerësime ende.</div>
+     ) : (
+       reviews.map((r, index) => (
+         <div key={r.id} className={styles.reviewCard} style={{ "--delay": `${index * 0.1}s` }}>
+           <div className={styles.reviewTop}>
+             <div className={styles.starBadge}>
+               <span className={styles.starIcon}>★</span>
+               <span className={styles.ratingNumber}>{r.rating}</span>
+             </div>
+             <div className={styles.verifiedTag}>I Verifikuar</div>
+           </div>
+           
+           <p className={styles.comment}>{r.comment}</p>
+           
+           <div className={styles.reviewFooter}>
+             <div className={styles.customerInfo}>
+               <div className={styles.avatarMini}>{r.customerName?.[0] || "K"}</div>
+               <strong>{r.customerName || "Klient"}</strong>
+             </div>
+             <span className={styles.reviewDate}>
+                {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
+             </span>
+           </div>
+         </div>
+       ))
+     )}
+   </div>
+ </section>
 
       <div className={styles.ctaSection}>
         <WhatsAppButton phoneNumber={worker.phoneNumber} />

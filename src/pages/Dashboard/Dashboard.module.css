@@ -520,7 +520,7 @@
   color: white;
   box-shadow: 0 4px 12px rgba(0, 153, 90, 0.2);
 }
-
+ 
 /* Small shimmer animation */
 .reviewTriggerBtn::after {
   content: "";
@@ -542,6 +542,146 @@
   left: 100%;
   transition: 0.6s ease-in-out;
 }
+
+/* ===================== SURPRISE BENTO REVIEWS ===================== */
+
+.reviewsSection {
+  margin-top: 5rem;
+  padding-bottom: 8rem;
+}
+
+.reviewHeaderMain {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 2.5rem;
+}
+
+.reviewCount {
+  background: rgba(0, 255, 133, 0.1);
+  color: var(--accent-emerald);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(0, 255, 133, 0.2);
+}
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.reviewCard {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.8rem;
+  border-radius: 24px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: bentoReveal 0.6s ease forwards;
+  animation-delay: var(--delay);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reviewCard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 255, 133, 0.3);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.reviewTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.starBadge {
+  background: #000;
+  border: 1px solid var(--accent-emerald);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.starIcon { color: var(--accent-emerald); font-size: 14px; }
+.ratingNumber { color: #fff; font-weight: 800; font-size: 14px; }
+
+.verifiedTag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #3498db;
+  letter-spacing: 1px;
+}
+
+.comment {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  font-style: italic;
+  margin-bottom: 2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reviewFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 1.2rem;
+}
+
+.customerInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatarMini {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent-emerald), #00b36a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #000;
+}
+
+.reviewDate {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+@keyframes bentoReveal {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Light Mode Overrides */
+:global([data-theme="light"]) .reviewCard {
+  background: #fff;
+  border-color: #eee;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+}
+
+:global([data-theme="light"]) .comment { color: #444; }
+:global([data-theme="light"]) .starBadge { background: #f8f9fa; border-color: #dee2e6; }
+:global([data-theme="light"]) .ratingNumber { color: #111; }
 
 .phoneContainer :global(.country-list) {
   background: var(--bg-dropdown) !important;
@@ -731,6 +871,7 @@
   .saveButtonSticky, .selfProfile { width: 100%; padding: 14px; }
   .actionFooter { height: auto; padding: 1.2rem; }
   .proContent { padding: 1.5rem; }
+  .reviewCount { text-align: center;}
 }
 
 @media (max-width: 480px) {

@@ -10,8 +10,13 @@ import 'react-phone-input-2/lib/style.css';
 import {
   doc,
   getDoc,
+  getDocs,
   updateDoc,
   serverTimestamp,
+  query,
+  collection,
+  where,
+  orderBy,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
@@ -77,6 +82,15 @@ function Dashboard() {
             portfolio: data.portfolio || [],
           }));
         }
+
+        const q = query(
+          collection(db, "reviews"),
+          where("workerId", "==", u.uid),
+          orderBy("createdAt", "desc")
+        )
+
+        const revSnap = await getDocs(q);
+        setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data()})))
       } catch (err) {
         console.error("Failed to load dashboard data", err);
         setStatus({ message: "Dështoi ngarkimi i të dhënave.", type: "error" });
@@ -418,19 +432,42 @@ function Dashboard() {
         </div>
       </div>
     </div>
-
     <section className={styles.reviewsSection}>
-      <h2 className={styles.sectionTitle}>Vlerësimet</h2>
-      {reviews.length === 0 ? <p>Nuk ka vlerësime ende.</p> : reviews.map((r) => (
-        <div key={r.id} className={styles.reviewCard}>
-          <div className={styles.reviewHead}>
-            <strong>{r.customerName || "Klient"}</strong>
-            <span className={styles.rating}>{r.rating} ★</span>
+  <div className={styles.reviewHeaderMain}>
+    <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
+    <span className={styles.reviewCount}>{reviews.length} Vlerësime</span>
+  </div>
+
+  <div className={styles.reviewsGrid}>
+    {reviews.length === 0 ? (
+      <div className={styles.emptyState}>Nuk ka vlerësime ende.</div>
+    ) : (
+      reviews.map((r, index) => (
+        <div key={r.id} className={styles.reviewCard} style={{ "--delay": `${index * 0.1}s` }}>
+          <div className={styles.reviewTop}>
+            <div className={styles.starBadge}>
+              <span className={styles.starIcon}>★</span>
+              <span className={styles.ratingNumber}>{r.rating}</span>
+            </div>
+            <div className={styles.verifiedTag}>I Verifikuar</div>
           </div>
-          <p>{r.comment}</p>
+          
+          <p className={styles.comment}>{r.comment}</p>
+          
+          <div className={styles.reviewFooter}>
+            <div className={styles.customerInfo}>
+              <div className={styles.avatarMini}>{r.customerName?.[0] || "K"}</div>
+              <strong>{r.customerName || "Klient"}</strong>
+            </div>
+            <span className={styles.reviewDate}>
+               {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
+            </span>
+          </div>
         </div>
-      ))}
-    </section>
+      ))
+    )}
+  </div>
+</section>
   </div>
 );
 }
