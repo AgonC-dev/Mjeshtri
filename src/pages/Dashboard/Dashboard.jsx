@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db, storage } from "../../api/firebase";
 import imageCompression from 'browser-image-compression';
 import PhoneInput from 'react-phone-input-2';
-import ReviewModal from "../../components/reviewModal/reviewModal";
+import ReviewModal from '../../components/ReviewModal/ReviewModal'
 
 import 'react-phone-input-2/lib/style.css';
 import {
