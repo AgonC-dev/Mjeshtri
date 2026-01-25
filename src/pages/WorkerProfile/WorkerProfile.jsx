@@ -149,7 +149,7 @@ useEffect(() => {
  <section className={styles.reviewsSection}>
   <div className={styles.reviewHeaderMain}>
     <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
-    <span className={styles.reviewCount}>{reviews.length} Vlerësime</span>
+    <span className={styles.reviewCount}>{ reviews?.length === 1 ? "1 Vlerësim" : `${reviews?.length} Vlerësime` }</span>
   </div>
 
   <div className={styles.reviewsGrid}>

@@ -1,11 +1,13 @@
 import { Link, NavLink } from 'react-router-dom'; // Added NavLink for active states
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './Header.module.css';
 import { auth, db } from '../../api/firebase'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
 function Header() {
+  
+  const menuRef = useRef();
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [showDropDown, setShowDropDown] = useState(false);
@@ -36,6 +38,18 @@ function Header() {
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+     if (menuRef.current && !menuRef.current.contains(e.target)) {
+      setShowDropDown(false)
+     }
+    }
+
+    document.addEventListener("mousedown", handleOutsideClick)
+    return () => document.removeEventListener("click", handleOutsideClick)
+      
+  }, [])
 
   return (
     <header className={styles.header}>
@@ -68,7 +82,10 @@ function Header() {
             <div className={styles.profileWrapper}>
               <div 
                 className={styles.profileCircle} 
-                onClick={() => setShowDropDown(!showDropDown)}
+                 onClick={(e) => {
+                  e.stopPropagation(); // Prevents the window from seeing this specific click
+                  setShowDropDown(!showDropDown);
+                }}
               >
                 <img 
                   src={userData?.profilePic || "https://via.placeholder.com/40"} 
@@ -78,7 +95,7 @@ function Header() {
               </div>
 
               {showDropDown && (
-                <div className={styles.dropdown}>
+                <div className={styles.dropdown} ref={menuRef}>
                   <div className={styles.dropdownHeader}>
                     <p className={styles.userName}>{userData?.fullName || "Mjeshtër"}</p>
                     <p className={styles.userEmail}>{user.email}</p>

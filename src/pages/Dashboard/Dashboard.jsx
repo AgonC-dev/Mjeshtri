@@ -254,7 +254,7 @@ function Dashboard() {
   }
 
   function openProModal() {
-    setIsModalOpen(true)
+    setIsModalOpen((prev) => ({ ...prev, pro:true}));
   }
 
 
@@ -279,7 +279,7 @@ function Dashboard() {
     }
   }
 
-
+  
 
   if (loading) return <Loading />
   if (!user) return <div className={styles.wrap}><p>Ju lutem hyni në llogari.</p></div>;
@@ -435,7 +435,7 @@ function Dashboard() {
     <section className={styles.reviewsSection}>
   <div className={styles.reviewHeaderMain}>
     <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
-    <span className={styles.reviewCount}>{reviews.length} Vlerësime</span>
+    <span className={styles.reviewCount}>{ reviews?.length === 1 ? "1 Vlerësim" : `${reviews?.length} Vlerësime` }</span>
   </div>
 
   <div className={styles.reviewsGrid}>
