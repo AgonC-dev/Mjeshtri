@@ -1,0 +1,95 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 1rem;
+  letter-spacing: -2px;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 2rem;
+}
+
+.heroTitle span, .title span {
+  color: var(--accent-emerald);
+}
+
+.leadText {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 4rem;
+  border-left: 4px solid var(--accent-emerald);
+  padding-left: 24px;
+}
+
+.contentSection {
+  color: var(--text-off-white);
+  line-height: 1.8;
+}
+
+.contentSection h2, .contentSection h3 {
+  color: var(--text-white);
+  margin: 2rem 0 1rem;
+}
+
+.contentSection p, .contentSection li {
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+}
+
+.date {
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* For the About Us Grid */
+.gridFeatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 3rem;
+}
+
+.feature {
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+}
+
+.feature h3 {
+  color: var(--accent-emerald) !important;
+  margin-top: 0 !important;
+}
+
+/* Light Theme */
+:global([data-theme="light"]) :local(.heroTitle),
+:global([data-theme="light"]) :local(.title),
+:global([data-theme="light"]) :local(.contentSection h2),
+:global([data-theme="light"]) :local(.contentSection h3) {
+  color: var(--text-off-white); /* Dark gray */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .heroTitle { font-size: 2.5rem; }
+  .gridFeatures { grid-template-columns: 1fr; }
+  .container { padding: 40px 20px; }
+}

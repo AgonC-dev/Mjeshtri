@@ -1,0 +1,228 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 80vh;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.contactCard {
+  background: transparent;
+  /* Thick accent line on the left to ground the wide design */
+  border-left: 4px solid var(--accent-emerald);
+  padding: 3rem 4rem;
+  width: 100%;
+  max-width: 850px; /* Much wider now */
+  animation: slideIn 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.contactCard h2 {
+  font-size: 2.5rem;
+  color: var(--text-white);
+  margin-bottom: 0.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; /* Increased gap for a more "breathable" look */
+}
+
+/* Side-by-side logic */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  animation: reveal 0.6s ease-out backwards;
+}
+
+.inputGroup label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: var(--accent-emerald);
+  margin-bottom: 10px;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
+  color: var(--text-off-white);
+  padding: 12px 0;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  outline: none;
+  border-bottom: 2px solid var(--accent-emerald);
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.03);
+  padding-left: 10px;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.submitBtn {
+  background: var(--accent-emerald);
+  color: #000;
+  border: none;
+  padding: 15px 45px;
+  font-weight: 800;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+}
+
+/* --- Typography Styling --- */
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-white); /* Dark theme default */
+  margin-bottom: 0.5rem;
+  letter-spacing: -1.5px;
+}
+
+.title span {
+  color: var(--accent-emerald);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  max-width: 500px;
+  line-height: 1.5;
+  margin-bottom: 3rem;
+}
+
+/* --- Dropdown / Select Styling --- */
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Custom arrow for the dropdown */
+.selectWrapper::after {
+  content: '▼';
+  font-size: 0.7rem;
+  color: var(--accent-emerald);
+  position: absolute;
+  right: 10px;
+  bottom: 15px;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.customSelect {
+  appearance: none; /* Removes default browser styling */
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
+  color: var(--text-off-white);
+  padding: 12px 0;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.customSelect:focus {
+  outline: none;
+  border-bottom: 2px solid var(--accent-emerald);
+}
+
+/* Styling the options (limitations apply in CSS, but this helps) */
+.customSelect option {
+  background-color: var(--bg-secondary);
+  color: var(--text-off-white);
+  padding: 10px;
+}
+
+/* --- LIGHT THEME FIXES --- */
+:global([data-theme="light"]) :local(.title) {
+  color: var(--text-off-white); /* This uses your #212529 dark gray */
+}
+
+:global([data-theme="light"]) :local(.subtitle) {
+  color: var(--text-muted); /* Uses your #6c757d gray */
+}
+
+:global([data-theme="light"]) :local(.customSelect) {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+:global([data-theme="light"]) :local(.customSelect option) {
+  background-color: var(--white);
+  color: #000;
+}
+
+/* Animation for the arrow when select is focused */
+.customSelect:focus + .selectWrapper::after {
+  transform: rotate(180deg);
+}
+
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Light Theme Adjustments */
+:global([data-theme="light"]) :local(.inputGroup input),
+:global([data-theme="light"]) :local(.inputGroup select),
+:global([data-theme="light"]) :local(.inputGroup textarea) {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .contactCard {
+    padding: 2rem;
+    border-left: none;
+    border-top: 4px solid var(--accent-emerald);
+  }
+
+    .title {
+    font-size: 2.2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr; /* Stacks on mobile */
+  }
+
+  .footerRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
