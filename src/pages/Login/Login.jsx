@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../api/firebase";
@@ -81,7 +81,7 @@ function Login() {
   return (
     <div className={styles.loginWrap}>
       <div className={styles.card}>
-        <h1 className={styles.title}>Hyr në llogari</h1>
+        <h1 className={styles.title}>Hyr në llogari (Si Mjeshter)</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label className={styles.label} htmlFor="email">
             Email
@@ -114,6 +114,11 @@ function Login() {
           <div className={styles.forgotDiv}>
             <p>Ke harruar Fjalëkalimin?</p>
             <button type="button" onClick={handleResetPassword}>Reseto</button>
+          </div>
+          
+          <div className={styles.loginDiv}>
+            <p>Nuk ke Llogari?</p>
+            <Link to='/register'>Krijo</Link>
           </div>
 
           {error && <div className={styles.errorMessage}>{error}</div>}

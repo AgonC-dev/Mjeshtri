@@ -138,9 +138,9 @@ function Header() {
             <>
               
               <NavLink 
-                to="/register" 
+                to="/login" 
                  className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}>
-                  Regjistrohu
+                  Kyqu
               </NavLink>
             </>
           )}

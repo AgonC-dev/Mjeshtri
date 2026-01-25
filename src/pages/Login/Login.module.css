@@ -83,7 +83,6 @@
 }
 
 .forgotDiv {
-  margin-top: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,6 +93,12 @@
   border-radius: 8px;
 }
 
+/* 2. DIFFERENT MARGINS */
+.forgotDiv {
+  margin-top: 1.5rem;
+}
+
+/* 3. SHARED STYLES for children (p and button) */
 .forgotDiv p {
   color: var(--text-muted);
   margin: 0;
@@ -110,7 +115,39 @@
   transition: all 0.2s ease;
 }
 
+/* 4. SHARED HOVER */
 .forgotDiv button:hover {
+  color: var(--accent-emerald-dark);
+  text-shadow: 0 0 8px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
+}
+
+/* Container: Minimal spacing, no background block */
+.loginDiv {
+  margin-top: 1rem; /* Reduced margin to prevent scrolling */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+/* The "Nuk ke Llogari?" text */
+.loginDiv p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* The "Krijo" Link */
+.loginDiv a {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Hover state matching your reset button */
+.loginDiv a:hover {
   color: var(--accent-emerald-dark);
   text-shadow: 0 0 8px
     rgba(
