@@ -1,9 +1,30 @@
-import styles from './WhatsAppButton.module.css'
+import styles from './WhatsAppButton.module.css';
+import { doc, updateDoc, increment } from "firebase/firestore";
+import { db } from '../../api/firebase';
 
-function WhatsAppButton({ phoneNumber, text = 'Pershendetje ju gjeta ne Mjeshtri.ks' }) {
- const cleanNumber = phoneNumber.replace(/\D/g, '');
+function WhatsAppButton({ id, phoneNumber, text = 'Pershendetje ju gjeta ne Mjeshtri.ks' }) {
+  const cleanNumber = phoneNumber.replace(/\D/g, '');
   const encodedText = encodeURIComponent(text);
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedText}`;
+
+  const trackClick = async () => {
+
+    if (!id) {
+    console.error("WhatsAppButton Error: No worker ID provided!");
+    return;
+  }
+    // This runs in the background while the user is being redirected
+    try {
+
+
+      const workerRef = doc(db, "workers", id);
+      await updateDoc(workerRef, {
+        whatsappRequests: increment(1)
+      });
+    } catch (err) {
+      console.error("Tracking error:", err);
+    }
+  };
 
   return (
     <a
@@ -11,6 +32,7 @@ function WhatsAppButton({ phoneNumber, text = 'Pershendetje ju gjeta ne Mjeshtri
       target="_blank"
       rel="noopener noreferrer"
       className={styles.button}
+      onClick={trackClick} // Fires instantly on click
     >
       <svg
         className={styles.icon}
@@ -22,7 +44,7 @@ function WhatsAppButton({ phoneNumber, text = 'Pershendetje ju gjeta ne Mjeshtri
       </svg>
       Kontakto në WhatsApp
     </a>
-  )
+  );
 }
 
-export default WhatsAppButton
+export default WhatsAppButton;

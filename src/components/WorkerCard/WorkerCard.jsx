@@ -57,7 +57,7 @@ const navigate = useNavigate();
           <span className={styles.ratingValue}>{worker.rating}</span>
         </div>
         <div className={styles.buttonContainer} onClick={(e) => e.stopPropagation()}>
-          <WhatsAppButton phoneNumber={worker.phoneNumber} />
+          <WhatsAppButton id={worker.id || worker.uid} phoneNumber={worker.phoneNumber} />
         </div>
       </div>
     </div>

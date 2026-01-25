@@ -1,4 +1,13 @@
-import { addDoc, collection, doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { 
+  addDoc, 
+  collection, 
+  doc, 
+  getDoc, 
+  updateDoc, 
+  serverTimestamp ,
+  runTransaction, 
+  increment
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../api/firebase";
@@ -17,8 +26,11 @@ export default function ReviewPage() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+
   useEffect(() => {
+    console.log("Effect started")
     async function load() {
+
       try {
         const tokenRef = doc(db, "reviewRequests", token);
         const snap = await getDoc(tokenRef);
@@ -43,38 +55,71 @@ export default function ReviewPage() {
       }
     }
     load();
+    console.log("Effect finished")
   }, [token]);
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    if(!tokenData || isSubmitting) return;
+  e.preventDefault();
+  if(!tokenData || isSubmitting) return;
 
-    try {
-        setIsSubmitting(true);
-        // 1. Create the Review
-        await addDoc(collection(db, "reviews"), {
-          workerId: tokenData.workerId,
-          rating,
-          comment: comment.trim(),
-          customerName: customerName.trim() || "Klient i Verifikuar",
-          token: token,
-          createdAt: serverTimestamp(),
-        });
+  try {
+    setIsSubmitting(true);
+    
+    // 1. Setup the "Addresses" (References)
+    const workerRef = doc(db, "workers", tokenData.workerId);
+    const tokenRef = doc(db, "reviewRequests", token);
+    const newReviewRef = doc(collection(db, "reviews")); 
 
-        // 2. Mark token as used
-        await updateDoc(doc(db, "reviewRequests", token), {
-            status: "used",
-            usedAt: serverTimestamp(),
-        });
+    // 2. Start the Transaction - Everything inside these { } is protected
+    await runTransaction(db, async (transaction) => {
+      
+      // STEP A: The READS (Must be first)
+      const tokenSnap = await transaction.get(tokenRef);
+      
+      // We don't necessarily need workerSnap unless you want to check if the worker exists,
+      // but let's keep it simple.
 
-        setSubmitted(true);
-    } catch (err) {
-        console.error(err);
-        setError("Dështoi dërgimi i vlerësimit. Provoni përsëri.");
-    } finally {
-        setIsSubmitting(false);
-    }
+      if (!tokenSnap.exists() || tokenSnap.data().status === "used") {
+        // Throwing an error inside a transaction cancels everything automatically
+        throw new Error("Ky link është përdorur tashmë ose nuk ekziston.");
+      }
+
+      // STEP B: The WRITES (These are now INSIDE the transaction block)
+      
+      // Create the review document
+      transaction.set(newReviewRef, {
+        workerId: tokenData.workerId,
+        rating: rating,
+        comment: comment.trim(),
+        customerName: customerName.trim() || "Klient i Verifikuar",
+        token: token,
+        createdAt: serverTimestamp(),
+      });
+
+      // Update the Worker totals
+      transaction.update(workerRef, {
+        reviewCount: increment(1),
+        totalRatingPoints: increment(rating)
+      });
+
+      // Disable the token
+      transaction.update(tokenRef, {
+        status: "used",
+        usedAt: serverTimestamp(),
+      });
+    });
+
+    // If we get here, the transaction was successful!
+    setSubmitted(true);
+
+  } catch (err) {
+    console.error("Transaction failed: ", err);
+    // err.message will catch the "Ky link është përdorur..." error we threw above
+    setError(err.message || "Dështoi dërgimi i vlerësimit. Provoni përsëri.");
+  } finally {
+    setIsSubmitting(false);
   }
+}
   
   if (loading) return <div className={styles.centered}><p>Duke u ngarkuar...</p></div>;
   if (error) return <div className={styles.centered}><p className={styles.errorText}>{error}</p></div>;

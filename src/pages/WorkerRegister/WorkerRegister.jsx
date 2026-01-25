@@ -121,6 +121,7 @@ function WorkerRegister() {
   // Pricing & experience
   startingPrice: 0,
   experienceYears: 0,
+  whatsappRequests: 0,
 
   // 🔴 REVIEW STATS (IMPORTANT)
   avgRating: null,        // no reviews yet

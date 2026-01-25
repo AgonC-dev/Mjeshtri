@@ -73,6 +73,10 @@ useEffect(() => {
     )
   }
 
+const averageRating = (worker.reviewCount && worker.totalRatingPoints) 
+  ? (worker.totalRatingPoints / worker.reviewCount).toFixed(1) 
+  : 0;
+
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 >= 0.5
@@ -103,9 +107,19 @@ useEffect(() => {
           <p className={styles.category}>{worker.category}</p>
           <p className={styles.city}>{worker.city}</p>
           <div className={styles.rating}>
-            <span className={styles.stars}>{renderStars(worker.rating)}</span>
-            <span className={styles.ratingValue}>{worker.rating}</span>
-          </div>
+  <span className={styles.stars}>{renderStars(averageRating)}</span>
+  
+  <span className={styles.ratingValue}>
+    {averageRating > 0 ? averageRating : "Pa vlerësime"}
+  </span>
+
+  {/* Only show the count if there are reviews */}
+  {worker.reviewCount > 0 && (
+    <span className={styles.reviewCount}>
+      {worker.reviewCount} {worker.reviewCount === 1 ? 'vlerësim' : 'vlerësime'}
+    </span>
+  )}
+</div>
           {worker.bio &&   
             <div className={styles.bio}>
               <p>{worker.bio}</p>
@@ -115,8 +129,8 @@ useEffect(() => {
 
       <div className={styles.stats}>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{worker.completedJobs}</div>
-          <div className={styles.statLabel}>Punë të përfunduara</div>
+          <div className={styles.statValue}>{worker.whatsappRequests}</div>
+          <div className={styles.statLabel}>Klientë të interesuar</div>
         </div>
         <div className={styles.statCard}>
           <div className={styles.statValue}>{worker.experienceYears}</div>
@@ -184,7 +198,7 @@ useEffect(() => {
 </section>
 
       <div className={styles.ctaSection}>
-        <WhatsAppButton phoneNumber={worker.phoneNumber} />
+        <WhatsAppButton id={worker.id || worker.uid} phoneNumber={worker.phoneNumber} />
       </div>
     </div>
   )

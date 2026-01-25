@@ -143,8 +143,8 @@ if (error) {
 
       <div className={styles.stats}>
         <div className={styles.statCard}>
-          <div className={styles.statValue}>{worker.completedJobs}</div>
-          <div className={styles.statLabel}>Punë të përfunduara</div>
+          <div className={styles.statValue}>{worker.whatsappRequests}</div>
+          <div className={styles.statLabel}>Klientë të interesuar</div>
         </div>
         <div className={styles.statCard}>
           <div className={styles.statValue}>{worker.experienceYears}</div>
@@ -211,7 +211,7 @@ if (error) {
  </section>
 
       <div className={styles.ctaSection}>
-        <WhatsAppButton phoneNumber={worker.phoneNumber} />
+        <WhatsAppButton id={worker.uid} phoneNumber={worker.phoneNumber} />
       </div>
     </div>
   )
