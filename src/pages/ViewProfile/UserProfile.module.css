@@ -1,12 +1,11 @@
 /* --- LOADING ANIMATIONS --- */
-/* --- THEMED LOADING --- */
 .loaderWrapper {
-  height: 80vh; /* Keeps it centered but not overlapping nav if you have one */
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: transparent; /* Let the global body background show */
+  background: transparent;
 }
 
 .wrap {
@@ -22,7 +21,6 @@
   background-color: var(--accent-emerald);
   border-radius: 50%;
   position: relative;
-  /* Glowing effect using your theme's emerald */
   box-shadow: 0 0 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
   animation: themePulse 1.8s infinite ease-in-out;
 }
@@ -39,7 +37,6 @@
   font-size: 1.2rem;
   letter-spacing: 1px;
   font-weight: 600;
-  /* Shimmer effect using your text colors */
   background: linear-gradient(
     90deg, 
     var(--text-muted) 0%, 
@@ -109,6 +106,7 @@
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
 }
+
 .profile {
   padding: 2rem 0;
 }
@@ -148,13 +146,7 @@
   background-color: var(--accent-emerald);
   border-radius: 50%;
   border: 3px solid var(--bg-secondary);
-  box-shadow: 0 0 10px
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.6
-    );
+  box-shadow: 0 0 10px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6);
 }
 
 .info {
@@ -211,13 +203,7 @@
   border-radius: var(--border-radius);
   text-align: center;
   box-shadow: var(--shadow-soft);
-  border: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.1
-    );
+  border: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
 }
 
 .statValue {
@@ -271,77 +257,62 @@
 }
 
 .bio {
-  margin: 1.9rem 0 2.5rem 0; /* Reduced top margin to keep it close to info */
+  margin: 1.9rem 0 2.5rem 0;
   padding-left: 1.5rem;
-  border-left: 2px solid
-    rgba(var(--white-r), var(--white-g), var(--white-b), 0.1); /* Subtle grayish line */
-  max-width: 800px; /* Prevents text from stretching too wide on desktop */
+  border-left: 2px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
+  max-width: 800px;
 }
 
 .bio p {
-  color: var(--text-muted); /* Grayish color from your theme */
+  color: var(--text-muted);
   line-height: 1.6;
   font-size: 1rem;
   white-space: pre-line;
   margin: 0;
-  font-style: italic; /* Makes it feel more like a personal statement */
+  font-style: italic;
 }
 
-/* Container for the whole section */
 .portfolioSection {
   margin: 40px 0;
   width: 100%;
 }
 
-/* Bigger Title with Green Accent */
 .portfolioTitle {
-  font-size: 1.8rem; /* Made the text bigger */
+  font-size: 1.8rem;
   color: var(--text-muted);
   margin-bottom: 25px;
-  border-left: 6px solid var(--accent-emerald); /* Changed Blue to Green */
+  border-left: 6px solid var(--accent-emerald);
   padding-left: 15px;
   font-weight: 700;
 }
 
-/* Horizontal Layout */
 .portfolioFlex {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* Wraps to next line only when out of space */
+  flex-wrap: wrap;
   gap: 20px;
   width: 100%;
 }
 
-/* Bigger Image Container */
 .portfolioItem {
-  /* This makes the items start at 400px wide and grow to fill space */
   flex: 1 1 400px;
-  max-width: 450px; /* Prevents it from getting TOO huge on massive screens */
+  max-width: 450px;
   height: 300px;
   border-radius: 12px;
   overflow: hidden;
-  border: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.1
-    );
-
-  box-shadow: 0 4px 12px
-    rgba(var(--black-r), var(--black-g), var(--black-b), 0.08);
+  border: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+  box-shadow: 0 4px 12px rgba(var(--black-r), var(--black-g), var(--black-b), 0.08);
   transition: transform 0.3s ease;
 }
 
 .portfolioItem:hover {
-  transform: scale(1.02); /* Slight pop effect on hover */
-  border-color: var(--accent-emerald); /* Border turns green on hover */
+  transform: scale(1.02);
+  border-color: var(--accent-emerald);
 }
 
-/* The actual image */
 .portfolioImage {
   width: 100%;
-  height: 100%; /* Keeps the original uploaded proportions */
+  height: 100%;
   display: block;
   object-fit: cover;
 }
@@ -377,8 +348,6 @@
   border: 1px solid rgba(0, 255, 133, 0.2);
 }
 
-/* ===================== GRID & BENTO CARDS ===================== */
-
 .reviewsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -396,8 +365,6 @@
   flex-direction: column;
   justify-content: space-between;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  
-  /* Staggered Animation Logic */
   opacity: 0;
   transform: translateY(20px);
   animation: revealIn 0.6s ease forwards;
@@ -410,8 +377,6 @@
   background: rgba(255, 255, 255, 0.06);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
-
-/* ===================== CARD CONTENT ===================== */
 
 .reviewTop {
   display: flex;
@@ -447,14 +412,11 @@
   color: #d1d1d1;
   font-style: italic;
   margin-bottom: 1.5rem;
-  /* Multi-line truncation */
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* ===================== FOOTER & AVATAR ===================== */
 
 .reviewFooter {
   display: flex;
@@ -496,72 +458,65 @@
   padding: 3rem;
 }
 
-/* ===================== ANIMATIONS ===================== */
-
 @keyframes revealIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===================== LIGHT THEME FIXES ===================== */
+/* Targeting light theme without modifying any existing dark theme values */
+
+:global([data-theme="light"]) :local(.sectionTitle) {
+  color: var(--text-off-white);
+}
+
+:global([data-theme="light"]) :local(.reviewCard) {
+  background: var(--text-white);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: none;
+}
+
+:global([data-theme="light"]) :local(.reviewCard:hover) {
+  background: var(--text-white);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--accent-emerald);
+}
+
+:global([data-theme="light"]) :local(.comment) {
+  color: var(--text-muted);
+}
+
+:global([data-theme="light"]) :local(.ratingNumber) {
+  color: var(--text-off-white);
+}
+
+:global([data-theme="light"]) :local(.starBadge) {
+  background: var(--bg-primary);
+  border: 1px solid var(--accent-emerald);
+}
+
+:global([data-theme="light"]) :local(.reviewFooter) {
+  border-top: 1px solid var(--card-border);
 }
 
 /* ===================== MOBILE RESPONSIVENESS ===================== */
 
 @media (max-width: 768px) {
-  .reviewsGrid {
-    grid-template-columns: 1fr; /* Single column on mobile */
-  }
-  
-  .sectionTitle {
-    font-size: 1.5rem;
-  }
+  .reviewsGrid { grid-template-columns: 1fr; }
+  .sectionTitle { font-size: 1.5rem; }
+  .header { flex-direction: column; align-items: center; text-align: center; }
+  .imageContainer { width: 150px; height: 150px; }
+  .name { font-size: 2rem; }
+  .stats { grid-template-columns: 1fr; }
+  .portfolioGrid { grid-template-columns: 1fr; }
 }
 
-
-
-
-/* Mobile: On small screens, let them take full width */
 @media (max-width: 600px) {
-  .portfolioItem {
-    flex: 1 1 100%;
-  }
-  .portfolioTitle {
-    font-size: 1.5rem;
-  }
+  .portfolioItem { flex: 1 1 100%; }
+  .portfolioTitle { font-size: 1.5rem; }
 }
-/* Mobile Adjustment: if screen is tiny, make images slightly smaller to fit better */
+
 @media (max-width: 480px) {
-  .portfolioItem {
-    width: calc(50% - 6px); /* Show 2 images per row on small phones */
-    height: 120px;
-  }
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .imageContainer {
-    width: 150px;
-    height: 150px;
-  }
-
-  .name {
-    font-size: 2rem;
-  }
-
-  .stats {
-    grid-template-columns: 1fr;
-  }
-
-  .portfolioGrid {
-    grid-template-columns: 1fr;
-  }
+  .portfolioItem { width: calc(50% - 6px); height: 120px; }
 }

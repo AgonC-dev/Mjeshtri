@@ -1,80 +1,5 @@
 .sidebar {
   background-color: var(--bg-secondary);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--card-border);
-  position: sticky;
-  top: 20px;
-  height: fit-content;
-}
-
-.title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--text-off-white);
-  border-bottom: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.2
-    );
-  padding-bottom: 0.75rem;
-}
-
-.section {
-  margin-bottom: 1.5rem;
-}
-
-.label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--text-off-white);
-  font-size: 0.95rem;
-}
-
-.input,
-.select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-primary);
-  border: 2px solid rgba(0, 255, 133, 0.2);
-  border-radius: var(--border-radius);
-  color: var(--text-off-white);
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.input:focus,
-.select:focus {
-  outline: none;
-  border-color: var(--accent-emerald);
-  box-shadow: 0 0 0 3px rgba(0, 255, 133, 0.1);
-}
-
-.input::placeholder {
-  color: var(--text-muted);
-}
-
-.select {
-  cursor: pointer;
-}
-
-.priceRow {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.priceInput {
-  flex: 1;
-  -moz-appearance: textfield;
-}
-
-.sidebar {
-  background-color: var(--bg-secondary);
   padding: 1.5rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--card-border);
@@ -88,8 +13,11 @@
 .title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-white);
+  /* CHANGED: Uses text-off-white to flip to dark in light theme */
+  color: var(--text-off-white); 
   margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
+  padding-bottom: 0.75rem;
 }
 
 .section {
@@ -106,14 +34,14 @@
   letter-spacing: 0.05em;
 }
 
-/* Base style for Inputs, Selects, and Autocomplete trigger */
 .input, .select {
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: var(--bg-primary); /* Tinted look */
+  background-color: var(--bg-primary); 
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  color: var(--text-off-white);
+  /* CHANGED: This now follows the theme-flipping variable */
+  color: var(--text-off-white); 
   font-size: 16px;
   outline: none;
   transition: all 0.2s ease;
@@ -124,6 +52,10 @@
   border-color: var(--accent-emerald);
   background-color: var(--bg-secondary);
   box-shadow: 0 0 0 3px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
 }
 
 /* Autocomplete Specifics */
@@ -152,7 +84,7 @@
   color: var(--accent-emerald);
 }
 
-/* Suggestion List (The Popover) */
+/* Suggestion List */
 .suggestionList {
   position: absolute;
   top: calc(100% + 8px);
@@ -191,7 +123,6 @@
   padding-left: 18px;
 }
 
-/* Custom Scrollbar for the Suggestion List */
 .suggestionList::-webkit-scrollbar {
   width: 6px;
 }
@@ -201,17 +132,28 @@
   border-radius: 10px;
 }
 
-/* Handling the 'select' arrow for the City dropdown */
 .select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0a0a0'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  /* UPDATED SVG COLOR: Uses var(--text-muted) color dynamically */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236c757d'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
 }
 
-/* Responsive adjustments */
+/* --- LIGHT THEME SPECIFIC OVERRIDES --- */
+:global([data-theme="light"]) :local(.input),
+:global([data-theme="light"]) :local(.select) {
+  /* Ensuring background isn't too dark in light mode */
+  background-color: var(--bg-primary); 
+  border-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+}
 
+:global([data-theme="light"]) :local(.suggestionItem) {
+    color: var(--text-off-white);
+}
+
+/* --- RESPONSIVENESS (UNCHANGED) --- */
 @media (max-width: 1024px) {
   .sidebar {
     position: static;
@@ -226,7 +168,6 @@
     margin-bottom: 1rem;
     border-radius: 10px;
     box-shadow: var(--shadow-soft);
-    border: 1px solid var(--card-border);
   }
 
   .title {
@@ -234,26 +175,8 @@
     margin-bottom: 1rem;
   }
 
-  .input,
-  .select {
+  .input, .select {
     padding: 0.6rem 0.85rem;
     font-size: 0.95rem;
-  }
-
-  /* Slightly reduce the visual weight on small screens */
-  .sidebar {
-    background-color: rgba(
-      var(--white-r),
-      var(--white-g),
-      var(--white-b),
-      0.02
-    );
-    border: 1px solid
-      rgba(
-        var(--accent-emerald-r),
-        var(--accent-emerald-g),
-        var(--accent-emerald-b),
-        0.06
-      );
   }
 }

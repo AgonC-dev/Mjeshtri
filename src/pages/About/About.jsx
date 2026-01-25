@@ -1,6 +1,11 @@
 import styles from './About.module.css';
+import { useEffect } from 'react';
 
 export default function About() {
+useEffect(() => {
+    window.scroll(0, 0);
+  }, [])
+
   return (
     <div className={styles.container}>
       <h1 className={styles.heroTitle}>Misioni ynë: <span>Mjeshtri.ks</span></h1>

@@ -22,7 +22,7 @@ function Footer() {
           <div className={styles.section}>
             <h4>Navigimi</h4>
             <ul className={styles.links}>
-              <li><Link to="/">Ballina</Link></li>
+              <li><Link to="/">Kryefaqja</Link></li>
               <li><Link to="/about">Rreth Nesh</Link></li>
               <li><Link to="/terms">Kushtet e Përdorimit</Link></li>
               <li><Link to="/privacy">Privatësia</Link></li>
