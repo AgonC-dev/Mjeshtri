@@ -5,20 +5,48 @@ function FilterSidebar({
   cities,
   categories,
   selectedCity,
+  workerNames,
   selectedCategory,
   onCityChange,
   onCategoryChange,
   searchQuery,
   onSearchChange,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
 
-  // Autocomplete suggestions ONLY (UI logic)
-  const suggestions = useMemo(() => {
+ const [isCatOpen, setIsCatOpen] = useState(false);
+ const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+ const normalize = (str) => 
+  str?.toLowerCase()
+   .replace(/ë/g, "e")
+   .replace(/ç/g, "c")
+   .trim();
+
+  const searchSuggestions = useMemo(() => {
+    const query = normalize(searchQuery);
+    if(!query || query.length < 2) return [];
+
+    const matchedCats = categories
+    .filter((cat) => normalize(cat).includes(query) && cat !== "Të gjitha")
+    .map((cat) => ({ type: "Kategoria", value: cat}));
+
+    const matchedNames = workerNames
+    .filter((name) => normalize(name).includes(query))
+    .slice(0, 5)
+    .map((name) => ({ type: "Mjeshtri", value: name}))
+
+    const matchedCities = cities
+    .filter((city) => normalize(city).includes(normalize(searchQuery)))
+    .map((city) => ({ type: "Qyteti", value: city}))
+
+     return [...matchedCats, ...matchedNames, ...matchedCities];
+  }, [categories, workerNames, searchQuery]) 
+
+
+  const categorySuggestions = useMemo(() => {
     if (!selectedCategory?.trim()) return categories;
-
     return categories.filter((cat) =>
-      cat.toLowerCase().includes(selectedCategory.toLowerCase())
+      normalize(cat).includes(normalize(selectedCategory))
     );
   }, [categories, selectedCategory]);
 
@@ -26,19 +54,51 @@ function FilterSidebar({
     <aside className={styles.sidebar}>
       <h2 className={styles.title}>Filtro</h2>
 
-      {/* Search */}
+      {/* Main Search with Smart Suggestions */}
       <div className={styles.section}>
         <label className={styles.label}>Kërko</label>
-        <input
-          type="text"
-          placeholder="Kërko mjeshtër..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className={styles.input}
-        />
+        <div className={styles.autocomplete}>
+          <input
+            type="text"
+            placeholder="Kërko (psh: Moler ose Emri)..."
+            value={searchQuery}
+            onChange={(e) => {
+              onSearchChange(e.target.value);
+              setIsSearchOpen(true);
+            }}
+            onFocus={() => setIsSearchOpen(true)}
+            onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
+            className={styles.input}
+          />
+          {isSearchOpen && searchSuggestions.length > 0 && (
+  <ul className={styles.suggestionList}>
+    {searchSuggestions.map((item, index) => (
+      <li
+        key={index}
+        className={styles.suggestionItem}
+        onClick={() => {
+          // NOW 'item' is defined because we are inside the .map()!
+          if (item.type === "Qyteti") {
+            onCityChange(item.value); 
+            onSearchChange("");       
+          } else if (item.type === "Kategoria") {
+            onCategoryChange(item.value); 
+            onSearchChange("");
+          } else {
+            onSearchChange(item.value); 
+          }
+          setIsSearchOpen(false);
+        }}
+      >
+        <small className={styles.typeLabel}>{item.type}:</small> {item.value}
+      </li>
+    ))}
+  </ul>
+)}
+        </div>
       </div>
 
-      {/* City */}
+      {/* City Select */}
       <div className={styles.section}>
         <label className={styles.label}>Qyteti</label>
         <select
@@ -47,9 +107,7 @@ function FilterSidebar({
           className={styles.select}
         >
           {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
+            <option key={city} value={city}>{city}</option>
           ))}
         </select>
       </div>
@@ -61,35 +119,24 @@ function FilterSidebar({
           <input
             type="text"
             className={styles.input}
-            placeholder="Zgjidh ose kërko..."
+            placeholder="Zgjidh kategorinë..."
             value={selectedCategory}
             onChange={(e) => {
-              const value = e.target.value;
-              onCategoryChange(value);
-              setIsOpen(value !== "");
+              onCategoryChange(e.target.value);
+              setIsCatOpen(true);
             }}
-            onFocus={() => setIsOpen(true)}
-            onBlur={() => setTimeout(() => setIsOpen(false), 150)}
+            onFocus={() => setIsCatOpen(true)}
+            onBlur={() => setTimeout(() => setIsCatOpen(false), 200)}
           />
-
-          <button
-            type="button"
-            className={styles.dropdownToggle}
-            onClick={() => setIsOpen((o) => !o)}
-            tabIndex={-1}
-          >
-            {isOpen ? "▲" : "▼"}
-          </button>
-
-          {isOpen && suggestions.length > 0 && (
+          {isCatOpen && categorySuggestions.length > 0 && (
             <ul className={styles.suggestionList}>
-              {suggestions.map((cat) => (
+              {categorySuggestions.map((cat) => (
                 <li
                   key={cat}
                   className={styles.suggestionItem}
                   onClick={() => {
                     onCategoryChange(cat);
-                    setIsOpen(false);
+                    setIsCatOpen(false);
                   }}
                 >
                   {cat}

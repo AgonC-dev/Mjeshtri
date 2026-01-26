@@ -164,6 +164,7 @@ function WorkerList() {
         <FilterSidebar
           cities={cities}
           categories={categories}
+          workerNames={allWorkers?.map(w => w.fullName) || [] }
           selectedCity={selectedCity}
           selectedCategory={selectedCategory}
           onCityChange={setSelectedCity}
