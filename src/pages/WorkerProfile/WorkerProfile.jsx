@@ -19,27 +19,25 @@ useEffect(() => {
   window.scroll(0, 0);
 
   const fetchWorkerAndReviews = async () => {
-    // We only set loading to true if we don't have worker data yet
+    // If we have worker data from navigate(state), don't show loading
     if (!worker) setLoading(true); 
 
     try {
-      // 1. Fetch Worker Details only if missing
+      // 1. Fetch Worker Details only if we don't have them
       if (!worker) {
         const docRef = doc(db, "workers", id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setWorker(docSnap.data());
+          setWorker({ id: docSnap.id, ...docSnap.data() });
         }
       }
 
-      // 2. Fetch Reviews (ALWAYS run this)
-      console.log("Fetching reviews for worker:", id); // Debug log
-      
-            const q = query(
-             collection(db, "reviews"),
-             where("workerId", "==", id),
-             orderBy("createdAt", "desc")
-            );
+      // 2. Fetch Reviews
+      const q = query(
+        collection(db, "reviews"),
+        where("workerId", "==", id),
+        orderBy("createdAt", "desc")
+      );
       
       const querySnapshot = await getDocs(q);
       const reviewsData = querySnapshot.docs.map(doc => ({
@@ -50,15 +48,15 @@ useEffect(() => {
       setReviews(reviewsData);
 
     } catch (err) {
-      console.error("Error fetching reviews:", err);
-      // If you get an error here, it's likely the missing Index link!
+      console.error("Error fetching data:", err);
     } finally {
       setLoading(false);
     }
   };
 
   fetchWorkerAndReviews();
-}, [id]); // Only re-run if the ID in the URL changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [id]);
 
   if (loading) return <div className={styles.loading}>Duke u ngarkuar...</div>;
 
@@ -95,6 +93,30 @@ const averageRating = (worker.reviewCount && worker.totalRatingPoints)
     return stars
   }
 
+  const VerifiedBadge = ({ size = 18 }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    className={styles.badge}
+  >
+    {/* The "Burst" Shape */}
+    <path 
+      d="M9.707 2.13a3 3 0 014.586 0l.867.996a1 1 0 00.755.343l1.319-.015a3 3 0 013.243 3.243l-.015 1.319a1 1 0 00.343.755l.996.867a3 3 0 010 4.586l-.996.867a1 1 0 00-.343.755l.015 1.319a3 3 0 01-3.243 3.243l-1.319-.015a1 1 0 00-.755.343l-.867.996a3 3 0 01-4.586 0l-.867-.996a1 1 0 00-.755-.343l-1.319.015a3 3 0 01-3.243-3.243l.015-1.319a1 1 0 00-.343-.755l-.996-.867a3 3 0 010-4.586l.996-.867a1 1 0 00.343-.755l-.015-1.319a3 3 0 013.243-3.243l1.319.015a1 1 0 00.755-.343l.867-.996z" 
+      fill="#0095f6" /* The classic Instagram Blue */
+    />
+    {/* The Checkmark */}
+    <path 
+      d="M17.333 9.333L10.933 15.733L7.733 12.533" 
+      stroke="white" 
+      strokeWidth="2.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+  </svg>
+);
+
   return (
     <div className={styles.profile}>
       <div className={styles.header}>
@@ -103,7 +125,10 @@ const averageRating = (worker.reviewCount && worker.totalRatingPoints)
           <div className={styles.onlineBadge}></div>
         </div>
         <div className={styles.info}>
-          <h1 className={styles.name}>{worker.fullName}</h1>
+          <h1 className={styles.name}>
+            {worker.fullName} 
+            {worker.isPro && <VerifiedBadge size={22} />}
+          </h1>
           <p className={styles.category}>{worker.category}</p>
           <p className={styles.city}>{worker.city}</p>
           <div className={styles.rating}>

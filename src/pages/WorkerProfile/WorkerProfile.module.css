@@ -362,6 +362,23 @@
   color: #04110a;
 }
 
+.name {
+  display: inline-flex;  /* Keeps the heading from taking 100% width */
+  align-items: center;   /* Perfectly centers the badge vertically with the text */
+  justify-content: center; /* Centers the whole group in the parent info div */
+  gap: 9px;             /* This is your space! Change this to 16px or 20px if you want more */
+  margin: 0;             /* Reset default h1 margins */
+  line-height: 1.2;
+}
+
+.badge {
+  flex-shrink: 0;        /* Stops the badge from getting squished */
+  /* If it still looks 1 pixel too high, use this: */
+  transform: translateY(4px); 
+}
+
+
+
 .reviewDate {
   font-size: 0.75rem;
   color: #777;

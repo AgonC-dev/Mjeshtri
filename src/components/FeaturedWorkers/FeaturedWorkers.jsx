@@ -1,40 +1,45 @@
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { collection, query, where, limit, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '../../api/firebase';
 import WorkerCard from '../WorkerCard/WorkerCard'
 import styles from './FeaturedWorkers.module.css'
 
 // Mock data - in a real app, this would come from an API
-const featuredWorkers = [
-  {
-    id: 1,
-    name: 'Arben Krasniqi',
-    category: 'Instalues',
-    rating: 4.8,
-    city: 'Prishtinë',
-    phoneNumber: '38349123456',
-    image: 'https://via.placeholder.com/200?text=Arben',
-  },
-  {
-    id: 2,
-    name: 'Blerim Berisha',
-    category: 'Elektricist',
-    rating: 4.9,
-    city: 'Prizren',
-    phoneNumber: '38349123457',
-    image: 'https://via.placeholder.com/200?text=Blerim',
-  },
-  {
-    id: 3,
-    name: 'Driton Gashi',
-    category: 'Klima/AC',
-    rating: 4.7,
-    city: 'Gjakovë',
-    phoneNumber: '38349123458',
-    image: 'https://via.placeholder.com/200?text=Driton',
-  },
-]
-
 function FeaturedWorkers() {
-  const navigate = useNavigate()
+const [ featuredWorkers, setFeaturedWorkers] = useState([]);
+const [ loading, setLoading] = useState(true);
+const navigate = useNavigate()
+
+useEffect(() => {
+  const fetchFeaturedWorkers = async () => {
+    try {
+      const q = query(
+        collection(db, "workers"),
+        where("isPro", "==", true),
+        limit(6)
+      )
+
+
+      const querySnapshot = await getDocs(q);
+      const allPros = querySnapshot.docs.map(doc => ({
+        id: doc.id, ...doc.data()
+      }))
+
+      const shuffled = allPros.sort(() => 0.5 - Math.random()).slice(0,3)
+
+      setFeaturedWorkers(shuffled);
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  fetchFeaturedWorkers()
+}, [])
+
+
 
   return (
     <section className={styles.featuredWorkers}>

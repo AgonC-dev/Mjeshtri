@@ -122,6 +122,13 @@ function Header() {
                   >
                     Shiko Profilin
                   </Link>
+                  <Link 
+                    to="/review"
+                    className={styles.dropdownItem}
+                    onClick={() => setShowDropDown(false)}
+                  >
+                    Kërko Vlerësim ⭐ 
+                  </Link>
                   <button 
                     onClick={() => {
                       auth.signOut();
@@ -149,5 +156,7 @@ function Header() {
     </header>
   );
 }
+
+
 
 export default Header;

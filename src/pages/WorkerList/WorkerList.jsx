@@ -110,7 +110,7 @@ function WorkerList() {
   const filteredWorkers = useMemo(() => {
     if (!allWorkers) return []
     
-    return allWorkers.filter((worker) => {
+    const filtered = allWorkers.filter((worker) => {
       const matchesCity = selectedCity === 'Të gjitha' || worker.city === selectedCity
       const matchesCategory =
        !selectedCategory?.trim() ||
@@ -125,7 +125,14 @@ function WorkerList() {
         worker.city?.toLowerCase().includes(searchStr)
 
       return matchesCity && matchesCategory  && matchesSearch
-    })
+    });
+ 
+    return filtered.sort((a,b) => { 
+      const scoreA = (a.isPro ? 1000 : 0) + (Number(a.reviewCount) || 0)
+      const scoreB = (b.isPro ? 1000 : 0) + (Number(b.reviewCount) || 0)
+
+      return scoreB - scoreA;
+    }) 
   }, [allWorkers, debouncedSearchQuery, selectedCity, selectedCategory])
 
   const totalPages = Math.ceil(filteredWorkers.length / itemsPerPage) || 1;

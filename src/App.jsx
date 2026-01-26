@@ -22,6 +22,7 @@ import Contact from "./pages/Contact/Contact";
 import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Terms/Terms";
 import About from "./pages/About/About";
+import ReviewDropDown from "./pages/ReviewDropDown/ReviewDropDown";
 
 
 const queryClient = new QueryClient();
@@ -43,7 +44,8 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact />},
       { path: "privacy", element: <Privacy />},
       { path: "terms", element: <Terms />},
-      { path: "about", element: <About />}
+      { path: "about", element: <About />},
+      { path: "review", element: <ReviewDropDown />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},

@@ -54,6 +54,7 @@ function Dashboard() {
 });
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
+  const MAX_PORTFOLIO_IMG_NOPRO = 3;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -128,9 +129,26 @@ function Dashboard() {
     }  
   }
 
+
   
   function handlePortfolioSelect(e) {
     const files = Array.from(e.target.files || []);
+    const currentCount = portfolioFiles.length + (form.portfolio?.length || 0);
+    const totalAfterSelection = currentCount + files.length;
+
+   if (!form.isPro && totalAfterSelection > MAX_PORTFOLIO_IMG_NOPRO) {
+    setIsModalOpen((prev) => ({...prev, pro:true}));
+
+    const spaceLeft = MAX_PORTFOLIO_IMG_NOPRO - currentCount;
+    if (spaceLeft > 0) {
+      const allowedFiles = files.slice(0, spaceLeft);
+      setPortfolioFiles((prev) => [...prev, ...allowedFiles]);
+      setIsDirty(true);
+    }
+
+    return;
+   }
+
     if (files.length) {
        setPortfolioFiles((prev) => [...prev, ...files]);
        setIsDirty(true)
@@ -415,7 +433,7 @@ function Dashboard() {
         </ul>
         <div className={styles.actions}>
           <button className={styles.purchaseBtn} onClick={handleGetPro}>Vazhdo te Pagesa (€14.99)</button>
-          <button className={styles.cancelBtn} onClick={() => setIsModalOpen(true)}>Më vonë</button>
+          <button className={styles.cancelBtn} onClick={() => setIsModalOpen(prev => ({ ...prev, pro: false }))}>Më vonë</button>
         </div>
       </div>
     </Modal>

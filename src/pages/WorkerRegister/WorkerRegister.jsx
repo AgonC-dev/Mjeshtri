@@ -240,6 +240,7 @@ function WorkerRegister() {
     inputClass={styles.phoneInput}
     buttonClass={styles.phoneButton}
     dropdownClass={styles.phoneDropdown}
+    required
     // This allows the library to use your custom CSS classes
   />
 </div>

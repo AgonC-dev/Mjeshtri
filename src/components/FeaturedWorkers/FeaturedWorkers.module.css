@@ -1,74 +1,136 @@
-/* Featured workers layout and light-theme tweaks */
+/* FeaturedWorkers.module.css */
+
 .featuredWorkers {
-  padding: 2rem 1rem;
-  margin: 0 auto 2rem auto;
+  padding: 3rem 1rem;
+  margin: 0 auto;
   max-width: 1200px;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
   color: var(--text-off-white);
+  letter-spacing: -0.5px;
+  position: relative;
 }
 
+/* THE GRID SYSTEM 
+   Using 280px as the minimum ensures cards never get "skinny"
+*/
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
   align-items: start;
+}
+
+/* DESKTOP TWEAK
+   3 Columns makes the cards wider and match your Search List width
+*/
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 2.5rem;
+  }
+  
+  .featuredWorkers {
+    padding: 4rem 2rem;
+    max-width: 1150px; /* Perfectly balances 3 wide cards */
+  }
 }
 
 .viewAll {
   text-align: center;
-  margin-top: 1.25rem;
+  margin-top: 3.5rem;
 }
 
 .viewAllButton {
   background: var(--accent-emerald);
-  color: var(--bg-primary);
-  padding: 0.65rem 1rem;
-  border-radius: 10px;
+  color: var(--bg-black); 
+  padding: 0.9rem 2.5rem;
+  border-radius: 12px;
   font-weight: 700;
+  font-size: 1rem;
   border: none;
   cursor: pointer;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 15px rgba(0, 255, 133, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .viewAllButton:hover {
   background: var(--accent-emerald-dark);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.3);
 }
 
-@media (max-width: 768px) {
+/* TABLET & MOBILE 
+*/
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  }
+}
+
+@media (max-width: 600px) {
   .featuredWorkers {
-    padding: 1rem;
+    padding: 2rem 1rem;
   }
 
   .title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
 
   .grid {
-    gap: 0.9rem;
+    grid-template-columns: 1fr; /* 1 wide card per row on phones */
+    max-width: 400px; /* Keeps the card from stretching too far on big phones */
+    margin: 0 auto;
   }
 }
 
-/* Light theme: subtle section background and more card separation */
-:global([data-theme="light"]) :local(.featuredWorkers) {
-  background-color: transparent;
-  padding: 2rem 1rem;
+/* LIGHT THEME OVERRIDES */
+:global([data-theme="light"]) :local(.title) {
+  color: #000000;
 }
 
 :global([data-theme="light"]) :local(.viewAllButton) {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-/* Slightly increase grid gap and add subtle section padding on light theme for separation */
-:global([data-theme="light"]) :local(.grid) {
-  gap: 1.6rem;
+/* SKELETON LOADING */
+.skeletonCard {
+  height: 380px; /* Match the height of your beefy cards */
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
 }
 
-:global([data-theme="light"]) :local(.featuredWorkers) {
-  padding-bottom: 2.5rem;
+.skeletonCard::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
 }
