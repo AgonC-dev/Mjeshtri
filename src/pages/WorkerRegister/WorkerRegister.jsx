@@ -91,6 +91,11 @@ function WorkerRegister() {
       return;
     }
 
+    if (!formData.phoneNumber || formData.phoneNumber.length < 6) {
+    setError("Ju lutem shkruani një numër telefoni të saktë.");
+    return;
+  }
+
     try {
     setIsPending(true)
         
@@ -177,6 +182,11 @@ function WorkerRegister() {
     }
   };
 
+ 
+
+     
+
+
  return (
   <div className={styles.register}>
     <h1 className={styles.title}>Regjistrohu si Mjeshtër</h1>
@@ -235,12 +245,12 @@ function WorkerRegister() {
   <PhoneInput
     country={'xk'} // Kosovo default
     value={formData.phoneNumber}
-    onChange={(phone) => setFormData(prev => ({ ...prev, phoneNumber: phone }))}
+    onChange={(value) => setFormData(prev => ({ ...prev, phoneNumber: value }))}
     containerClass={styles.phoneContainer}
     inputClass={styles.phoneInput}
     buttonClass={styles.phoneButton}
     dropdownClass={styles.phoneDropdown}
-    required
+ 
     // This allows the library to use your custom CSS classes
   />
 </div>

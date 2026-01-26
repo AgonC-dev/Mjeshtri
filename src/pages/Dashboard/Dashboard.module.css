@@ -667,6 +667,57 @@
   color: #666;
 }
 
+.errorModalContent {
+  text-align: center;
+  padding: 2rem;
+  max-width: 470px;
+  background-color: var(--bg-secondary);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+}
+
+.errorIconContainer {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  /* Simple animation to grab attention */
+  animation: shake 0.5s ease-in-out;
+}
+
+.errorModalContent h2 {
+  color: #ff4d4d; /* Error Red */
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.errorModalContent p {
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.errorCloseBtn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  width: 100%;
+}
+
+.errorCloseBtn:hover {
+  background-color: #e63939;
+  transform: translateY(-2px);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
 @keyframes bentoReveal {
   from { opacity: 0; transform: scale(0.9) translateY(20px); }
   to { opacity: 1; transform: scale(1) translateY(0); }

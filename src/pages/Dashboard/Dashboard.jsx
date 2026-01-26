@@ -24,6 +24,7 @@ import Loading from "../../components/Loading/Loading";
 import Modal from "../../components/Modal/Modal";
 
 
+
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +52,7 @@ function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState({
   review: false,
   pro: false,
+  error:false,
 });
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
@@ -116,6 +118,8 @@ function Dashboard() {
     if (value !== form.phoneNumber) {
       setIsDirty(true);
     }
+
+
     setForm((prev) => ({
       ...prev, phoneNumber: value
     }))
@@ -208,6 +212,11 @@ function Dashboard() {
       setStatus({ message: "Fotoja e profilit është mbi 3MB. Zgjidhni një foto më të vogël.", type: "error" });
       return;
     }
+
+      if (!form.phoneNumber || form.phoneNumber.length < 8) {
+         setIsModalOpen((prev) => ({...prev, error: true}));
+      return;
+  }
 
     setSaving(true);
     setStatus({ message: "Duke u ruajtur...", type: "pending" });
@@ -422,7 +431,7 @@ function Dashboard() {
       />
     </Modal>
 
-    <Modal open={isModalOpen.pro} onClose={() => setIsModalOpen(false)}>
+    <Modal open={isModalOpen.pro} onClose={() => setIsModalOpen(prev => ({...prev, pro: false}))}>
       <div className={styles.proContent}>
         <h2>PRO Membership</h2>
         <p>Zhblloko të gjitha mundësitë</p>
@@ -437,6 +446,27 @@ function Dashboard() {
         </div>
       </div>
     </Modal>
+    <Modal 
+     open={isModalOpen.error} 
+     onClose={() => setIsModalOpen(prev => ({ ...prev, error: false }))}
+    >
+      <div className={styles.errorModalContent}>
+      <div className={styles.errorIconContainer}>
+        <span>⚠️</span>
+      </div>
+      <h2>Numri i pasaktë</h2>
+      <p>
+        Ju lutem shkruani një numër të vlefshëm telefoni. 
+        Numri duhet të ketë të paktën 8 shifra për t'u regjistruar.
+      </p>
+      <button 
+       className={styles.errorCloseBtn} 
+       onClick={() => setIsModalOpen(prev => ({ ...prev, error: false }))}
+      >
+        Kuptova
+      </button>
+    </div>
+   </Modal>
 
     {/* Sticky Footer */}
     <div className={`${styles.actionFooter} ${isDirty ? styles.footerVisible : ''}`}>
