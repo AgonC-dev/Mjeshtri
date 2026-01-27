@@ -102,7 +102,7 @@ const ProfileSettings = () => {
       await verifyUser(passwords.current);
       const userUid = auth.currentUser.uid;
 
-      const userDo0cRef = doc(db, "workers", userUid);
+      const userDocRef = doc(db, "workers", userUid);
       await updateDoc(userDocRef, {
         isActive: false,
         deactivatedAt: serverTimestamp(),
