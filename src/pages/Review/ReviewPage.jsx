@@ -121,20 +121,52 @@ export default function ReviewPage() {
   }
 }
   
-  if (loading) return <div className={styles.centered}><p>Duke u ngarkuar...</p></div>;
-  if (error) return <div className={styles.centered}><p className={styles.errorText}>{error}</p></div>;
-  
-  if (submitted) {
+// --- Loading Return ---
+  if (loading) {
     return (
-      <div className={styles.successCard}>
-        <div className={styles.successIcon}>🎉</div>
-        <h2>Vlerësimi u dërgua!</h2>
-        <p>Faleminderit që ndihmoni komunitetin tonë të rritet.</p>
-        <button onClick={() => window.location.href = '/'} className={styles.homeBtn}>Kthehu në Ballinë</button>
+      <div className={styles.centered}>
+        <div className={styles.loader}></div>
+        <p className={styles.loadingText}>Duke u sinkronizuar...</p>
       </div>
     );
   }
 
+  // --- Error Return ---
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.errorCard}>
+          <span className={styles.errorIcon}>⚠️</span>
+          <p className={styles.errorText}>{error}</p>
+          <button onClick={() => window.location.reload()} className={styles.retryBtn}>
+            Provo përsëri
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Success Return ---
+  if (submitted) {
+    return (
+      <div className={styles.container}>
+        <div className={`${styles.card} ${styles.successCard}`}>
+          <div className={styles.successIcon}>🎉</div>
+          <h2>Vlerësimi u dërgua!</h2>
+          <p>Faleminderit që ndihmoni komunitetin tonë të rritet.</p>
+          <button 
+            onClick={() => window.location.href = '/'} 
+            className={styles.homeBtn}
+            style={{ marginTop: '2rem' }}
+          >
+            Kthehu në Ballinë
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Main Form Return ---
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -142,18 +174,22 @@ export default function ReviewPage() {
           <h2>Lini një Vlerësim</h2>
           <p>Eksperienca juaj me mjeshtrin:</p>
           <div className={styles.workerBadge}>
-            {tokenData.workerPic ? (
+            {tokenData?.workerPic ? (
               <img src={tokenData.workerPic} alt="" className={styles.workerImg} />
             ) : (
-              <div className={styles.avatarPlaceholder}>{tokenData.workerName[0]}</div>
+              <div className={styles.avatarPlaceholder}>
+                {tokenData?.workerName ? tokenData.workerName[0] : "?"}
+              </div>
             )}
-            <span className={styles.workerName}>{tokenData.workerName}</span>
+            <span className={styles.workerName}>{tokenData?.workerName}</span>
           </div>
         </header>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.ratingGroup}>
-            <label>Si do ta vlerësonit punën?</label>
+            <label style={{textAlign: 'center', display: 'block', color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '8px'}}>
+              Si do ta vlerësonit punën?
+            </label>
             <div className={styles.starRating}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -193,7 +229,12 @@ export default function ReviewPage() {
           </div>
 
           <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-            {isSubmitting ? "Duke u dërguar..." : "Dërgo Vlerësimin"}
+            {isSubmitting ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <div className={styles.loader} style={{ width: '18px', height: '18px', borderWidth: '2px' }}></div>
+                Dërgimi...
+              </div>
+            ) : "Dërgo Vlerësimin"}
           </button>
         </form>
       </div>
