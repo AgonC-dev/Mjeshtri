@@ -1,6 +1,6 @@
 .modal {
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: 30px;
   padding: 0;
   background: var(--bg-secondary);
   color: var(--text-off-white);
