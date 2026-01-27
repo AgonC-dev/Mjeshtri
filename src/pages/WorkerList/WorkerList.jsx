@@ -55,7 +55,7 @@ function WorkerList() {
 
     useEffect(() => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
-}, [currentPage, selectedCity, selectedCategory]);
+}, [currentPage]);
 
   // Sync URL params with state
   useEffect(() => {
