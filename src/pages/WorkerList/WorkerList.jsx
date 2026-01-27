@@ -50,9 +50,12 @@ function WorkerList() {
   })
 
     useEffect(() => {
-      window.scroll(0, 0)
       setCurrentPage(1);
     }, [selectedCity, selectedCategory, debouncedSearchQuery])
+
+    useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, [currentPage, selectedCity, selectedCategory]);
 
   // Sync URL params with state
   useEffect(() => {
