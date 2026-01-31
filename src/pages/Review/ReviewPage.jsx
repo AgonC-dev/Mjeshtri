@@ -12,6 +12,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../api/firebase";
 import styles from './ReviewPage.module.css';
+import { httpsCallable, getFunctions } from "firebase/functions";
+
+const functions = getFunctions();
 
 export default function ReviewPage() {
   const { token } = useParams();
@@ -63,55 +66,19 @@ export default function ReviewPage() {
   if(!tokenData || isSubmitting) return;
 
   try {
-    setIsSubmitting(true);
-    
-    // 1. Setup the "Addresses" (References)
-    const workerRef = doc(db, "workers", tokenData.workerId);
-    const tokenRef = doc(db, "reviewRequests", token);
-    const newReviewRef = doc(collection(db, "reviews")); 
+   setIsSubmitting(true);
 
-    // 2. Start the Transaction - Everything inside these { } is protected
-    await runTransaction(db, async (transaction) => {
-      
-      // STEP A: The READS (Must be first)
-      const tokenSnap = await transaction.get(tokenRef);
-      
-      // We don't necessarily need workerSnap unless you want to check if the worker exists,
-      // but let's keep it simple.
+   const submitReviewFn = httpsCallable(functions, "submitReview")
 
-      if (!tokenSnap.exists() || tokenSnap.data().status === "used") {
-        // Throwing an error inside a transaction cancels everything automatically
-        throw new Error("Ky link është përdorur tashmë ose nuk ekziston.");
-      }
-
-      // STEP B: The WRITES (These are now INSIDE the transaction block)
-      
-      // Create the review document
-      transaction.set(newReviewRef, {
-        workerId: tokenData.workerId,
-        rating: rating,
-        comment: comment.trim(),
-        customerName: customerName.trim() || "Klient i Verifikuar",
-        token: token,
-        createdAt: serverTimestamp(),
-      });
-
-      // Update the Worker totals
-      transaction.update(workerRef, {
-        reviewCount: increment(1),
-        totalRatingPoints: increment(rating)
-      });
-
-      // Disable the token
-      transaction.update(tokenRef, {
-        status: "used",
-        usedAt: serverTimestamp(),
-      });
+   await submitReviewFn({
+      token: token, // from useParams
+      rating: rating,
+      comment: comment.trim(),
+      customerName: customerName.trim()
     });
 
-    // If we get here, the transaction was successful!
     setSubmitted(true);
-
+    
   } catch (err) {
     console.error("Transaction failed: ", err);
     // err.message will catch the "Ky link është përdorur..." error we threw above

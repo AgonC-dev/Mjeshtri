@@ -12,7 +12,8 @@ import { setGlobalOptions } from "firebase-functions/v2";
 import admin from "firebase-admin";
 // Destructure FieldValue specifically for Admin v13
 import { FieldValue } from "firebase-admin/firestore"; 
-import crypto from "crypto";
+import crypto from "node:crypto";
+
 
 // Initialize admin only if it hasn't been initialized already
 if (!admin.apps.length) {
@@ -64,6 +65,63 @@ export const generateReviewRequest = onCall(async (request) => {
     throw new HttpsError("internal", err.message || "Ndodhi një gabim në server.");
   }
 });
+
+
+export const submitReview = onCall(async (request) => {
+const { token, rating, comment, customerName} = request.data;
+
+if(!token || !rating || rating < 1 || rating > 5) {
+  throw new HttpsError("invalid-argument", "Të dhëna të gabuara.");
+}
+
+const reviewReqRef = db.collection("reviewRequests").doc(token);
+
+return await db.runTransaction(async ( transaction ) => {
+  const snap = await transaction.get(reviewReqRef);
+
+  if(!snap.exists || snap.data().status !== "pending") {
+    throw new HttpsError("failed-precondition", "Ky link është përdorur ose nuk ekziston.");
+  }
+
+  const workerId = snap.data().workerId;
+  const workerRef = db.collection("workers").doc(workerId);
+  const workerSnap = await transaction.get(workerRef);
+
+  if (!workerSnap.exists) {
+      throw new HttpsError("not-found", "Mjeshtri nuk ekziston.");
+  }
+
+  const currentPoints = workerSnap.data().totalRatingPoints || 0;
+  const currentCount = workerSnap.data().reviewCount || 0;
+
+  const newCount = currentCount + 1;
+  const newPoints = currentPoints + rating;
+  const newAvg = newPoints / newCount;
+
+  transaction.update(reviewReqRef, {
+    status: "used",
+    usedAt:  FieldValue.serverTimestamp(),
+  });
+
+  transaction.update(workerRef, {
+    reviewCount: newCount, 
+    totalRatingPoints: newPoints,
+    avgRating: newAvg
+  });
+
+  const newReviewRef = db.collection("reviews").doc();
+  transaction.set(newReviewRef, {
+    workerId,
+    rating,
+    comment: comment || "",
+    customerName: customerName || "Klient i Verifikuar",
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+
+  return { success: true}
+})
+
+})
 // For cost control, you can set the maximum number of containers that can be
 // running at the same time. This helps mitigate the impact of unexpected
 // traffic spikes by instead downgrading performance. This limit is a
