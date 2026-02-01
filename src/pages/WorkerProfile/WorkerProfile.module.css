@@ -87,39 +87,8 @@
   font-weight: 600;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
 
-.statCard {
-  background-color: var(--bg-secondary);
-  padding: 2rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  box-shadow: var(--shadow-soft);
-  border: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.1
-    );
-}
 
-.statValue {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--accent-emerald);
-  margin-bottom: 0.5rem;
-}
-
-.statLabel {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
 
 .portfolioSection {
   margin-bottom: 3rem;
@@ -397,6 +366,8 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+
+
 /* ===================== LIGHT THEME FIXES ===================== */
 /* Targeting light theme without modifying any existing dark theme values */
 
@@ -442,6 +413,235 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  border: 2px solid rgba(var(--accent-emerald-rgb), 0.1); /* Adjusted to use common variable naming */
+  position: relative; /* Needed for tooltip positioning */
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-emerald);
+  margin-bottom: 0; /* Removed margin here because statHeader handles it */
+}
+
+.statLabel {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* Tooltip Styles */
+.infoTooltip {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.infoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(var(--accent-emerald-rgb), 0.15);
+  border: 1px solid var(--accent-emerald);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--accent-emerald);
+  cursor: help;
+}
+
+.tooltipText {
+  visibility: hidden;
+  width: 220px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: 150%; /* Position above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+/* Tooltip Arrow */
+.tooltipText::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1a1a1a transparent transparent transparent;
+}
+
+.infoTooltip:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Container to keep everything grouped */
+.statsContainer {
+  margin-bottom: 3rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem; /* Reduced to sit closer to the summary bar */
+}
+
+/* ... keep your existing .statCard, .statValue, .statHeader, and Tooltip CSS here ... */
+
+.summaryBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: rgba(var(--accent-emerald-rgb), 0.05);
+  border: 1px dashed rgba(var(--accent-emerald-rgb), 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.summaryBar strong {
+  color: var(--accent-emerald);
+  margin-left: 4px;
+}
+
+.summaryDivider {
+  width: 1px;
+  height: 16px;
+  background-color: rgba(var(--accent-emerald-rgb), 0.2);
+}
+
+.summaryDetail {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* ... keep your existing .stats, .statCard, .statValue, .statHeader ... */
+
+.verificationBadge {
+  margin-top: 1.2rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(var(--accent-emerald-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkIcon {
+  font-size: 0.9rem;
+}
+
+/* Tooltip adjustments to match the emerald theme better */
+.infoIcon {
+  background: rgba(var(--accent-emerald-rgb), 0.1);
+  border: 1px solid var(--accent-emerald);
+  color: var(--accent-emerald);
+  /* ... keep rest of previous styles ... */
+}
+
+.tooltipText {
+  background-color: #0f172a; /* Darker navy for better contrast */
+  border: 1px solid var(--accent-emerald);
+  /* ... keep rest of previous styles ... */
+}
+
+/* ... keep your existing stats, statCard, statValue ... */
+
+.transparencyBreakdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: rgba(var(--accent-emerald-rgb), 0.05);
+  padding: 4px 12px;
+  border-radius: 20px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dot {
+  color: var(--accent-emerald);
+  font-weight: bold;
+}
+
+.verificationBadge {
+  margin-top: 1.2rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(var(--accent-emerald-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.7rem; /* Slightly smaller to keep hierarchy */
+  font-weight: 700;
+  color: var(--accent-emerald);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.checkIcon {
+  font-size: 0.9rem;
+}
+
+/* Mobile fix for summary bar */
+@media (max-width: 600px) {
+  .summaryBar {
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+  }
+  .summaryDivider {
+    display: none;
   }
 }
 

@@ -5,8 +5,8 @@
   background: var(--bg-secondary);
   color: var(--text-off-white);
   box-shadow: var(--shadow-medium);
-  max-width: 450px;
-  width: 90%;
+  max-width: 550px;
+
   margin:  auto;
   overflow: hidden;
   outline: none;

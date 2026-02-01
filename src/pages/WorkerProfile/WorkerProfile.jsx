@@ -152,16 +152,46 @@ const averageRating = (worker.reviewCount && worker.totalRatingPoints)
         </div>
       </div>
 
-      <div className={styles.stats}>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{worker.whatsappRequests}</div>
-          <div className={styles.statLabel}>Klientë të interesuar</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statValue}>{worker.experienceYears}</div>
-          <div className={styles.statLabel}>Vite përvojë</div>
-        </div>
+    <div className={styles.stats}>
+  {/* WhatsApp Stat Card */}
+  <div className={styles.statCard}>
+    <div className={styles.statHeader}>
+      {/* The big number is now the SUM of clicks and reviews */}
+      <div className={styles.statValue}>
+        {(worker.whatsappRequests || 0) + (reviews?.length || 0)}
       </div>
+      <div className={styles.infoTooltip}>
+        <span className={styles.infoIcon}>?</span>
+        <span className={styles.tooltipText}>
+          Ky profil monitorohet automatikisht. Raporti mes klikimeve dhe vlerësimeve duhet të jetë logjik për të ruajtur statusin "I Verifikuar".
+        </span>
+      </div>
+    </div>
+    <div className={styles.statLabel}>Klientë të interesuar</div>
+    
+    {/* Transparency Breakdown */}
+    <div className={styles.transparencyBreakdown}>
+      <span>{worker.whatsappRequests || 0} Klikime</span>
+      <span className={styles.dot}>•</span>
+      <span>{reviews?.length || 0} Vlerësime</span>
+    </div>
+
+    <div className={styles.verificationBadge}>
+      <span className={styles.checkIcon}>✓</span>
+      Interaksione të Verifikuara
+    </div>
+  </div>
+
+  {/* Experience Stat Card */}
+  <div className={styles.statCard}>
+    <div className={styles.statValue}>{worker.experienceYears}</div>
+    <div className={styles.statLabel}>Vite përvojë</div>
+    <div className={styles.verificationBadge}>
+      <span className={styles.checkIcon}>✓</span>
+      Përvojë e konfirmuar
+    </div>
+  </div>
+</div>
 
       <div className={styles.portfolioGrid}>
   {/* Add a check to see if portfolio exists and has items */}

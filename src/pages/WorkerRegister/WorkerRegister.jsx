@@ -136,6 +136,7 @@ function WorkerRegister() {
   // Status
   isPro: false,
   isActive: true,
+  
 
   // Metadata
   createdAt: serverTimestamp(),

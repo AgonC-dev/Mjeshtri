@@ -881,6 +881,213 @@
 
 .errorCloseBtn:hover { background: rgba(255, 68, 68, 0.2); }
 
+/* --- ALERT BANNER (Inside Dashboard) --- */
+/* --- ADAPTIVE ALERT BANNER --- */
+/* ===================== ALERT BANNER & HEALTH MODAL ===================== */
+
+/* --- MAIN BANNER --- */
+.alertBanner {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(var(--accent-red-r), 0.4);
+  padding: 12px 18px;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  animation: slideIn 0.4s ease-out;
+  gap: 12px;
+}
+
+:global([data-theme="light"]) .alertBanner {
+  background: #fff5f5;
+  border-color: #feb2b2;
+}
+
+/* --- ICON & PULSE --- */
+.iconBox {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background: rgba(var(--accent-red-r), 0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pulseRing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--accent-red);
+  border-radius: 6px;
+  animation: strokePulse 2s infinite;
+}
+
+/* --- TEXT STYLES --- */
+.alertText {
+  color: var(--text-off-white);
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.redWarningText {
+  color: var(--accent-red) !important;
+  font-weight: 700;
+}
+
+.alertActionBtn {
+  background: var(--accent-red);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* --- THEMED HEALTH MODAL --- */
+.themedHealthModal {
+  padding: 2.5rem 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-secondary);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(var(--white-r), 0.1);
+  text-align: center;
+  box-shadow: var(--shadow-medium);
+}
+
+.modalStatusGlow {
+  position: absolute;
+  top: -50px; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 100px;
+  background: var(--accent-red);
+  filter: blur(60px);
+  opacity: 0.2;
+}
+
+/* Title Logic: Green on Dark, Red on Light */
+.dualTitle {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--accent-emerald); 
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+:global([data-theme="light"]) .dualTitle {
+  color: var(--accent-red);
+}
+
+.modalSubtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* --- STATS BOXES --- */
+.statsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 2rem;
+}
+
+.statBox {
+  background: var(--bg-primary);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  transition: transform 0.3s ease;
+}
+
+.statBox:hover { transform: translateY(-5px); }
+
+.statVal {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--accent-emerald);
+  line-height: 1;
+}
+
+.statLab {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 8px;
+  display: block;
+}
+
+/* --- WARNING MESSAGE BOX --- */
+.warningMessage {
+  background: rgba(var(--accent-red-r), 0.08);
+  border-left: 4px solid var(--accent-red);
+  padding: 16px;
+  border-radius: 0 12px 12px 0;
+  text-align: left;
+  margin: 1.5rem 0;
+}
+
+.warningMessage p {
+  color: var(--text-off-white);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.warningMessage strong { color: var(--text-white); }
+
+/* --- MODAL CLOSE BUTTON --- */
+.modalCloseBtn {
+  width: 100%;
+  background: var(--accent-red);
+  color: white;
+  padding: 16px;
+  border-radius: 14px;
+  font-weight: 800;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+/* --- ANIMATIONS --- */
+@keyframes strokePulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 600px) {
+  .alertBanner { margin: 0 10px 2rem 10px; padding: 10px 15px; }
+  .alertActionBtn { display: none; } 
+  .dualTitle { font-size: 1.4rem; }
+  .statVal { font-size: 1.8rem; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 /* ===================== LIGHT MODE ADAPTATION ===================== */
 :global([data-theme="light"]) .proContent, 
 :global([data-theme="light"]) .errorModalContent {
@@ -902,6 +1109,8 @@
 :global([data-theme="light"]) .errorModalContent p {
   color: #64748b;
 }
+
+
 
 @keyframes revealItem {
   from { opacity: 0; transform: translateX(-15px); }

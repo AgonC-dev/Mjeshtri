@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import WhatsAppButton from '../WhatsAppButton/WhatsAppButton'
 import styles from './WorkerCard.module.css'
 
 function WorkerCard({ worker }) {
+const { id } = useParams();
 const navigate = useNavigate();
 
   const renderStars = (rating) => {
@@ -57,7 +58,7 @@ const navigate = useNavigate();
           <span className={styles.ratingValue}>{worker.rating}</span>
         </div>
         <div className={styles.buttonContainer} onClick={(e) => e.stopPropagation()}>
-          <WhatsAppButton id={worker.id || worker.uid} phoneNumber={worker.phoneNumber} />
+          <WhatsAppButton id={id || worker.uid} phoneNumber={worker.phoneNumber} />
         </div>
       </div>
     </div>

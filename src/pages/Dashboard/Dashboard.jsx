@@ -49,15 +49,22 @@ function Dashboard() {
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
+  const [whatsappRequests, setWhatsappRequests] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState({
   review: false,
   pro: false,
   error:false,
+  health: false,
 });
   const topRef = useRef();
   const MAX_FILE_SIZE = 3 * 1024 * 1024;
   const MAX_PORTFOLIO_IMG_NOPRO = 3;
   const navigate = useNavigate();
+
+  const reviewCount = reviews?.length || 0;
+  const clickCount = whatsappRequests || 0;
+  // Threshold: Flag if reviews are more than clicks + 3
+  const isFishy = user && (reviewCount > (clickCount + 3));
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -67,11 +74,15 @@ function Dashboard() {
         return;
       }
 
+     
+
       try {
         const docRef = doc(db, "workers", u.uid);
         const snap = await getDoc(docRef);
         if (snap.exists()) {
           const data = snap.data();
+
+          setWhatsappRequests(data.whatsappRequests || 0);
           setForm((prev) => ({
             ...prev,
             name: data.fullName || "",
@@ -332,6 +343,64 @@ function Dashboard() {
       </div>
     )}
 
+        {/* REDESIGNED WARNING BANNER */}
+{isFishy && (
+  <div className={styles.alertBanner} onClick={() => setIsModalOpen(prev => ({...prev, health: true}))}>
+    <div className={styles.alertContent}>
+      <div className={styles.iconBox}>
+        <div className={styles.pulseRing}></div>
+        ⚠️
+      </div>
+      <div className={styles.alertText}>
+        <span className={styles.redWarningText}>VREJTJE:</span> 
+        <span className={styles.redWarningText}> Aktivitet i dyshimtë i detektuar.</span>
+      </div>
+    </div>
+    <button type="button" className={styles.alertActionBtn}>Analizo</button>
+  </div>
+)}
+
+{/* REDESIGNED HEALTH MODAL */}
+<Modal 
+  open={isModalOpen.health} 
+  onClose={() => setIsModalOpen(prev => ({...prev, health: false}))}
+>
+  <div className={styles.themedHealthModal}>
+    <div className={styles.modalStatusGlow}></div>
+    
+    <header className={styles.modalHeader}>
+      <h2 className={styles.dualTitle}>
+        <span className={styles.partWhite}>INTEGRITETI</span>
+        <span className={styles.partRed}>I PROFILIT</span>
+      </h2>
+      <p className={styles.modalSubtitle}>Raporti vlerësim/interesim nuk përputhet</p>
+    </header>
+
+    <div className={styles.statsContainer}>
+      <div className={styles.statBox}>
+        <span className={styles.statVal}>{clickCount}</span>
+        <span className={styles.statLab}>Klikime</span>
+      </div>
+      <div className={styles.statBox}>
+        <span className={styles.statVal} style={{color: 'var(--accent-red)'}}>{reviewCount}</span>
+        <span className={styles.statLab}>Vlerësime</span>
+      </div>
+    </div>
+<div className={styles.warningMessage}>
+  <p>
+    Sistemi ynë ka vënë re se keni më shumë <span className={styles.redWarningText}>vlerësime</span> se sa <span className={styles.redWarningText}>klientë realë</span> që ju kanë kontaktuar. Platforma jonë ndalon rreptësisht vlerësimet fiktive.
+  </p>
+</div>
+    
+    <button 
+      className={styles.modalCloseBtn} 
+      onClick={() => setIsModalOpen(prev => ({ ...prev, health: false }))}
+    >
+      E Kuptova
+    </button>
+  </div>
+</Modal>
+
     {/* ================= FORM ================= */}
     <form className={styles.dashboardGrid} onSubmit={handleSave}>
       
@@ -368,6 +437,7 @@ function Dashboard() {
         </div>
       </div>
 
+     
       {/* SECTION 2: PROFILE PHOTO */}
       <div className={`${styles.bentoCard} ${styles.mediaSection}`}>
         <h3 className={styles.cardTitle}>🖼️ Foto Profili</h3>
@@ -473,6 +543,10 @@ function Dashboard() {
         onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}
       />
     </Modal>
+
+
+
+{/* 3. The Health Check Modal */}
 
     <Modal open={isModalOpen.pro} onClose={() => setIsModalOpen(prev => ({...prev, pro: false}))}>
       <div className={styles.proContent}>
