@@ -60,6 +60,8 @@ export default function Contact() {
         </div>
       </div>
 
+      <input type="hidden" name="botcheck" style={{display: "none"}} />
+
       <div className={styles.inputGroup}>
     <label>Subjekti</label>
     <div className={styles.selectWrapper}>

@@ -167,6 +167,76 @@
   width: 100%;
 }
 
+/* The '?' Circle */
+.helpIcon {
+  position: relative; /* Essential for positioning the bubble */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 8px;
+  cursor: help;
+  border: 1px solid #888;
+  color: #888;
+  transition: all 0.2s ease;
+}
+
+/* The Tooltip Bubble (Hidden by default) */
+.helpIcon::after {
+  content: attr(data-tooltip); /* Grabs the text from the data-tooltip attribute */
+  position: absolute;
+  bottom: 125%; /* Position it above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* Styling the bubble */
+  background-color: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px; /* Bigger text as requested */
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  
+  /* Visibility - Set to 0 delay */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease; /* Very fast fade in */
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* The little arrow under the bubble */
+.helpIcon::before {
+  content: '';
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease;
+}
+
+/* Instant Hover Effect */
+.helpIcon:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.helpIcon:hover::after,
+.helpIcon:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
 /* ================= MOBILE FIX ================= */
 
 @media (max-width: 600px) {

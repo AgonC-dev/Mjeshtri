@@ -47,7 +47,7 @@ function Header() {
     }
 
     document.addEventListener("mousedown", handleOutsideClick)
-    return () => document.removeEventListener("click", handleOutsideClick)
+    return () => document.removeEventListener("mousedown", handleOutsideClick)
       
   }, [])
 
@@ -94,52 +94,71 @@ function Header() {
                 />
               </div>
 
-              {showDropDown && (
-                <div className={styles.dropdown} ref={menuRef}>
-                  <div className={styles.dropdownHeader}>
-                    <p className={styles.userName}>{userData?.fullName || "Mjeshtër"}</p>
-                    <p className={styles.userEmail}>{user.email}</p>
-                  </div>
-                  <hr className={styles.divider} />
-                  <Link 
-                    to="/dashboard" 
-                    className={styles.dropdownItem}
-                    onClick={() => setShowDropDown(false)}
-                  >
-                    Paneli
-                  </Link>
-                  <Link 
-                    to="/settings" 
-                    className={styles.dropdownItem}
-                    onClick={() => setShowDropDown(false)}
-                  >
-                    Cilësimet e Profilit
-                  </Link>
-                  <Link 
-                    to="/profile"
-                    className={styles.dropdownItem}
-                    onClick={() => setShowDropDown(false)}
-                  >
-                    Shiko Profilin
-                  </Link>
-                  <Link 
-                    to="/review"
-                    className={styles.dropdownItem}
-                    onClick={() => setShowDropDown(false)}
-                  >
-                    Kërko Vlerësim ⭐ 
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      auth.signOut();
-                      setShowDropDown(false);
-                    }} 
-                    className={styles.logoutButton}
-                  >
-                    Dil (Logout)
-                  </button>
-                </div>
-              )}
+             {showDropDown && (
+  <div className={styles.dropdown} ref={menuRef}>
+    <div className={styles.dropdownHeader}>
+      <p className={styles.userName}>{userData?.fullName || "Mjeshtër"}</p>
+      <p className={styles.userEmail}>{user.email}</p>
+    </div>
+    <hr className={styles.divider} />
+    
+          <Link 
+             to="/dashboard" 
+             className={styles.dropdownItem}
+             onClick={() => setShowDropDown(false)}
+          >
+               Paneli
+            </Link>
+    
+    <Link 
+      to="/settings" 
+      className={styles.dropdownItem}
+      onClick={() => setShowDropDown(false)}
+    >
+      Cilësimet e Profilit
+    </Link>
+    
+    <Link 
+      to="/profile"
+      className={styles.dropdownItem}
+      onClick={() => setShowDropDown(false)}
+    >
+      Shiko Profilin
+    </Link>
+    
+    <Link 
+      to="/review"
+      className={styles.dropdownItem}
+      onClick={() => setShowDropDown(false)}
+    >
+      Kërko Vlerësim ⭐ 
+      <span className={styles.helpIcon} data-tooltip="Dërgoni linkun klientit për vlerësim!">
+        ?
+      </span>
+    </Link>
+
+    {/* Separator for Support Section */}
+    <hr className={styles.divider} />
+
+    <Link 
+      to="/help" 
+      className={styles.dropdownItem}
+      onClick={() => setShowDropDown(false)}
+    >
+      Ndihmë & FAQ 💡
+    </Link>
+
+    <button 
+      onClick={() => {
+        auth.signOut();
+        setShowDropDown(false);
+      }} 
+      className={styles.logoutButton}
+    >
+      Dil (Logout)
+    </button>
+  </div>
+)}
             </div>
           ) : (
             <>

@@ -1,0 +1,258 @@
+.helpContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+  /* Animation for the whole page load */
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem); /* Responsive font size */
+  color: var(--text-white);
+  margin-bottom: 15px;
+  letter-spacing: -1px;
+}
+
+.header p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* FAQ Accordion */
+.faqSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqItem {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-soft);
+}
+
+.faqItem:hover {
+  border-color: var(--accent-emerald);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-medium);
+}
+
+.faqQuestion {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.faqQuestion h3 {
+  font-size: 1.15rem;
+  color: var(--text-off-white);
+  font-weight: 600;
+  margin: 0;
+}
+
+.icon {
+  font-size: 1.4rem;
+  color: var(--accent-emerald);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faqItem.active .icon {
+  transform: rotate(45deg); /* Rotates the + to look like an x */
+}
+
+.faqAnswer {
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 24px;
+  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.03);
+  border-top: 1px solid transparent;
+}
+
+.faqItem.active .faqAnswer {
+  max-height: 500px; /* Large enough for any text */
+  opacity: 1;
+  padding: 20px 24px 30px 24px;
+  border-top: 1px solid var(--card-border);
+}
+
+.faqAnswer p {
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+/* Contact Section */
+.contactSupport {
+  margin-top: 80px;
+  padding-bottom: 40px;
+}
+
+.supportCard {
+  background: var(--bg-secondary);
+  padding: 50px 30px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--card-border);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+}
+
+/* Emerald glow behind card */
+.supportCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.supportCard h3 {
+  margin-bottom: 15px;
+  color: var(--text-white);
+  font-size: 1.6rem;
+}
+
+.supportCard p {
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto 30px auto;
+}
+
+.supportButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.emailBtn {
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: var(--accent-emerald);
+  color: var(--bg-black) !important; /* Force dark text on emerald button */
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.emailBtn:hover {
+  background-color: var(--accent-emerald-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
+}
+
+/* --- Header Styles --- */
+.title {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--text-white); /* White in dark mode */
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.title span {
+  color: var(--accent-emerald); /* Green word */
+}
+
+/* --- Support Card Styles --- */
+.supportTitle {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  color: var(--text-white);
+  font-weight: 700;
+}
+
+.supportTitle span {
+  color: var(--accent-emerald);
+}
+
+/* --- Theme Specific Fixes --- */
+
+/* LIGHT THEME ADJUSTMENTS */
+[data-theme="light"] .title,
+[data-theme="light"] .supportTitle {
+  color: #1a1a1a; /* Makes the first word dark gray/black in light mode */
+}
+
+[data-theme="light"] .title span,
+[data-theme="light"] .supportTitle span {
+  color: var(--accent-emerald-dark); /* Slightly deeper green for better contrast on light bg */
+}
+
+/* Responsive Fix: Ensure the split text doesn't look weird on small screens */
+@media (max-width: 480px) {
+  .title {
+    display: flex;
+    flex-direction: column; /* Stacks the words if they are too long */
+    line-height: 1.2;
+  }
+}
+
+/* ... keep the rest of your previous CSS (FAQ items, animations, etc.) ... */
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .helpContainer {
+    margin: 30px auto;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+  }
+
+  .faqQuestion {
+    padding: 18px;
+  }
+
+  .faqQuestion h3 {
+    font-size: 1rem;
+  }
+
+  .supportCard {
+    padding: 30px 20px;
+  }
+
+  .supportButtons {
+    flex-direction: column; /* Stack button on small phones */
+  }
+
+  .emailBtn {
+    width: 100%;
+  }
+}
+
+/* Light Mode Specific Contrast Fix */
+[data-theme="light"] .faqAnswer p {
+  color: #333333; /* Pure dark gray for perfect reading */
+  font-weight: 450;
+}
+
+[data-theme="light"] .faqItem {
+  background-color: #f8f9fa; /* Slightly lighter than your bg-secondary for depth */
+}
+
+[data-theme="light"] .faqItem.active {
+  background-color: var(--text-white);
+}

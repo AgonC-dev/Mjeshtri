@@ -1,4 +1,4 @@
-import React from 'react';
+
 import styles from './Maintenance.module.css';
 
 const Maintenance = () => {
