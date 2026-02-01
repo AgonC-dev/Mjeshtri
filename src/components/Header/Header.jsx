@@ -115,7 +115,7 @@ function Header() {
       className={styles.dropdownItem}
       onClick={() => setShowDropDown(false)}
     >
-      Cilësimet e Profilit
+      Cilësimet e Llogarisë
     </Link>
     
     <Link 

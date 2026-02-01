@@ -180,7 +180,7 @@ function Dashboard() {
 
   function handleDeleteProfile() {
     setProfileFile(null);
-    setForm(prev => ({...prev, profileUrl: null}));
+    setForm(prev => ({...prev, profileUrl: ''}));
      setIsDirty(true);
   }
 
@@ -241,14 +241,12 @@ function Dashboard() {
         startingPrice: Number(form.hourlyRate) || 0,
         bio: form.bio,
         updatedAt: serverTimestamp(),
-        profilePic: form.profileUrl || '',
+        profilePic: form.profileUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(form.name)}&background=00ff85&color=fff`,
+  
       };
 
     
 
-      if (!profileFile && (form.profileUrl === null || form.profileUrl === "")) {
-        updates.profilePic = "";
-      }
 
       const options = {
         maxSizeMB: 1,
@@ -448,7 +446,11 @@ function Dashboard() {
             ) : form.profileUrl ? (
               <img src={form.profileUrl} alt="profile" className={styles.profile} />
             ) : (
-              <div className={styles.avatarPlaceholder}>Foto</div>
+              <img 
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(form.name || 'M')}&background=00ff85&color=fff&bold=true`} 
+                alt="default-avatar" 
+                className={styles.profile} 
+              />
             )}
           </div>
           <div className={styles.uploadControls}>

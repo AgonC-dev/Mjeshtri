@@ -1,43 +1,78 @@
+/* ProfileSettings.module.css */
+
 .settingsContainer {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeIn 0.6s ease-out;
 }
 
-html {
-  scroll-behavior: smooth;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .pageTitle {
-  color: var(--text-off-white);
-  font-size: 2.2rem;
-  margin-bottom: 2.5rem;
-  font-weight: 700;
-}
-
-/* Status Message Styling */
-.statusMessage {
-  padding: 1rem;
-  border-radius: 8px;
+  font-size: 2rem;
+  font-weight: 800;
   margin-bottom: 2rem;
-  font-weight: 500;
-  text-align: center;
-  background: rgba(var(--white-r), var(--white-g), var(--white-b), 0.05);
   color: var(--text-off-white);
 }
 
-.success {
-  border: 1px solid var(--accent-emerald);
-  color: var(--accent-emerald);
-  background: rgba(16, 185, 129, 0.1);
-}
-
-.error {
+/* --- SECURITY WARNING BANNER --- */
+.securityWarningBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(var(--accent-red-r), 0.1);
   border: 1px solid var(--accent-red);
-  color: var(--accent-red);
-  background: rgba(var(--accent-red-r), var(--accent-red-g), var(--accent-red-b), 0.1);
+  padding: 1.25rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  gap: 1rem;
+  animation: pulseShadow 3s infinite;
 }
 
+@keyframes pulseShadow {
+  0% { box-shadow: 0 0 0 0 rgba(var(--accent-red-r), 0.2); }
+  70% { box-shadow: 0 0 0 10px rgba(var(--accent-red-r), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--accent-red-r), 0); }
+}
+
+.warningContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.warningIcon {
+  font-size: 1.5rem;
+}
+
+.warningTitle {
+  font-weight: 700;
+  color: var(--accent-red);
+}
+
+.warningDesc {
+  font-size: 0.9rem;
+  color: var(--text-off-white);
+}
+
+.verifyBtnInline {
+  background: var(--accent-red);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.verifyBtnInline:hover {
+  transform: scale(1.05);
+}
+
+/* --- SECTIONS & CARDS --- */
 .sectionsWrapper {
   display: flex;
   flex-direction: column;
@@ -45,27 +80,58 @@ html {
 }
 
 .settingsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  transition: opacity 0.3s ease;
 }
 
 .sectionTitle {
-  font-size: 1rem;
-  color: var(--text-muted);
+  font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+  font-weight: 700;
 }
 
 .card {
-  background-color: var(--bg-secondary);
-  padding: 1.8rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.05);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* --- LOCKED STATE --- */
+.lockedSection {
+  opacity: 0.6;
+  position: relative;
+  cursor: not-allowed;
+}
+
+.lockedSection .card:hover {
+  transform: none;
+}
+
+.lockHint {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--accent-red);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lockHint::before {
+  content: "🔒";
+}
+
+/* --- ROW STYLES --- */
 .displayRow {
   display: flex;
   justify-content: space-between;
@@ -74,37 +140,30 @@ html {
 
 .info label {
   display: block;
-  color: var(--text-muted);
   font-size: 0.85rem;
-  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
 }
 
 .info p {
-  color: var(--text-off-white);
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.editToggleButton {
-  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
-  color: var(--accent-emerald);
-  border: 1px solid var(--accent-emerald);
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  font-size: 1.1rem;
 }
 
-.editToggleButton:hover {
-  background: var(--accent-emerald);
-  color: var(--text-white);
-}
+.verifiedTag { color: var(--accent-emerald); font-weight: bold; margin-left: 5px; }
+.unverifiedTag { color: var(--accent-red); font-weight: bold; margin-left: 5px; }
 
+/* --- FORMS --- */
 .editForm {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .inputGroup {
@@ -114,86 +173,122 @@ html {
 }
 
 .inputGroup label {
-  color: var(--text-off-white);
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .inputGroup input {
   padding: 0.8rem;
   border-radius: 8px;
-  border: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
-  background: rgba(var(--black-r), var(--black-g), var(--black-b), 0.3);
-  color: var(--text-white);
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
+  border: 1px solid var(--card-border);
+  background: var(--bg-primary);
+  color: var(--text-off-white);
+  outline: none;
 }
 
 .inputGroup input:focus {
-  outline: none;
   border-color: var(--accent-emerald);
 }
 
+/* --- BUTTONS --- */
 .buttonGroup {
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
 }
 
-.updateButton {
-  background-color: var(--accent-emerald);
-  color: var(--text-white);
-  border: none;
-  padding: 0.8rem 1.5rem;
+.editToggleButton {
+  background: rgba(var(--accent-emerald-r), 0.1);
+  color: var(--accent-emerald);
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   font-weight: 600;
-  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.editToggleButton:hover:not(:disabled) {
+  background: var(--accent-emerald);
+  color: white;
+}
+
+.editToggleButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.updateButton {
+  background: var(--accent-emerald);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
 }
 
 .cancelButton {
   background: transparent;
   color: var(--text-muted);
-  border: 1px solid var(--text-muted);
-  padding: 0.8rem 1.5rem;
+  border: 1px solid var(--card-border);
+  padding: 0.7rem 1.5rem;
   border-radius: 8px;
-  cursor: pointer;
 }
 
+/* --- DANGER ZONE --- */
 .dangerText {
   color: var(--accent-red);
 }
 
 .dangerCard {
-  border: 1px solid rgba(var(--accent-red-r), var(--accent-red-g), var(--accent-red-b), 0.2);
+  border: 1px dashed rgba(var(--accent-red-r), 0.5);
+}
+
+.dangerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
 }
 
 .dangerInfo h3 {
-  color: var(--accent-red);
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .dangerInfo p {
+  font-size: 0.85rem;
   color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
 }
 
-.deleteButton, .deleteButtonFull {
-  background: transparent;
+.deleteButton {
+  background: rgba(var(--accent-red-r), 0.1);
   color: var(--accent-red);
-  border: 1px solid var(--accent-red);
-  padding: 0.8rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.deleteButton:hover, .deleteButtonFull:hover {
+.deleteButtonFull {
   background: var(--accent-red);
-  color: var(--text-white);
+  color: white;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-weight: 700;
+  width: 100%;
 }
 
+/* --- STATUS MESSAGES --- */
+.statusMessage {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.success { background: rgba(var(--accent-emerald-r), 0.1); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
+.error { background: rgba(var(--accent-red-r), 0.1); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+/* --- LOADER & AUTH SCREENS --- */
 .centeredContainer {
   display: flex;
   flex-direction: column;
@@ -201,19 +296,18 @@ html {
   justify-content: center;
   min-height: 60vh;
   text-align: center;
-  gap: 20px;
 }
 
-/* --- LOADING ANIMATION (Jumping Dots) --- */
 .loaderWrapper {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  margin-bottom: 1rem;
 }
 
 .jumpingDot {
-  width: 15px;
-  height: 15px;
-  background-color: #007bff; /* Change to your brand color */
+  width: 12px;
+  height: 12px;
+  background: var(--accent-emerald);
   border-radius: 50%;
   animation: jump 0.6s infinite alternate;
 }
@@ -222,59 +316,58 @@ html {
 .jumpingDot:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes jump {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-20px); opacity: 0.5; }
-}
-
-.animatedText {
-  font-weight: 600;
-  color: #555;
-  animation: fadeInOut 2s infinite;
-}
-
-/* --- UNAUTHORIZED STATE (Lock Animation) --- */
-.lockEmoji {
-  font-size: 50px;
-  display: inline-block;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  from { transform: translateY(0); }
+  to { transform: translateY(-15px); }
 }
 
 .loginPulseButton {
-  padding: 12px 30px;
   background: var(--accent-emerald);
-  color: var(--text-white);
-  border: none;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 15px rgba(var(--accent-emerald-r), 0.3);
+  transition: all 0.3s ease;
+}
+
+.loginPulseButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(var(--accent-emerald-r), 0.5);
+}
+
+.bannerButtons {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.refreshBtnInline {
+  background: transparent;
+  color: var(--text-off-white);
+  border: 1px solid var(--text-muted);
+  padding: 0.6rem 1.2rem;
   border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: transform 0.2s;
-  box-shadow: 0 0 0 0 rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.7);
-  animation: pulse 2s infinite;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-@keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0); }
+.refreshBtnInline:hover {
+  background: rgba(var(--white-r), 0.1);
+  border-color: var(--text-off-white);
 }
 
-@keyframes fadeInOut {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
+/* Ensure the banner stacks nicely on mobile */
 @media (max-width: 600px) {
-  .displayRow {
+  .securityWarningBanner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
   }
-  .buttonGroup {
-    flex-direction: column;
+  .bannerButtons {
+    width: 100%;
+  }
+  .verifyBtnInline, .refreshBtnInline {
+    flex: 1;
+    text-align: center;
   }
 }
