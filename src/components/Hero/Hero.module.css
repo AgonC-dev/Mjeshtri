@@ -1,158 +1,192 @@
 .hero {
-  background: linear-gradient(
-    135deg,
-    var(--bg-secondary) 0%,
-    var(--bg-black) 100%
-  );
-  padding: 4rem 0;
-  text-align: center;
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
-  margin-bottom: 3rem;
-}
+  width: 85%;
+  margin: 0 auto;
+  min-height: 45rem;
+  display: flex;
+  justify-content: center;
+  gap: 9rem;
 
-/* Light theme: cleaner base with a subtle emerald radial accent */
-:global([data-theme="light"]) :local(.hero) {
-  background-color: var(--bg-primary);
-  position: relative;
-  overflow: hidden;
-}
-
-:global([data-theme="light"]) :local(.hero)::before {
-  content: "";
-  position: absolute;
-  top: -6%;
-  left: -8%;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(
-        var(--accent-emerald-r),
-        var(--accent-emerald-g),
-        var(--accent-emerald-b),
-        0.12
-      )
-      0%,
-    rgba(
-        var(--accent-emerald-r),
-        var(--accent-emerald-g),
-        var(--accent-emerald-b),
-        0.04
-      )
-      40%,
-    transparent 60%
-  );
-  filter: blur(38px);
-  opacity: 0.95;
-  pointer-events: none;
-  transform: translateZ(0);
+  padding: 70px 160px 100px 160px;
+ 
 }
 
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 580px;
+  
+
+  min-height: 306px;
+  display: flex;
+  gap: 2.2rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.workerImage {
+  width: 470px;
+  height: 540px;
+
 }
 
 .title {
-  font-size: 2.5rem;
+  font-family: 'Graphik', sans-serif;
+  
+  min-width: 620px;
+  text-align: start;
   font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-off-white);
-  background: linear-gradient(
-    135deg,
-    var(--text-off-white),
-    var(--accent-emerald)
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 80px;
+  line-height: 1;
+  letter-spacing: -0.04;
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  margin-bottom: 2.5rem;
+    font-family: 'Graphik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.46;
+  letter-spacing: 0.03em;
 }
 
 .searchForm {
+  border-radius: 40px;
+  max-width: 285px;
+  padding: 2px 16px;
+  background-color: none;
+  min-height: 44px;
+  gap: 1px;
   display: flex;
-  gap: 1rem;
-  max-width: 600px;
-  margin: 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #E0E0E0;
 }
 
 .searchInput {
-  flex: 1;
-  padding: 1rem 1.5rem;
-  background-color: var(--bg-secondary);
-  border: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.2
-    );
-  border-radius: var(--border-radius);
-  color: var(--text-off-white);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.searchInput:focus {
-  outline: none;
-  border-color: var(--accent-emerald);
-  box-shadow: 0 0 0 3px
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.1
-    );
-}
-
-.searchInput::placeholder {
-  color: var(--text-muted);
+  background-color: transparent;
+  border-radius: 40px;
+  max-width: 270px;
+    min-height: 44px;
+  padding-left: 12px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  color: #000000;
 }
 
 .searchButton {
-  padding: 1rem 2rem;
-  background-color: var(--accent-emerald);
-  color: var(--bg-primary);
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-soft);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
 }
 
-.searchButton:hover {
-  background-color: var(--accent-emerald-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+.title span {
+  display: inline-block;
+  min-height: 1em; 
+  padding-right: 4px;
+  /* Smooth transition for when characters are added */
+  transition: all 0.1s ease-in-out; 
 }
 
-@media (max-width: 768px) {
+.typewriter {
+  /* Change 'currentColor' to 'black' or #000000 */
+  border-right: 4px solid black; 
+  /* 'step-end' is what makes it 'blink' sharply. 
+     If you want a 'soft' blink, change 'step-end' to 'linear' */
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: black; }
+}
+
+
+/* --- LAPTOPS (under 1200px) --- */
+@media (max-width: 1200px) {
   .hero {
-    padding: 3rem 0;
-    margin-bottom: 2rem;
+    width: 95%;
+    padding: 60px 40px;
+    gap: 4rem;
   }
 
   .title {
-    font-size: 2rem;
+    font-size: 60px; /* Scaling down from 80px */
+    min-width: unset; /* Removing the fixed width */
   }
 
-  .subtitle {
-    font-size: 1rem;
-    margin-bottom: 2rem;
+  .workerImage {
+    width: 380px;
+    height: auto;
+  }
+}
+
+/* --- TABLETS (under 992px) --- */
+@media (max-width: 992px) {
+  .hero {
+    flex-direction: column; /* Stacking text on top of image */
+    text-align: center;
+    align-items: center;
+    min-height: auto;
+    gap: 3rem;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 100%;
+    align-items: center; /* Center search bar and text */
+  }
+
+  .title {
+    text-align: center;
+    font-size: 50px;
   }
 
   .searchForm {
-    flex-direction: column;
+    width: 100%;
+    max-width: 400px; /* Make search bar wider on mobile for easier tapping */
   }
 
-  .searchInput,
-  .searchButton {
-    width: 100%;
+  .workerImage {
+    width: 320px;
   }
+}
+
+/* --- PHONES (under 600px) --- */
+@media (max-width: 600px) {
+  .hero {
+    padding: 30px 15px;
+  }
+
+  .title {
+    font-size: 38px; /* Small enough to fit on one/two lines on a phone */
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+
+  .workerImage {
+    width: 100%; /* Image takes full width of the screen */
+    max-width: 280px;
+  }
+
+  .searchForm {
+    max-width: 100%; /* Search bar stretches to screen width */
+  }
+}
+
+/* --- DARK THEME FIXES --- */
+[data-theme="dark"] .searchInput {
+  color: var(--text-white);
+}
+
+[data-theme="dark"] .searchForm {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--bg-secondary);
 }

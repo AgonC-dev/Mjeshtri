@@ -5,7 +5,7 @@ import { db } from "./firebase";
 // your firebase config
 
 
-export async function fetchUsers(city, category) {
+export async function fetchUsers(city, category, isVerified) {
   try {
     const normalizedCategory =
       !category?.trim() || category === 'Të gjitha'
@@ -13,7 +13,14 @@ export async function fetchUsers(city, category) {
         : category
 
     const workersRef = collection(db, "workers")
-    let constraints = [where("isActive", "==", true)]
+    let constraints = [
+      where("isActive", "==", true),
+      where("isAvailable", "==", true)
+    ]
+
+    if (isVerified) {
+      constraints.push(where("isVerified", "==", true))
+    }
 
     if (city && city !== 'Të gjitha') {
       constraints.push(where("city", "==", city))

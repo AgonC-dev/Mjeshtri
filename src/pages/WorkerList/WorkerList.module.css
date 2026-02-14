@@ -1,97 +1,58 @@
-/* --- Original Styles (Do Not Touch) --- */
-.workerList {
-  padding: 2rem 0;
-  position: relative;
-}
-
-.debugInfo {
-  background-color: var(--bg-secondary);
-  padding: 1rem 1.5rem;
-  border-radius: var(--border-radius);
-  margin-bottom: 1.5rem;
-  border: 2px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.18
-    );
-  box-shadow: var(--shadow-soft);
-}
-
-.debugText {
-  color: var(--text-off-white);
-  font-size: 0.95rem;
-  margin: 0.5rem 0;
-  font-family: "Courier New", monospace;
-}
-
-.debugText strong {
-  color: var(--accent-emerald);
-  font-weight: 600;
-}
-
 .title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  color: var(--text-off-white);
-  text-align: center;
+ font-family: 'Graphik', sans-serif;
+ font-weight: 600;
+ font-style: semibold; 
+ font-size: 55px;
+ line-height: 1.1;
+ letter-spacing: -0.05em;
+ text-align: center;
+ color:#141414;
+ margin: 2rem auto;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 2rem;
-  
-  align-items: start;
-}
-
-.results {
-  width: 100%;
-}
-
-.resultsCount {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+.workerList {
+    
 }
 
 .resultsWrapper {
-  position: relative;
-  min-height: 400px;
+   
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+
 }
 
+
+/* This forces exactly 4 workers per row */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: grid;
+    /* This creates 4 equal columns */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 32px;
+    width: 100%;
+      transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.noResults {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--text-muted);
-  background-color: var(--bg-secondary);
-  border-radius: var(--border-radius);
-}
+
 
 /* --- Fixed Loading & Fetching Styles --- */
 
 /* 1. Top Browser Progress Bar (Emerald Green) */
+/* --- 1. Top Loading Bar (Recolored to match Spinner Blue) --- */
 .loadingBar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: rgba(16, 185, 129, 0.1);
+  height: 4px; /* Slightly thicker for better visibility */
+  background: rgba(0, 89, 255, 0.05); 
   overflow: hidden;
-  z-index: 9999;
+  z-index: 10000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 
 .loadingBar.active {
@@ -101,18 +62,56 @@
 .loadingBar::after {
   content: "";
   position: absolute;
-  width: 40%;
+  width: 45%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent-emerald),
-    transparent
-  );
-  animation: slide 1.5s infinite ease-in-out;
+  /* Using your #0059FF blue */
+  background: linear-gradient(90deg, transparent, #0059FF, transparent);
+  animation: slide 1.2s infinite ease-in-out;
 }
 
-/* 2. Initial Loader (Centered Spinner) */
+/* --- 2. Results Count (More "Pretty" & Professional) --- */
+.resultsCount {
+  font-family: 'Graphik', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0 auto;
+  padding: 8px 16px;
+  border-radius: 100px; /* Pill shape */
+   /* Keeps the background tight to the text */
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* --- 3. No Results State (Clean & Modern) --- */
+.noResults {
+  grid-column: 1 / -1; /* Spans full width if inside grid */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  background: #ffffff;
+  border: 2px dashed #e2e8f0;
+  border-radius: 24px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.noResults p {
+  color: #1a202c;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.noResults::after {
+  content: "Ju lutemi provoni të ndryshoni filtrat ose kërkimin tuaj.";
+  color: #718096;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+/* --- Keeping your Spinner & Animations as requested --- */
 .initialLoader {
   display: flex;
   flex-direction: column;
@@ -125,16 +124,20 @@
 .spinner {
   width: 42px;
   height: 42px;
-  border: 3px solid rgba(16, 185, 129, 0.1);
-  border-top: 3px solid var(--accent-emerald);
+  border: 3px solid rgba(0, 89, 255, 0.1); /* Updated base to match blue */
+  border-top: 3px solid #0059FF;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1.5rem;
 }
 
-.loadingText {
-  color: var(--text-muted);
-  font-size: 0.95rem;
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slide {
+  from { left: -50%; }
+  to { left: 150%; }
 }
 
 /* 3. Grid Blur (For Category/Filter Changes) */
@@ -144,176 +147,31 @@
   pointer-events: none;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.05);
-}
-
-.pageBtn {
-  padding: 10px 24px;
-  background-color: var(--bg-secondary);
-  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
-  border-radius: var(--border-radius);
-  color: var(--text-off-white);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: var(--shadow-soft);
-}
-
-.pageBtn:hover:not(:disabled) {
-  background-color: var(--accent-emerald);
-  color: var(--bg-black); /* High contrast text on emerald background */
-  border-color: var(--accent-emerald);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
-}
-
-.pageBtn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.pageBtn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  filter: grayscale(1);
-  border-color: var(--text-muted);
-}
-
-.pageInfo {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  font-family: inherit;
-  letter-spacing: 0.5px;
-}
-
-.pageInfo strong {
-  color: var(--accent-emerald);
-  font-weight: 700;
-  margin: 0 4px;
-}
-
-/* Light Theme Adjustments */
-:global([data-theme="light"]) :local(.pageBtn) {
-  border-color: rgba(0, 0, 0, 0.1);
-  background-color: var(--bg-secondary);
-}
-
-:global([data-theme="light"]) :local(.pageBtn:hover:not(:disabled)) {
-  background-color: var(--accent-emerald);
-  color: var(--text-white);
-}
-/* The "Blur" effect for background updates */
-.dimmed {
-  opacity: 0.5;
-  pointer-events: none;
-  filter: blur(1px);
-  transition: opacity 0.3s ease;
-}
-
 /* --- Animations --- */
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes slide {
-  from {
-    left: -50%;
-  }
-  to {
-    left: 150%;
-  }
+  from { left: -50%; }
+  to { left: 150%; }
 }
 
-/* --- Responsive --- */
-@media (max-width: 1024px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
+
+/* This centers the pagination buttons at the bottom */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 0;
+    width: 100%;
+    
 }
 
-/* Light theme: slightly more gap and subtle section padding for clearer card separation */
-:global([data-theme="light"]) :local(.grid) {
-  gap: 2.2rem;
-}
-
-:global([data-theme="light"]) :local(.debugInfo) {
-  border: 1px solid
-    rgba(
-      var(--accent-emerald-r),
-      var(--accent-emerald-g),
-      var(--accent-emerald-b),
-      0.08
-    );
-  background-color: rgba(var(--white-r), var(--white-g), var(--white-b), 0.02);
-}
-
-@media (max-width: 768px) {
-  .debugInfo {
-    padding: 0.85rem 1rem;
-    border-radius: 10px;
-    border: 1px solid
-      rgba(
-        var(--accent-emerald-r),
-        var(--accent-emerald-g),
-        var(--accent-emerald-b),
-        0.08
-      );
-    background-color: rgba(
-      var(--white-r),
-      var(--white-g),
-      var(--white-b),
-      0.02
-    );
-  }
-
-  .container {
-    padding: 0 12px;
-    gap: 1rem;
-  }
-
-  .title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
- 
-
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: 1.4rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 0.9rem;
-  }
-
-  .pagination {
-    gap: 10px;
-    margin-top: 2rem;
-  }
-
-  .pageBtn {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-
-  .pageInfo {
-    font-size: 0.85rem;
-  }
+.resultsCount {
+    text-align: center;
+    margin: 1rem;
+     font-family: 'Graphik', sans-serif;
+    font-weight: 400;
 }

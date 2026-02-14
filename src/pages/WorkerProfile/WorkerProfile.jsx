@@ -8,51 +8,59 @@ import { useEffect, useState } from 'react';
 // Mock data - in a real app, this would come from an API
 
 function WorkerProfile() {
-  const { id } = useParams()
+  const { id, slug } = useParams()
   const navigate = useNavigate();
   const location = useLocation();
   
-  const [worker, setWorker] = useState(location.state.workerData || null)
+  const [worker, setWorker] = useState(location.state?.workerData || null)
   const [loading, setLoading] = useState(!worker);
   const [reviews, setReviews] = useState([]);
 useEffect(() => { 
   window.scroll(0, 0);
 
-  const fetchWorkerAndReviews = async () => {
-    // If we have worker data from navigate(state), don't show loading
-    if (!worker) setLoading(true); 
+ const fetchWorkerAndReviews = async () => {
+  if (!worker) setLoading(true);
 
-    try {
-      // 1. Fetch Worker Details only if we don't have them
-      if (!worker) {
+  try {
+    let finalWorkerData = worker;
+
+    // 1. GET THE WORKER
+    if (!finalWorkerData) {
+      if (id) {
+        // DIRECT HIT (Fastest)
         const docRef = doc(db, "workers", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setWorker({ id: docSnap.id, ...docSnap.data() });
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          finalWorkerData = { id: snap.id, ...snap.data() };
+        }
+      } else if (slug) {
+        // QUERY (Necessary for slugs)
+        const q = query(collection(db, "workers"), where("slug", "==", slug));
+        const qSnap = await getDocs(q);
+        if (!qSnap.empty) {
+          finalWorkerData = { id: qSnap.docs[0].id, ...qSnap.docs[0].data() };
         }
       }
+    }
 
-      // 2. Fetch Reviews
-      const q = query(
+    if (finalWorkerData) {
+      setWorker(finalWorkerData);
+
+      // 2. GET THE REVIEWS (Always a query because one worker has many reviews)
+      const qReviews = query(
         collection(db, "reviews"),
-        where("workerId", "==", id),
+        where("workerId", "==", finalWorkerData.id), // Use the ID we just found
         orderBy("createdAt", "desc")
       );
-      
-      const querySnapshot = await getDocs(q);
-      const reviewsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      
-      setReviews(reviewsData);
-
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    } finally {
-      setLoading(false);
+      const revSnap = await getDocs(qReviews);
+      setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     }
-  };
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   fetchWorkerAndReviews();
   // eslint-disable-next-line react-hooks/exhaustive-deps

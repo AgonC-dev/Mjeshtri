@@ -1,182 +1,255 @@
 .sidebar {
-  background-color: var(--bg-secondary);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-card);
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-  transition: all 0.3s ease;
-}
-
-.title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  /* CHANGED: Uses text-off-white to flip to dark in light theme */
-  color: var(--text-off-white); 
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
-  padding-bottom: 0.75rem;
-}
-
-.section {
-  margin-bottom: 1.5rem;
-}
-
-.label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.input, .select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-primary); 
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  /* CHANGED: This now follows the theme-flipping variable */
-  color: var(--text-off-white); 
-  font-size: 16px;
-  outline: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.input:focus {
-  border-color: var(--accent-emerald);
-  background-color: var(--bg-secondary);
-  box-shadow: 0 0 0 3px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
-}
-
-.input::placeholder {
-  color: var(--text-muted);
-}
-
-/* Autocomplete Specifics */
-.autocomplete {
-  position: relative;
   display: flex;
+  background-color: #F0F0F0;
+  justify-content: center;
   align-items: center;
+  width: 924px;
+  padding: 10px;
+  border-radius: 80px;
+  gap: 8px;
+  margin: 0 auto;
+
 }
 
-.dropdownToggle {
+.section1 {
+  background-color: green;
+  max-width: 340px;
+  width: 100%;
+  
+ 
+  border-radius: 40px;
+ 
+  
+}
+
+.section2 {
+  background-color: green;
+  min-width: 180px;
+  
+  border-radius: 40px; 
+}
+
+.section3 {
+  background-color: green;
+  min-width: 180px;
+
+  border-radius: 40px; 
+}
+
+.section4 {
+  background-color: green;
+   min-width: 180px;
+  border-radius: 40px; 
+}
+
+
+.searchIcon {
   position: absolute;
   right: 12px;
-  background: none;
+  top: 50%;
+  transform: translateY(-50%); /* Centers icon vertically */
+  width: 13.3px;
+  height: 13.3px;
+  pointer-events: none; /* Allows clicks to pass through to the input */
+}
+
+.input { 
+  background-color: White;
   border: none;
-  color: var(--text-muted);
-  font-size: 0.65rem;
-  cursor: pointer;
-  padding: 5px;
+   border-radius: 40px;
+  padding: 10px 16px;
+  width: 100%;
+  height: 36px;
+}
+
+.autocomplete {
+  position: relative; /* This is the anchor */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease, transform 0.2s ease;
+  
+  flex-direction: column; /* Ensures the UL stays below the input */
 }
 
-.dropdownToggle:hover {
-  color: var(--accent-emerald);
-}
-
-/* Suggestion List */
+/* The container for the list */
 .suggestionList {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px); /* 10px gap below the input */
   left: 0;
   right: 0;
-  background-color: var(--bg-dropdown);
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  box-shadow: var(--shadow-medium);
-  padding: 6px;
-  margin: 0;
+  background-color: #ffffff;
+  border-radius: 20px; /* Matching your rounded theme */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft "floating" shadow */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 8px 0;
+  z-index: 999;
+  overflow: hidden;
   list-style: none;
-  max-height: 240px;
-  overflow-y: auto;
-  z-index: 1000;
-  animation: slideDown 0.2s ease-out;
+  margin: 0;
+  
+  /* Animation */
+  animation: dropdownSlide 0.2s ease-out forwards;
+  transform-origin: top;
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* Individual items in the list */
 .suggestionItem {
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  color: var(--text-off-white);
+  padding: 5px 15px;
+  font-family: 'Graphik', sans-serif;
+  font-size: 14px;
+  color: #333;
   cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
+/* Hover state */
 .suggestionItem:hover {
-  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
-  color: var(--accent-emerald);
-  padding-left: 18px;
+  background-color: #F0F0F0;
+  color: orange; /* Matches your accent color */
 }
 
-.suggestionList::-webkit-scrollbar {
-  width: 6px;
+/* The Label (e.g., "Qyteti:") */
+.typeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #A0A0A0;
+  margin-right: 10px;
+  letter-spacing: 0.5px;
 }
 
-.suggestionList::-webkit-scrollbar-thumb {
-  background-color: var(--card-border);
-  border-radius: 10px;
+/* Entrance Animation */
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .select {
+  /* Hides default browser arrow */
   appearance: none;
-  /* UPDATED SVG COLOR: Uses var(--text-muted) color dynamically */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236c757d'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Layout & Sizing */
+
+  width: 100%;
+  height: 40px;
+  border-radius: 40px;
+  cursor: pointer;
+  
+  /* Border settings you requested */
+  border: none;
+  
+  /* Typography & Spacing */
+  padding: 0 40px 0 16px; /* 40px on right to prevent text hitting the arrow */
+  font-family: 'Graphik', sans-serif;
+  font-weight: 400;
+
+  /* Custom Arrow Setup */
+  background-image: url('../../assets/Arrow.png');
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
+  background-size: 8px 4px; /* Sets your specific width/height */
+  background-position: calc(100% - 16px) center; /* Keeps it 16px from the right edge */
 }
 
-/* --- LIGHT THEME SPECIFIC OVERRIDES --- */
-:global([data-theme="light"]) :local(.input),
-:global([data-theme="light"]) :local(.select) {
-  /* Ensuring background isn't too dark in light mode */
-  background-color: var(--bg-primary); 
-  border-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.15);
+/* Removes arrow in IE11 */
+.select::-ms-expand {
+  display: none;
 }
 
-:global([data-theme="light"]) :local(.suggestionItem) {
-    color: var(--text-off-white);
+.section5 {
+  background-color: #ffffff; /* Contrast against the sidebar grey */
+  min-width: 180px;
+  height: 40px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  transition: all 0.3s ease;
 }
 
-/* --- RESPONSIVENESS (UNCHANGED) --- */
-@media (max-width: 1024px) {
-  .sidebar {
-    position: static;
-  }
+/* When active, change the section background slightly */
+.section5:has(.hiddenCheckbox:checked) {
+  background-color: #E8F5E9; /* Very light green hint */
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow-soft);
-  }
+.switchLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
 
-  .title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
+.hiddenCheckbox {
+  display: none;
+}
 
-  .input, .select {
-    padding: 0.6rem 0.85rem;
-    font-size: 0.95rem;
-  }
+/* The Toggle Track */
+.toggle {
+  width: 32px;
+  height: 18px;
+  background-color: #ccc;
+  border-radius: 20px;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.toggle.active {
+  background-color: #0095f6; /* Instagram Blue */
+}
+
+/* The Toggle Moving Ball */
+.toggleBall {
+  width: 14px;
+  height: 14px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.active .toggleBall {
+  transform: translateX(14px);
+}
+
+.toggleText {
+  font-family: 'Graphik', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap; /* Prevents text from wrapping and pushing the badge down */
+}
+
+.verifiedBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0095f6;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0; /* CRITICAL: Prevents the badge from being squashed */
+  margin-left: 4px; /* Changed from -2px to 4px to give it breathing room */
+}
+
+.badgeIcon {
+  width: 100%;
+  height: 100%;
+  display: block; /* Removes any inline baseline spacing */
+}
+
+
+
+/* Hover Effect for the whole section */
+.section5:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }

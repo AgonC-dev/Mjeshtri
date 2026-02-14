@@ -950,6 +950,202 @@
   text-transform: uppercase;
 }
 
+/* Container Polish */
+.linkSharingBox {
+  background: var(--bg-box);
+  border: 1px solid var(--border-color);
+  border-radius: 20px; /* Slightly rounder for a modern look */
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Soft shadow */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a subtle decorative background glow for PRO users */
+.linkSharingBox.isPro::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  background: var(--pro-text);
+  filter: blur(60px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* Link Wrapper with Icon */
+.linkInputWrapper {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* The Link Display */
+.linkDisplayInput {
+  flex: 1;
+  padding: 14px 18px;
+  border: 2px solid var(--border-color); /* Thicker border */
+  border-radius: 14px;
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  font-family: 'Monaco', 'Consolas', monospace; /* Monospace looks techy */
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+/* Glow when hovering the box */
+.linkDisplayInput:hover {
+  border-color: var(--btn-bg);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.1);
+}
+
+/* Copy Button with Icon spacing */
+.copyBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  background-color: var(--btn-bg);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.copyBtn:hover {
+  background-color: var(--btn-hover);
+  transform: scale(1.03); /* Pops out slightly */
+}
+
+/* Pro Badge with "Sparkle" Animation */
+.proBadgeText {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--pro-text);
+  background: var(--pro-bg);
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--pro-border);
+  animation: shimmer 3s infinite ease-in-out;
+}
+
+.availabilityBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* State: Online */
+.btnActive {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.btnActive .statusDot {
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+/* State: On Vacation */
+.btnPaused {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.btnPaused .statusDot {
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulseRed 2s infinite;
+}
+
+.vacationBanner {
+  background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid #475569;
+  animation: slideDown 0.4s ease-out;
+}
+
+.vacationContent {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vacationIcon {
+  font-size: 24px;
+}
+
+.vacationText strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.vacationText p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.vacationQuickAction {
+  background: #00ff85;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.vacationQuickAction:hover {
+  transform: scale(1.05);
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes pulseRed {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+@keyframes shimmer {
+  0% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.8; transform: scale(1); }
+}
+
 /* --- THEMED HEALTH MODAL --- */
 .themedHealthModal {
   padding: 2.5rem 1.5rem;

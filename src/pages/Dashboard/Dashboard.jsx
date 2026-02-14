@@ -22,8 +22,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
 import Modal from "../../components/Modal/Modal";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
-
+const functions = getFunctions();
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -41,8 +42,10 @@ function Dashboard() {
     phoneNumber: "",
     bio: "",
     isPro: false,
+    isAvailable: true,
     profileUrl: "",
     portfolio: [],
+    slug: "",
   });
 
   const [profileFile, setProfileFile] = useState(null);
@@ -50,6 +53,7 @@ function Dashboard() {
   const [reviews, setReviews] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
   const [whatsappRequests, setWhatsappRequests] = useState(0);
+  const [sessions, setSessions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState({
   review: false,
   pro: false,
@@ -65,6 +69,7 @@ function Dashboard() {
   const clickCount = whatsappRequests || 0;
   // Threshold: Flag if reviews are more than clicks + 3
   const isFishy = user && (reviewCount > (clickCount + 3));
+
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -94,6 +99,7 @@ function Dashboard() {
             isPro: !!data.isPro,
             profileUrl: data.profilePic || "",
             portfolio: data.portfolio || [],
+            slug: data.slug || "",
           }));
         }
 
@@ -102,6 +108,21 @@ function Dashboard() {
           where("workerId", "==", u.uid),
           orderBy("createdAt", "desc")
         )
+
+        const sessionQuery = query(
+          collection(db, "contactSessions"),
+          where("workerId", "==", u.uid),
+          where("usedForReview", "==", false),
+          orderBy("createdAt", "desc")
+        )
+
+        const sessionSnap = await getDocs(sessionQuery);
+        const sessionList = sessionSnap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+
+        setSessions(sessionList)
 
         const revSnap = await getDocs(q);
         setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data()})))
@@ -245,7 +266,16 @@ function Dashboard() {
   
       };
 
-    
+       if(form.isPro) {
+        const baseSlug = form.name.toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '') // Remove special chars
+          .replace(/[\s_-]+/g, '-') // Replace spaces/underscores with -
+          .replace(/^-+|-+$/g, '');
+
+          const uniqueSlug = `${baseSlug}-${user.uid.substring(0, 4)}`;
+          updates.slug = uniqueSlug;
+       }
 
 
       const options = {
@@ -280,6 +310,7 @@ function Dashboard() {
       const docRef = doc(db, "workers", user.uid);
       await updateDoc(docRef, updates);
         setIsDirty(false);
+        setForm(prev => ({ ...prev, slug: updates.slug || prev.slug }));
       setStatus({ message: "Ndryshimet u ruajtën me sukses!", type: "success" });
     } catch (err) {
       console.error(err);
@@ -299,13 +330,10 @@ function Dashboard() {
     if (!user) return;
     setSaving(true);
     try {
-      const docRef = doc(db, "workers", user.uid);
-      await updateDoc(docRef, {
-        isPro: true,
-        proSubscribedAt: serverTimestamp(),
-      });
-      setForm((p) => ({ ...p, isPro: true }));
-      setIsModalOpen(false);
+      const getPro = httpsCallable(functions, "handleGetPro");
+      await getPro(); 
+      setForm(prev => ({ ...prev, isPro: true }));
+      setIsModalOpen(prev => ({ ...prev, pro: false }));
       setStatus({ message: "Faleminderit! Tani jeni anëtar PRO.", type: "success" });
     } catch (err) {
       console.error(err);
@@ -315,14 +343,100 @@ function Dashboard() {
     }
   }
 
-  
+  async function disableAccount() {
+    if (!user) return
+    setSaving(true)
+
+    try {
+      const newStatus = !form.isAvailable;
+      const workerRef = doc(db, "workers", user.uid);
+      await updateDoc(workerRef, {
+        isAvailable: newStatus
+      })
+
+      setForm(prev => ({ ...prev, isAvailable: newStatus }));
+      setStatus({ 
+      message: newStatus ? "Jeni online!" : "Jeni në pushim (vjollcë).", 
+      type: "success" 
+    });
+    } catch(err) {
+      console.log(err)
+      setStatus({ message: "Dështoi ndryshimi i statusit.", type: "error" });
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const baseUrl = window.location.origin;
+  const personalLink = form.slug 
+  ? `${baseUrl}/${form.slug}` 
+  : `${baseUrl}/worker/${user?.uid}`;
 
   if (loading) return <Loading />
   if (!user) return <div className={styles.wrap}><p>Ju lutem hyni në llogari.</p></div>;
 
  return (
   <div className={styles.wrap}>
+    {!form.isAvailable && (
+  <div className={styles.vacationBanner}>
+    <div className={styles.vacationContent}>
+      <span className={styles.vacationIcon}>🌙</span>
+      <div className={styles.vacationText}>
+        <strong>Profili juaj është i fshehur.</strong>
+        <p>Klientët nuk mund t'ju gjejnë në kërkim derisa të ktheheni online.</p>
+      </div>
+    </div>
+    <button 
+      type="button" 
+      onClick={disableAccount} 
+      className={styles.vacationQuickAction}
+    >
+      Kthehu Online
+    </button>
+  </div>
+)}
+
+    <div className={styles.linkSharingBox}>
+  <label className={styles.label}>Linku i profilit tënd:</label>
+  <div className={styles.linkInputWrapper}>
+    <input 
+      type="text" 
+      readOnly 
+      value={personalLink} 
+      className={styles.linkDisplayInput} 
+    />
+    <button 
+      type="button" 
+      onClick={() => {
+        navigator.clipboard.writeText(personalLink);
+        setStatus({ message: "Linku u kopjua!", type: "success" });
+      }}
+      className={styles.copyBtn}
+    >
+      Kopjo
+    </button>
+  </div>
+  {form.isPro ? (
+    <p className={styles.proBadgeText}>✨ Link Profesional Aktiv</p>
+  ) : (
+    <p className={styles.linkHint}>Bëhu PRO për një link më të thjeshtë (mjeshtri.ks/emri-yt)</p>
+  )}
+</div>
     {/* HEADER */}
+    <button 
+  type="button"
+  onClick={disableAccount} 
+  disabled={saving}
+  className={`${styles.availabilityBtn} ${form.isAvailable ? styles.btnActive : styles.btnPaused}`}
+>
+  <span className={styles.statusDot}></span>
+  {saving 
+    ? "Duke u procesuar..." 
+    : form.isAvailable 
+      ? "Pezullo Profilin (Vacation Mode)" 
+      : "Aktivizo Profilin (Kthehu Online)"
+  }
+</button>
     <header className={styles.headerSection}>
       <div>
         <h1 className={styles.title} ref={topRef}>Paneli i Mjeshtrit</h1>
@@ -542,6 +656,7 @@ function Dashboard() {
     <Modal open={isModalOpen.review} onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}>
       <ReviewModal 
         user={user}
+        sessions={sessions}
         onClose={() => setIsModalOpen(prev => ({ ...prev, review: false }))}
       />
     </Modal>

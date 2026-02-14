@@ -1,303 +1,300 @@
 .header {
-  background-color: var(--bg-secondary);
-  border-bottom: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
-  padding: 0.75rem 0;
-  box-shadow: var(--shadow-soft);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
   width: 100%;
+
+  display: flex;
+  height: 75px;
+
 }
 
 .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
+  width: 100%;
   display: flex;
+ 
   justify-content: space-between;
   align-items: center;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--accent-emerald);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
-.logoText {
-  background: linear-gradient(135deg, var(--accent-emerald), var(--accent-emerald-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  padding: 20px 40px;
 }
 
 .nav {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  justify-content: space-evenly;
+  width: 30%;
 }
 
 .navLink {
-  color: var(--text-off-white);
+
+  height: 35px;
+  border-radius: 40px;
+    font-family: 'Graphik', sans-serif;
   font-weight: 500;
-  transition: all 0.3s ease;
-  position: relative;
-  text-decoration: none;
-  white-space: nowrap;
+  font-size: 15px;
+  letter-spacing: 3%;
+  opacity: 0.6;
 }
 
-/* 2. The Underline (Hidden by default) */
-.navLink::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0; /* Starts at zero */
-  height: 2px;
-  background-color: var(--accent-emerald);
-  transition: width 0.3s ease;
-}
-
-/* 3. Hover AND Active States (Text Color) */
-.navLink:hover,
-.navLink.active {
-  color: var(--accent-emerald);
-}
-
-/* 4. Hover AND Active States (Underline Width) */
-.navLink:hover::after,
-.navLink.active::after {
-  width: 100%; /* Overrides the width: 0 from above */
-}
-
-.themeToggle {
-  background: transparent;
-  border: 2px solid var(--accent-emerald);
-  color: var(--accent-emerald);
-  padding: 0.4rem 0.8rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-/* Profile Section */
-.profileWrapper {
-  position: relative;
+.navLinkLogIn {
+  width: 12em;
+  text-align: center;
+  justify-content: center;
+  background-color: #000000;
+  height: 34px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
-  z-index: 1010;
+  padding: 10px 26px;
+    font-family: 'Graphik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #FFFFFF;
+  line-height: 14px;
+}
+
+.searchIcon {
+
+ border-radius: 40px;
+ background-color: #F1F1F1;
+ display: flex;
+ align-items: center;
+ border: 1px solid #00000014;
+ justify-content: center;
+ padding: 7px;
+ width: 34px;
+ height: 34px;
+ 
+
+}
+
+.navLink.active {
+    height: 35px;
+  border-radius: 40px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 3%;
+  opacity: 1;
+}
+
+
+
+.right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+/* --- Dropdown Container --- */
+.profileWrapper {
+  position: relative; /* Essential for absolute positioning of dropdown */
 }
 
 .profileCircle {
   cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--accent-emerald);
-  transition: all 0.3s ease;
-  background-color: var(--bg-primary);
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.profileCircle:hover {
+  transform: scale(1.05);
 }
 
 .avatar {
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #00000014;
 }
 
-/* Dropdown */
 .dropdown {
   position: absolute;
-  top: calc(100% + 15px);
+  top: 55px;
   right: 0;
-  background-color: var(--bg-dropdown);
-  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2);
-  border-radius: 12px;
-  width: 220px;
-  padding: 0.8rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  width: 240px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid #0000000d;
+  padding: 15px 0;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  animation: slideDown 0.2s ease-out forwards;
-  transform-origin: top right;
-  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.dropdownHeader { padding: 0.5rem; }
-.userName { font-weight: 600; color: var(--text-white); margin: 0; font-size: 0.95rem; }
-.userEmail { font-size: 0.75rem; color: var(--text-muted); margin: 0; word-break: break-all; }
-.divider { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 0.5rem 0; }
+/* --- Dropdown Header --- */
+.dropdownHeader {
+  padding: 0 20px 10px 20px;
+}
 
+.userName {
+    font-family: 'Graphik', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #000;
+  margin: 0;
+}
+
+.userEmail {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #666;
+  margin: 2px 0 0 0;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #0000000d;
+  margin: 10px 0;
+}
+
+/* --- Dropdown Items --- */
 .dropdownItem {
-  color: var(--text-off-white);
+  padding: 12px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
   text-decoration: none;
-  font-size: 0.9rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s ease;
 }
 
 .dropdownItem:hover {
-  background-color: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
-  color: var(--accent-emerald);
+  background-color: #f5f5f5;
+  color: #000;
 }
 
-.logoutButton {
-  background: none;
-  border: none;
-  color: #ff6666;
-  text-align: left;
-  padding: 0.6rem 0.8rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  width: 100%;
-}
-
-/* The '?' Circle */
 .helpIcon {
-  position: relative; /* Essential for positioning the bubble */
+  margin-left: auto;
+  background: #f1f1f1;
+  width: 18px;
+  height: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  background-color: transparent;
   border-radius: 50%;
-  font-size: 12px;
-  font-weight: bold;
-  margin-left: 8px;
+  font-size: 10px;
   cursor: help;
-  border: 1px solid #888;
-  color: #888;
-  transition: all 0.2s ease;
 }
 
-/* The Tooltip Bubble (Hidden by default) */
-.helpIcon::after {
-  content: attr(data-tooltip); /* Grabs the text from the data-tooltip attribute */
-  position: absolute;
-  bottom: 125%; /* Position it above the icon */
-  left: 50%;
-  transform: translateX(-50%);
-  
-  /* Styling the bubble */
-  background-color: #333;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px; /* Bigger text as requested */
-  white-space: nowrap;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  
-  /* Visibility - Set to 0 delay */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.1s ease; /* Very fast fade in */
-  pointer-events: none;
-  z-index: 100;
+/* --- Logout Button --- */
+.logoutButton {
+  margin-top: 5px;
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff4d4d; /* Red for logout */
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s ease;
 }
 
-/* The little arrow under the bubble */
-.helpIcon::before {
-  content: '';
-  position: absolute;
-  bottom: 105%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: #333;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.1s ease;
+.logoutButton:hover {
+  background-color: #fff0f0;
 }
 
-/* Instant Hover Effect */
-.helpIcon:hover {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+/* --- Dark Mode Support --- */
+[data-theme="dark"] .dropdown {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.helpIcon:hover::after,
-.helpIcon:hover::before {
-  opacity: 1;
-  visibility: visible;
-}
-/* ================= MOBILE FIX ================= */
-
-@media (max-width: 600px) {
-
-  body {
-    overflow-x: hidden;
+[data-theme="dark"] .userName { color: #fff; }
+[data-theme="dark"] .userEmail { color: #aaa; }
+[data-theme="dark"] .dropdownItem { color: #ddd; }
+[data-theme="dark"] .dropdownItem:hover { background-color: #2a2a2a; color: #fff; }
+[data-theme="dark"] .divider { border-top-color: rgba(255, 255, 255, 0.1); }
+/* --- TABLETS & SMALL LAPTOPS (under 1024px) --- */
+@media (max-width: 1024px) {
+  .container {
+    padding: 20px; /* Reducing side padding */
   }
 
+  .nav {
+    width: 50%; /* Giving nav more room */
+    gap: 15px;
+  }
+
+  .navLink {
+    font-size: 14px; /* Slightly smaller text */
+  }
+}
+
+/* --- LARGE PHONES & TABLETS (under 768px) --- */
+@media (max-width: 768px) {
   .header {
-    padding-bottom: 0.5rem;
+    height: 65px; /* Shorter header on mobile */
+  }
+
+  .logo img {
+    height: 30px; /* Scale down logo */
+    width: auto;
+  }
+
+  /* We hide the main nav links on mobile to prevent clutter 
+     and keep only the "Login" or "Profile" visible */
+  .nav {
+    display: none; 
   }
 
   .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0 12px;
+    padding: 10px 15px;
   }
 
-  /* Logo always on top */
-  .logo {
-    order: 1;
-    font-size: 1.6rem;
+  .navLinkLogIn {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
-  /* Profile circle top-right */
-  .profileWrapper {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+  .searchIcon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* --- SMALL PHONES (under 480px) --- */
+@media (max-width: 480px) {
+  .right {
+    gap: 5px;
   }
 
-  /* Navigation row */
-  .nav {
-    order: 2;
-    width: 100%;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    overflow: hidden;
+  /* Make the Login button more compact */
+  .navLinkLogIn {
+    font-size: 12px;
+    padding: 6px 12px;
+    white-space: nowrap;
   }
 
-  .navLink,
-  .themeToggle {
-    font-size: 0.9rem;
+  /* Profile pic slightly smaller */
+  .avatar {
+    width: 32px;
+    height: 32px;
   }
+}
 
-  /* Dropdown fixed & touch-safe */
-  .dropdown {
-    position: fixed;
-    top: 65px;
-    right: 12px;
-    width: 220px;
-    z-index: 10000;
-  }
+/* --- DARK THEME OVERRIDES (Safety check) --- */
+[data-theme="dark"] .searchIcon {
+  background-color: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-  /* Improve touch usability */
-  .dropdownItem,
-  .logoutButton {
-    padding: 0.8rem;
-    font-size: 0.95rem;
-  }
+[data-theme="dark"] .navLinkLogIn {
+  background-color: var(--accent-emerald); /* Using your emerald for the button in dark mode */
+  color: #000;
 }

@@ -1,0 +1,203 @@
+.proContent {
+  padding: 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: modalSlideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+  background: var(--card-bg);
+  border-radius: 24px;
+}
+
+@keyframes modalSlideUp {
+  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.proContent h2 {
+  font-size: 2rem;
+  font-weight: 850;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, var(--text-white) 0%, var(--accent-emerald) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.proContent p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ===================== PHONE INPUT STYLING ===================== */
+.phoneContainer {
+  width: 100% !important;
+  margin-top: 0.5rem;
+}
+
+.phoneContainer :global(.form-control) {
+  width: 100% !important;
+  height: 55px !important;
+  background: rgba(var(--black-r), var(--black-g), var(--black-b), 0.2) !important;
+  border: 1.5px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2) !important;
+  border-radius: 12px !important;
+  color: var(--text-off-white) !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease;
+}
+
+.phoneContainer :global(.form-control:focus) {
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.2) !important;
+}
+
+.phoneContainer :global(.flag-dropdown) {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 12px 0 0 12px !important;
+}
+
+.phoneContainer :global(.selected-flag) {
+  background: transparent !important;
+  width: 45px !important;
+}
+
+.phoneContainer :global(.country-list) {
+  background: var(--bg-dropdown) !important;
+  color: var(--text-off-white) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-medium) !important;
+}
+
+/* ===================== NEW BUTTON & ACTION STYLES ===================== */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 2rem;
+  /* Entrance animation for buttons */
+  animation: fadeInUp 0.8s ease forwards 0.2s;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.purchaseBtn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--accent-emerald);
+  color: #04110a;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.purchaseBtn:hover:not(:disabled) {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+}
+
+.purchaseBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--text-muted);
+}
+
+/* Success State: WhatsApp Link Animation */
+a.purchaseBtn {
+  background: #25D366; /* Official WhatsApp Green */
+  color: white;
+  animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  padding: 0.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-white);
+}
+
+/* ===================== THEME OPTIMIZATION (LIGHT) ===================== */
+
+:global([data-theme="light"]) .phoneContainer :global(.form-control) {
+  background: #f9f9f9 !important;
+  color: #1a1a1a !important;
+  border-color: #ddd !important;
+}
+
+:global([data-theme="light"]) .cancelBtn {
+  border-color: #eee;
+  background: #f5f5f5;
+}
+
+:global([data-theme="light"]) .cancelBtn:hover {
+  background: #ebebeb;
+  color: #333;
+}
+
+/* ===================== ORIGINAL STYLES PRESERVED ===================== */
+
+.reviewTriggerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin: 1.5em auto;
+  background: rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.1);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.reviewTriggerBtn::before {
+  content: "★";
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.reviewTriggerBtn:hover {
+  background: var(--accent-emerald);
+  color: #04110a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+}
+
+.reviewTriggerBtn:hover::before {
+  transform: rotate(72deg) scale(1.2);
+}

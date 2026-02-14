@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import styles from "./FilterSidebar.module.css";
+import Search from '../../assets/Search2.png';
+
 
 function FilterSidebar({
   cities,
@@ -11,6 +13,8 @@ function FilterSidebar({
   onCategoryChange,
   searchQuery,
   onSearchChange,
+  isVerified,
+  onVerifiedChange,
 }) {
 
  const [isCatOpen, setIsCatOpen] = useState(false);
@@ -52,11 +56,10 @@ function FilterSidebar({
 
   return (
     <aside className={styles.sidebar}>
-      <h2 className={styles.title}>Filtro</h2>
+    
 
       {/* Main Search with Smart Suggestions */}
-      <div className={styles.section}>
-        <label className={styles.label}>Kërko</label>
+      <div className={styles.section1}>
         <div className={styles.autocomplete}>
           <input
             type="text"
@@ -70,6 +73,7 @@ function FilterSidebar({
             onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
             className={styles.input}
           />
+          <img src={Search} alt="Search icon" className={styles.searchIcon}/>
           {isSearchOpen && searchSuggestions.length > 0 && (
   <ul className={styles.suggestionList}>
     {searchSuggestions.map((item, index) => (
@@ -99,8 +103,8 @@ function FilterSidebar({
       </div>
 
       {/* City Select */}
-      <div className={styles.section}>
-        <label className={styles.label}>Qyteti</label>
+      <div className={styles.section2}>
+       
         <select
           value={selectedCity}
           onChange={(e) => onCityChange(e.target.value)}
@@ -112,9 +116,11 @@ function FilterSidebar({
         </select>
       </div>
 
+     
+
       {/* Category Autocomplete */}
-      <div className={styles.section}>
-        <label className={styles.label}>Kategoria</label>
+      <div className={styles.section4}>
+ 
         <div className={styles.autocomplete}>
           <input
             type="text"
@@ -146,6 +152,27 @@ function FilterSidebar({
           )}
         </div>
       </div>
+
+       <div className={styles.section5}>
+  <label className={styles.switchLabel}>
+    <input
+      type="checkbox"
+      checked={isVerified}
+      onChange={(e) => onVerifiedChange(e.target.checked)}
+      className={styles.hiddenCheckbox}
+    />
+    <div className={`${styles.toggle} ${isVerified ? styles.active : ''}`}>
+       <div className={styles.toggleBall} />
+    </div>
+    <span className={styles.toggleText}>Verifikuar</span>
+    {/* This is the Instagram Badge */}
+    <span className={styles.verifiedBadge}>
+      <svg viewBox="0 0 24 24" aria-label="Verified account" className={styles.badgeIcon}>
+        <path d="M22.5 12.5c0-1.58-.88-2.95-2.18-3.66.15-.44.23-.91.23-1.4 0-2.43-1.97-4.4-4.4-4.4-.49 0-.96.09-1.4.24-1.17-1.55-3.04-2.56-5.16-2.56-2.12 0-3.99 1.01-5.16 2.56-.44-.15-.91-.24-1.4-.24-2.43 0-4.4 1.97-4.4 4.4 0 .49.08.96.23 1.41-1.3.71-2.18 2.08-2.18 3.65 0 1.58.88 2.95 2.18 3.66-.15.44-.23.91-.23 1.4 0 2.43 1.97 4.4 4.4 4.4.49 0 .96-.09 1.4-.24 1.17 1.55 3.04 2.56 5.16 2.56 2.12 0 3.99-1.01 5.16-2.56.44.15.91.24 1.4.24 2.43 0 4.4-1.97 4.4-4.4 0-.49-.08-.96-.23-1.41 1.3-.71 2.18-2.08 2.18-3.66zm-13.42 4.4L5.5 13.32l1.45-1.45 2.13 2.13 5.3-5.3 1.45 1.45-6.75 6.75z" fill="currentColor"></path>
+      </svg>
+    </span>
+  </label>
+</div>
     </aside>
   );
 }

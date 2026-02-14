@@ -1,5 +1,21 @@
 /* FeaturedWorkers.module.css */
 
+.workerEntry {
+  opacity: 0;
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(15px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
 .featuredWorkers {
   padding: 3rem 1rem;
   margin: 0 auto;
@@ -14,6 +30,7 @@
   color: var(--text-off-white);
   letter-spacing: -0.5px;
   position: relative;
+  text-align: center;
 }
 
 /* THE GRID SYSTEM 
@@ -46,24 +63,7 @@
   margin-top: 3.5rem;
 }
 
-.viewAllButton {
-  background: var(--accent-emerald);
-  color: var(--bg-black); 
-  padding: 0.9rem 2.5rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 255, 133, 0.2);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
 
-.viewAllButton:hover {
-  background: var(--accent-emerald-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.3);
-}
 
 /* TABLET & MOBILE 
 */
@@ -133,4 +133,133 @@
 
 @keyframes shimmer {
   100% { transform: translateX(100%); }
+}
+
+.categoryNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 562px;
+  min-height: 42px;
+  width: 100%;
+  border-radius: 100px;
+  padding: 4px;
+  background-color: #F0F0F0;
+  margin: 0 auto;
+  /* Ensure the container doesn't shift when tabs change */
+  box-sizing: border-box;
+}
+
+.categoryTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 34px;
+  border-radius: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  
+  /* The "Buttery" Secret: Use cubic-bezier for the timing */
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s ease,
+    color 0.3s ease;
+
+  opacity: 0.4; /* Slightly higher than 0.3 for better legibility */
+  font-family: 'Graphik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: #141414;
+}
+
+/* Hover Effect: Subtle lift and slight opacity increase */
+.categoryTab:hover:not(.activeTab) {
+  opacity: 0.7;
+  /* transform: translateY(-1px); Optional: tiny lift */
+}
+
+.categoryTab.activeTab {
+  opacity: 1 !important;
+  background-color: #FFFFFF !important;
+  color: #141414 !important;
+  /* Shadow adds depth to the active state */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  /* Optional: slightly scale up the active tab */
+  transform: scale(1.02);
+}
+
+/* Active tab shouldn't move on hover */
+.categoryTab.activeTab:hover {
+  transform: scale(1.02);
+}
+
+/* Container that holds the spinner inside the grid */
+.loaderContainer {
+  grid-column: 1 / -1; /* Spans across all grid columns */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px; /* Keeps the page from collapsing too small while loading */
+  width: 100%;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(0, 89, 255, 0.1);
+  border-top: 3px solid #0059FF; /* Your brand blue */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loadingText {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  min-height: 400px;
+  padding: 4rem;
+  color: #666;
+  font-style: italic;
+}
+
+
+.viewAllButton {
+  background: transparent;
+
+  padding: 0.9rem 2.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: 1px solid black;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 255, 133, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.viewAllButton:hover {
+  background: #0059FF;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 255, 133, 0.3);
 }

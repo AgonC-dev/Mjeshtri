@@ -1,184 +1,145 @@
 .card {
-  background-color: var(--bg-secondary);
-  border-radius: var(--border-radius);
-  overflow: hidden;
+
+  width: 100%;        /* Fill the space provided by the grid */
+  max-width: 280px;   /* But don't get too giant on desktop */
+  min-height: 396px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-soft);
-  border: 2px solid transparent;
+  
 }
 
 .card:hover {
   transform: translateY(-4px);
-  border-color: var(--accent-emerald);
-  box-shadow: var(--shadow-medium);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .imageContainer {
-  position: relative;
+  
   width: 100%;
-  padding-top: 75%;
+  height: 250px;
+  position: relative;
   overflow: hidden;
-  background-color: var(--bg-primary);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  font-family:'Courier New', Courier, monospace;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.verifiedBadge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
 }
 
 .image {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
+
+  display: block; /* Removes the "ghost" gap at the bottom */
   object-fit: cover;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+  margin: 0 auto;
+  
 }
 
-.onlineBadge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 12px;
-  height: 12px;
-  background-color: var(--accent-emerald);
-  border-radius: 50%;
-  border: 2px solid var(--bg-secondary);
-  box-shadow: 0 0 8px rgba(0, 255, 133, 0.6);
+
+
+.priceCityCon {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.8rem;
+  width: 100%;
+ 
 }
 
-.content {
-  padding: 1.5rem;
-   background-color: var(--bg-secondary);
+
+
+.mappin {
+  width: 14px;
+  height: 14px;
+}
+
+.cityCon {
+  display: flex;
+  align-items: center;      /* Aligns the MapPin and the City text */
+  gap: 5px;
 }
 
 .name {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--text-off-white);
+     font-family: 'Graphik', sans-serif;
+   font-weight: 500;
+   font-size: 18px;
+   line-height: 1.2;
+   margin-top: 0.7rem ;
+   margin-bottom: 0.7em;
+   letter-spacing: -0.03em;
+   color: #000000;
 }
 
-.category {
-  color: var(--accent-emerald);
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  font-size: 0.95rem;
+.cityCon {
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .city {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem; /* Reduced slightly to fit price */
+   font-family: 'Graphik', sans-serif;
+   font-weight: 400;
+  height: 15px;
+   font-size: 15px;
+ 
+   line-height: 1.1;
+   letter-spacing: -0.04em;
+   color: #141414;
 }
 
-/* NEW PRICE STYLES */
-.priceContainer {
-  display: flex;
-  align-items: baseline;
-  gap: 0.3rem;
-  margin-bottom: 0.5rem;
-  background: rgba(0, 255, 133, 0.05); /* Very subtle emerald glow */
-  padding: 4px 8px;
-  border-radius: 4px;
-  width: fit-content;
-}
 
 .priceLabel {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
+  font-family: 'Graphik', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: #797979;
 }
 
 .priceAmount {
-  color: var(--text-off-white);
-  font-weight: 700;
-  font-size: 1.1rem;
+   font-family: 'Graphik', sans-serif;
+   font-weight: 400;
+   font-size: 15px;
+   line-height: 1.1;
+   letter-spacing: -0.04em;
 }
 
-.rating {
+.priceContainer {
   display: flex;
+  gap: 0.2rem;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.stars {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.ratingValue {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  font-weight: 600;
+  justify-content: center;
 }
 
 .buttonContainer {
+  margin-top: 0.8rem;
+}
+
+
+.category {
+  border-radius: 20px;
+  width: fit-content;
+  min-height: 19px;
   margin-top: 1rem;
+  padding: 2px 8px;
+  background-color:#303AFC12;
+  font-family:'Graphik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.1;
+   letter-spacing: 0.03em;
+  color: #000674;
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 1.25rem;
-  }
 
-  .name {
-    font-size: 1.1rem;
-  }
-}
-
-/* Smaller, tighter cards on small phones */
-@media (max-width: 480px) {
-  .card {
-    border-radius: 10px;
-  }
-
-  .imageContainer {
-    padding-top: 66%; /* shorter image to reduce card height */
-  }
-
-  .content {
-    padding: 0.9rem;
-  }
-
-  .name {
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .category {
-    font-size: 0.85rem;
-  }
-
-  .priceAmount {
-    font-size: 1rem;
-  }
-
-  .rating {
-    margin-bottom: 0.6rem;
-  }
-
-  .buttonContainer {
-    margin-top: 0.6rem;
-  }
-}
-
-/* Light theme overrides: ensure readable (black) text on light cards */
-:global([data-theme="light"]) :local(.card) :local(.content) {
-  color: #000000;
-}
-
-:global([data-theme="light"]) :local(.card) :local(.name),
-:global([data-theme="light"]) :local(.card) :local(.priceAmount),
-:global([data-theme="light"]) :local(.card) :local(.ratingValue),
-:global([data-theme="light"]) :local(.card) :local(.city),
-:global([data-theme="light"]) :local(.card) :local(.priceLabel) {
-  color: #000000;
-}
-
-/* Light theme: make card background slightly darker than page and add subtle border */
-:global([data-theme="light"]) :local(.card) {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--shadow-card);
-}

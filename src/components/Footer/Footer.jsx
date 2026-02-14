@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import { useEffect } from 'react';
+import Logo from '../../assets/FooterLogo.png'
 
 function Footer() {
 
@@ -12,7 +13,7 @@ function Footer() {
         <div className={styles.grid}>
           {/* Brand Section */}
           <div className={styles.section}>
-            <h3 className={styles.logo}>Mjeshtri<span>.ks</span></h3>
+            <img src={Logo} className={styles.logoIcon} alt='Logo Icon'/>
             <p className={styles.description}>
               Platforma lider për gjetjen e mjeshtrit të duhur në Kosovë. Shërbime cilësore dhe të sigurta.
             </p>

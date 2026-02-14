@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../api/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import PhoneInput from 'react-phone-input-2';
+import Modal from "../../components/Modal/Modal";
 import 'react-phone-input-2/lib/style.css';
 
 const cities = [
@@ -52,6 +53,7 @@ function WorkerRegister() {
     acceptTerms: false,
   });
   const [photoPreview, setPhotoPreview] = useState(null);
+
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -105,46 +107,53 @@ function WorkerRegister() {
         formData.password
       );
       const user = userCrendentials.user;
+     
 
-   await setDoc(doc(db, "workers", user.uid), {
+  const baseSlug = formData.name.toLowerCase()
+  .trim()
+  .replace(/[^\w\s-]/g, '')
+  .replace(/[\s_-]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+const initialSlug = `${baseSlug}-${user.uid.substring(0, 4)}`;
+
+// Then in setDoc, change slug: "", to:
+
+
+await setDoc(doc(db, "workers", user.uid), {
   uid: user.uid,
+  fullName: formData.name || "",
+  email: formData.email || "",
+  phoneNumber: formData.phoneNumber || "",
+  slug: initialSlug, 
 
-  // Identity
-  fullName: formData.name,
-  email: formData.email,
-  phoneNumber: formData.phoneNumber,
+  // Use fallbacks to prevent "Bad Request"
+  city: formData.city || "E panjohur", 
+  category: formData.skills || "Të tjera", 
 
-  // Marketplace info
-  city: formData.city,
-  category: formData.skills,
-
-  // Profile
   bio: "",
-  profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.name)}&background=random`,
+  profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.name || 'M')}&background=random`,
   portfolio: [],
 
-  // Pricing & experience
   startingPrice: 0,
   experienceYears: 0,
   whatsappRequests: 0,
 
-  // 🔴 REVIEW STATS (IMPORTANT)
-  avgRating: null,        // no reviews yet
+  avgRating: null,
   reviewCount: 0,
   lastReviewAt: null,
 
-  // Status
   isPro: false,
+  isAvailable: true,
   isActive: true,
+  isVerified: false,
   
-
-  // Metadata
   createdAt: serverTimestamp(),
 });
 
 
-      alert("Llogaria u krijua me sukses");
-      navigate("/");
+      
+      navigate("/", { state: { modalOpen: true } });
     } catch(err) {
       
      switch (err.code) {
@@ -283,7 +292,11 @@ function WorkerRegister() {
         Tashmë ke një llogari? <Link to="/login" className={styles.authLink}>Hyr</Link>
       </div>
     </form>
+
+
   </div>
+
+  
 );
 }
 

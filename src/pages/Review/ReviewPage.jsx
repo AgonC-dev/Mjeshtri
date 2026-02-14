@@ -1,39 +1,32 @@
-import { 
-  addDoc, 
-  collection, 
-  doc, 
-  getDoc, 
-  updateDoc, 
-  serverTimestamp ,
-  runTransaction, 
-  increment
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../api/firebase";
 import styles from './ReviewPage.module.css';
 import { httpsCallable, getFunctions } from "firebase/functions";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const functions = getFunctions();
 
 export default function ReviewPage() {
   const { token } = useParams();
-  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [tokenData, setTokenData] = useState(null);
   const [rating, setRating] = useState(5);
-  const [hover, setHover] = useState(0); // For star hover effect
+  const [hover, setHover] = useState(0); 
   const [comment, setComment] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [inputPhone, setInputPhone] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
-    console.log("Effect started")
     async function load() {
-
       try {
         const tokenRef = doc(db, "reviewRequests", token);
         const snap = await getDoc(tokenRef);
@@ -58,37 +51,48 @@ export default function ReviewPage() {
       }
     }
     load();
-    console.log("Effect finished")
   }, [token]);
 
-  async function handleSubmit(e) {
-  e.preventDefault();
-  if(!tokenData || isSubmitting) return;
+  function handleCheckPhone() {
+    const cleanInput = inputPhone.replace(/\D/g, "");
+    const cleanTarget = tokenData.customerPhone.replace(/\D/g, "");
 
-  try {
-   setIsSubmitting(true);
-
-   const submitReviewFn = httpsCallable(functions, "submitReview")
-
-   await submitReviewFn({
-      token: token, // from useParams
-      rating: rating,
-      comment: comment.trim(),
-      customerName: customerName.trim()
-    });
-
-    setSubmitted(true);
-    
-  } catch (err) {
-    console.error("Transaction failed: ", err);
-    // err.message will catch the "Ky link është përdorur..." error we threw above
-    setError(err.message || "Dështoi dërgimi i vlerësimit. Provoni përsëri.");
-  } finally {
-    setIsSubmitting(false);
+    // Checking for exact match or suffix match (to handle country code variations)
+    if (cleanInput === cleanTarget || cleanInput.endsWith(cleanTarget) || cleanTarget.endsWith(cleanInput)) {
+      setIsVerified(true);
+      setError("");
+      setPhoneError("");
+    } else {
+      setPhoneError("Numri nuk përputhet me kërkesën.");
+      return;
+    }
   }
-}
-  
-// --- Loading Return ---
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!tokenData || isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      const submitReviewFn = httpsCallable(functions, "submitReview");
+
+      await submitReviewFn({
+        token: token,
+        rating: rating,
+        comment: comment.trim(),
+        customerName: customerName.trim(),
+        inputPhone: inputPhone.replace(/\D/g, "") // Send clean phone to backend
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Transaction failed: ", err);
+      setError(err.message || "Dështoi dërgimi i vlerësimit. Provoni përsëri.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className={styles.centered}>
@@ -98,7 +102,6 @@ export default function ReviewPage() {
     );
   }
 
-  // --- Error Return ---
   if (error) {
     return (
       <div className={styles.container}>
@@ -113,7 +116,6 @@ export default function ReviewPage() {
     );
   }
 
-  // --- Success Return ---
   if (submitted) {
     return (
       <div className={styles.container}>
@@ -133,7 +135,6 @@ export default function ReviewPage() {
     );
   }
 
-  // --- Main Form Return ---
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -152,58 +153,86 @@ export default function ReviewPage() {
           </div>
         </header>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.ratingGroup}>
-            <label style={{textAlign: 'center', display: 'block', color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '8px'}}>
-              Si do ta vlerësonit punën?
+        {!isVerified ? (
+          /* --- Step 1: Verification UI --- */
+          <div className={styles.verifySection}>
+            <label className={styles.verifyLabel}>
+              Verifikoni numrin e telefonit për të vazhduar:
             </label>
-            <div className={styles.starRating}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  className={star <= (hover || rating) ? styles.starActive : styles.starInactive}
-                  onClick={() => setRating(star)}
-                  onMouseEnter={() => setHover(star)}
-                  onMouseLeave={() => setHover(0)}
-                >
-                  ★
-                </button>
-              ))}
+            <div className={styles.phoneWrapper}>
+              <PhoneInput
+                country={'xk'}
+                value={inputPhone}
+                onChange={setInputPhone}
+                inputClass={styles.phoneInputCustom}
+                containerClass={styles.phoneContainerCustom}
+              />
             </div>
+            {phoneError && <p className={styles.phoneErrorText}>{phoneError}</p>}
+            <button 
+              type="button" 
+              onClick={handleCheckPhone} 
+              className={styles.submitBtn}
+              style={{ marginTop: '1rem' }}
+            >
+              Verifiko & Vazhdo
+            </button>
           </div>
-
-          <div className={styles.inputGroup}>
-            <label>Emri juaj (Opsionale)</label>
-            <input 
-              type="text" 
-              value={customerName} 
-              onChange={(e) => setCustomerName(e.target.value)} 
-              placeholder="Psh: Filan Fisteku"
-              className={styles.textField}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>Komenti juaj</label>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Shpjegoni shkurtimisht çfarë ju pëlqeu..."
-              required
-              className={styles.textareaField}
-            />
-          </div>
-
-          <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-            {isSubmitting ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                <div className={styles.loader} style={{ width: '18px', height: '18px', borderWidth: '2px' }}></div>
-                Dërgimi...
+        ) : (
+          /* --- Step 2: The Actual Review Form --- */
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.ratingGroup}>
+              <label style={{textAlign: 'center', display: 'block', color: '#888', fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '8px'}}>
+                Si do ta vlerësonit punën?
+              </label>
+              <div className={styles.starRating}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={star <= (hover || rating) ? styles.starActive : styles.starInactive}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHover(star)}
+                    onMouseLeave={() => setHover(0)}
+                  >
+                    ★
+                  </button>
+                ))}
               </div>
-            ) : "Dërgo Vlerësimin"}
-          </button>
-        </form>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Emri juaj (Opsionale)</label>
+              <input 
+                type="text" 
+                value={customerName} 
+                onChange={(e) => setCustomerName(e.target.value)} 
+                placeholder="Psh: Filan Fisteku"
+                className={styles.textField}
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Komenti juaj</label>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Shpjegoni shkurtimisht çfarë ju pëlqeu..."
+                required
+                className={styles.textareaField}
+              />
+            </div>
+
+            <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+              {isSubmitting ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                  <div className={styles.loader} style={{ width: '18px', height: '18px', borderWidth: '2px' }}></div>
+                  Dërgimi...
+                </div>
+              ) : "Dërgo Vlerësimin"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

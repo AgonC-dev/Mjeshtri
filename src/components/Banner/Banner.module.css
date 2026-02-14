@@ -1,0 +1,200 @@
+.container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 3.4rem; 
+    margin-bottom: 9rem; 
+}
+
+.blockCon { 
+    display: flex; 
+    gap: 7.5rem; 
+    justify-content: center; 
+}
+
+.firstCon, .secondCon, .thirdCon { width: 20%; }
+
+.block1, .block2, .block3 { 
+    max-width: 382px; 
+    position: relative; 
+    min-height: 355px; 
+    border-radius: 10px; 
+    overflow: hidden; 
+}
+
+.block1, .block3, .block2 { background-color: #F0F0F0; }
+
+
+/* Global Image Rules - Keep opacity 0 for things that animate */
+.block1 img, .block2 img { position: absolute; opacity: 0; }
+
+/* --- WORKERS (Block 1) --- */
+.worker1 { left: 5%; animation: jumpUp 7s linear infinite; animation-delay: -1s; }
+.worker2 { left: 25%; animation: driftUp 9s linear infinite; animation-delay: -4s; }
+.worker3 { left: 50%; animation: spinUp 11s linear infinite; animation-delay: -2s; }
+.worker4 { left: 70%; animation: driftUp 8s linear infinite; animation-delay: -6s; }
+.worker5 { left: 40%; animation: jumpUp 10s linear infinite; animation-delay: -3s; }
+
+/* --- STARS (Block 2) --- */
+.star1 { width: 10rem; height: 9rem; left: -5%; animation: spinUp 6s linear infinite; animation-delay: 0s; }
+.star2 { width: 10rem; height: 9rem; left: 20%; animation: jumpUp 8.5s linear infinite; animation-delay: -3s; }
+.star3 { width: 10rem; height: 9rem; left: 45%; animation: driftUp 10.5s linear infinite; animation-delay: -5s; }
+.star4 { width: 10rem; height: 9rem; left: 70%; animation: spinUp 7.5s linear infinite; animation-delay: -2s; }
+.star5 { width: 10rem; height: 9rem; left: 30%; animation: jumpUp 12s linear infinite; animation-delay: -1s; }
+
+/* --- CHAT (Block 3) FIXED --- */
+.block3 img { position: absolute; }
+
+.chat {
+     min-width: 342px; 
+     height: 355px; 
+     left: 20px; 
+     top: 0; 
+     opacity: 1; 
+     border-radius: 9.58px; 
+     border: 1px solid #0000000A; 
+}
+
+/* --- TEXT STYLES --- */
+.title { 
+      font-family: 'Graphik', sans-serif;
+    font-weight: 700; 
+    font-size: 55px; 
+    line-height: 1;
+    letter-spacing: -0.05em; 
+    color: #141414; 
+    text-align: center; 
+}
+
+.title2 { 
+      font-family: 'Graphik', sans-serif;
+    font-weight: 600; 
+    font-size: 20px; 
+    line-height: 24px; 
+    letter-spacing: -0.02em; 
+    text-align: center;
+    color: #141414; 
+    margin: 20px; 
+}
+
+.subtitle { 
+    text-align: center; 
+      font-family: 'Graphik', sans-serif;
+    font-weight: 400; 
+    font-size: 16px; 
+    line-height: 1.46; 
+    letter-spacing: -0.03em;
+    margin: auto; 
+}
+
+/* --- ANIMATIONS --- */
+@keyframes driftUp {
+    0% { transform: translateY(380px) translateX(0); opacity: 0; }
+    15% { opacity: 1; }
+    50% { transform: translateY(190px) translateX(25px); }
+    100% { transform: translateY(-160px) translateX(-15px); opacity: 0; }
+}
+@keyframes spinUp {
+    0% { transform: translateY(380px) rotate(0deg); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translateY(-160px) rotate(360deg); opacity: 0; }
+}
+@keyframes jumpUp {
+    0% { transform: translateY(380px) scale(0.8); opacity: 0; }
+    15% { opacity: 1; }
+    40% { transform: translateY(220px) scale(1.2); }
+    100% { transform: translateY(-160px) scale(1); opacity: 0; }
+}
+
+/* --- LAPTOPS & TABLETS (under 1100px) --- */
+@media (max-width: 1100px) {
+    .blockCon {
+        gap: 3rem;
+        padding: 0 20px;
+    }
+
+    .firstCon, .secondCon, .thirdCon {
+        width: 30%; /* Increase width as screen gets smaller */
+    }
+
+    .title {
+        font-size: 42px;
+    }
+}
+
+/* --- TABLETS (under 850px) --- */
+@media (max-width: 850px) {
+    .blockCon {
+        flex-direction: column; /* Stack the blocks vertically */
+        align-items: center;
+        gap: 5rem;
+    }
+
+    .firstCon, .secondCon, .thirdCon {
+        width: 80%; /* Blocks take up most of the screen width */
+        max-width: 400px;
+    }
+
+    .title {
+        font-size: 36px;
+        padding: 0 15px;
+    }
+}
+
+/* --- PHONES (under 480px) --- */
+@media (max-width: 480px) {
+    .container {
+        margin-bottom: 5rem;
+        gap: 2rem;
+    }
+
+    .firstCon, .secondCon, .thirdCon {
+        width: 100%; /* Full width on small phones */
+    }
+
+    .block1, .block2, .block3 {
+        min-height: 280px; /* Shorter blocks for mobile */
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .title2 {
+        font-size: 18px;
+        margin: 15px 0 5px 0;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        width: 90%;
+    }
+
+    /* Adjusting animation distance for smaller blocks */
+    @keyframes driftUp {
+        0% { transform: translateY(300px); opacity: 0; }
+        15% { opacity: 1; }
+        100% { transform: translateY(-100px); opacity: 0; }
+    }
+    
+    .chat {
+        min-width: 100%; /* Ensure chat image doesn't overflow */
+        height: auto;
+    }
+}
+
+/* --- DARK THEME ADJUSTMENTS --- */
+[data-theme="dark"] .title,
+[data-theme="dark"] .title2 {
+    color: var(--text-white);
+}
+
+[data-theme="dark"] .subtitle {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .block1, 
+[data-theme="dark"] .block2, 
+[data-theme="dark"] .block3 {
+    background-color: var(--bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}

@@ -47,7 +47,8 @@ const router = createBrowserRouter([
       { path: "terms", element: <Terms />},
       { path: "about", element: <About />},
       { path: "review", element: <ReviewDropDown />},
-      { path: "help", element: <Help />}
+      { path: "help", element: <Help />},
+      { path: ":slug", element: <WorkerProfile />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},

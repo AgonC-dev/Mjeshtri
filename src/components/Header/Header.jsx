@@ -4,6 +4,9 @@ import styles from './Header.module.css';
 import { auth, db } from '../../api/firebase'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
+import Logo from '../../assets/Logo.png';
+import Search from '../../assets/Search.png';
+
 
 function Header() {
   
@@ -56,7 +59,7 @@ function Header() {
       {/* This container ensures the logo and nav links align with the page body */}
       <div className={styles.container}>
         <Link to="/" className={styles.logo}>
-          <span className={styles.logoText}>Mjeshtri.ks</span>
+          <img src={Logo} alt='Page Logo' />
         </Link>
 
         <nav className={styles.nav}>
@@ -66,19 +69,25 @@ function Header() {
           >
             Kryefaqja
           </NavLink>
-          
-          <NavLink 
+           <NavLink 
             to="/workers" 
             className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}
           >
-            Mjeshtër
+            Kërko Punëtorin
+          </NavLink>
+           <NavLink 
+            to="/about" 
+            className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}
+          >
+            Më të kërkuarit
           </NavLink>
 
-          <button onClick={toggleTheme} className={styles.themeToggle}>
+          {/* <button onClick={toggleTheme} className={styles.themeToggle}>
             {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-          </button>
-
-          {user ? (
+          </button> */}
+        </nav>
+        <div className={styles.right}>
+             {user ? (
             <div className={styles.profileWrapper}>
               <div 
                 className={styles.profileCircle} 
@@ -162,15 +171,17 @@ function Header() {
             </div>
           ) : (
             <>
-              
+              <Link to='/worker' className={styles.searchIcon}>
+               <img src={Search} alt='search icon' />
+              </Link>
               <NavLink 
                 to="/login" 
-                 className={({ isActive }) => isActive ? `${styles.navLink} ${styles.active}` : styles.navLink}>
-                  Kyqu
+                 className={({ isActive }) => isActive ? `${styles.navLinkLogIn} ${styles.active}` : styles.navLinkLogIn}>
+                  Kyqu si mjeshtër
               </NavLink>
             </>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

@@ -3,103 +3,95 @@ import {
   httpsCallable,
   connectFunctionsEmulator,
 } from "firebase/functions";
-import { useState } from "react";
-import PhoneInput from "react-phone-input-2";
+import { useState, useEffect } from "react";
 import styles from "./ReviewModal.module.css";
 import { app } from "../../api/firebase";
 
 const functions = getFunctions(app, "us-central1");
 
+// Handle Emulator vs Production
 if (import.meta.env.VITE_USE_EMULATOR === "true") {
-  console.log("🔗 Using Emulator Mode");
   connectFunctionsEmulator(functions, "127.0.0.1", 5001);
-} else {
-  console.log("🚀 Using Production Mode");
 }
 
-export default function ReviewModal({ onClose }) {
-  const [customerPhone, setCustomerPhone] = useState(null);
-  const [loadingLink, setLoadingLink] = useState(false);
-  const [whatsappUrl, setWhatsAppUrl] = useState(null);
+export default function ReviewModal({ user, onClose, sessions }) {
+  const [generatingId, setGeneratingId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handlePrepareLink = async () => {
-    if (!customerPhone) return;
+  // Since sessions come from props, we just handle the loading state locally
+  useEffect(() => {
+    if (sessions) {
+      setLoading(false);
+    }
+  }, [sessions]);
 
-    setLoadingLink(true);
-
+  const handleCreateLink = async (sessionId, phone) => {
+    setGeneratingId(sessionId);
     try {
-      const generateToken = httpsCallable(functions, "generateReviewRequest");
-      const { data } = await generateToken({ customerPhone });
+      // 1. Call your Cloud Function to generate the token and document
+      const createRequest = httpsCallable(functions, "createReviewRequest");
+      const { data } = await createRequest({ sessionId });
 
-      console.log("Backend Token Received:", data.token);
+      // 2. Format the message for WhatsApp
+      const cleanPhone = phone.replace(/\D/g, "");
+      const message = encodeURIComponent(
+        `Përshëndetje! Faleminderit që na kontaktuat. Mund të lini një vlerësim për punën tonë në këtë link: ${data.reviewUrl}`
+      );
 
-      // ✅ ALWAYS production URL here
-     const base = window.location.hostname.includes("localhost")
-      ? window.location.origin
-      : "https://mjeshtri-blue.vercel.app";
+      // 3. Open WhatsApp Web/App
+      window.open(`https://wa.me/${cleanPhone}?text=${message}`, "_blank");
 
-      const reviewLink = `${base}/review/${data.token}`;
-
-      const phoneNumber = customerPhone.replace(/\D/g, "");
-      const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-        `Përshëndetje! Ju mund të lini një vlerësim për mjeshtrin tim: ${reviewLink}`,
-      )}`;
-
-      setWhatsAppUrl(waUrl);
-    } catch (error) {
-      console.error("Error generating token:", error);
+      // 4. Close the modal
+      onClose();
+    } catch (err) {
+      console.error("Error creating review request:", err);
+      alert("Gabim: " + err.message);
     } finally {
-      setLoadingLink(false);
+      setGeneratingId(null);
     }
   };
 
   return (
-    <div className={styles.proContent}>
-      <h2>Kërko Vlerësim</h2>
-      <p>Dërgoni një link klientit tuaj për të marrë një vlerësim me yje.</p>
-      <div style={{ textAlign: "left", marginTop: "1.5rem" }}>
-        <label className={styles.label}>Numri i Klientit (WhatsApp)</label>
-        <PhoneInput
-          country={"xk"}
-          value={customerPhone}
-          onChange={(val) => {
-            setCustomerPhone(val);
-            setWhatsAppUrl(null); // Reset if number changes
-          }}
-          containerClass={styles.phoneContainer}
-          inputClass={styles.PhoneInput}
-        />
-      </div>
-      <div className={styles.actions}>
-        {!whatsappUrl ? (
-          <button
-            className={styles.purchaseBtn}
-            onClick={handlePrepareLink}
-            disabled={!customerPhone || loadingLink}
-          >
-            {loadingLink ? "Duke përgatitur..." : "Gjenero Linkun 🔗"}
-          </button>
-        ) : (
-          <a
-            href={whatsappUrl}
-            target="_blank"
-          
-            rel="noopener noreferrer"
-            className={styles.purchaseBtn}
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            Dërgo në WhatsApp 💬
-          </a>
-        )}
-        <button className={styles.cancelBtn} onClick={onClose}>
-          Anulo
-        </button>
-      </div>
+    <div className={styles.modalContent}>
+      <header className={styles.modalHeader}>
+        <h2>Zgjidhni Klientin</h2>
+        <p>Kërko vlerësim nga kontaktet e fundit që ju kanë shkruar:</p>
+      </header>
+
+      {loading ? (
+        <div className={styles.loader}>Duke ngarkuar...</div>
+      ) : (
+        <div className={styles.sessionList}>
+          {sessions.length === 0 ? (
+            <div className={styles.emptyState}>
+               <span className={styles.emptyIcon}>💬</span>
+               <p>Nuk u gjet asnjë kontakt i ri i disponueshëm për vlerësim.</p>
+            </div>
+          ) : (
+            sessions.map((s) => (
+              <div key={s.id} className={styles.sessionItem}>
+                <div className={styles.clientInfo}>
+                  <strong>{s.customerName}</strong>
+                  <span>{s.customerPhone}</span>
+                </div>
+                <button
+                  onClick={() => handleCreateLink(s.id, s.customerPhone)}
+                  disabled={generatingId !== null}
+                  className={styles.generateBtn}
+                >
+                  {generatingId === s.id ? (
+                    <span className={styles.spinner}>...</span>
+                  ) : (
+                    "Dërgo Linkun"
+                  )}
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+      
+      <button onClick={onClose} className={styles.closeModalBtn}>Mbyll</button>
     </div>
   );
 }

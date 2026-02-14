@@ -32,19 +32,20 @@ function WorkerList() {
   const navigate = useNavigate()
   
   // State for filters
-  const [selectedCity, setSelectedCity] = useState('Të gjitha')
+  const [selectedCity, setSelectedCity] = useState('Të gjitha');
+  const [isVerifiedOnly, setIsVerifiedOnly] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Të gjitha')
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
 
 
 
   // Fetching data with TanStack Query
   const { data: allWorkers, isLoading, isFetching } = useQuery({
-    queryKey: ['workers', selectedCity, selectedCategory],
-    queryFn: () => fetchUsers(selectedCity, selectedCategory),
+    queryKey: ['workers', selectedCity, selectedCategory, isVerifiedOnly],
+    queryFn: () => fetchUsers(selectedCity, selectedCategory, isVerifiedOnly),
     placeholderData: (previousData) => previousData,
     staleTime: 1000 * 60 * 5,
   })
@@ -161,7 +162,7 @@ function WorkerList() {
       {/* Top Progress Bar for background updates */}
       <div className={`${styles.loadingBar} ${isFetching ? styles.active : ''}`} />
       
-      <h1 className={styles.title}>Mjeshtër</h1>
+      <h1 className={styles.title}>Kërko punëtorin e duhur</h1>
       
       <div className={styles.container}>
         <FilterSidebar
@@ -170,6 +171,8 @@ function WorkerList() {
           workerNames={allWorkers?.map(w => w.fullName) || [] }
           selectedCity={selectedCity}
           selectedCategory={selectedCategory}
+          isVerified={isVerifiedOnly}
+          onVerifiedChange={setIsVerifiedOnly}
           onCityChange={setSelectedCity}
           onCategoryChange={setSelectedCategory}
           searchQuery={searchQuery}
