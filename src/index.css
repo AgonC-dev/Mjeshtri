@@ -133,76 +133,7 @@
   font-style: italic;
 }
 
-:root {
-  /* Dark Theme Colors */
-  --bg-primary: #121212;
-  --bg-secondary: #1a1a1a;
-  --bg-black: #000000;
-  --accent-emerald: #00ff85;
-  --accent-emerald-r: 0;
-  --accent-emerald-g: 255;
-  --accent-emerald-b: 133;
-  --text-off-white: #e0e0e0;
-  --text-muted: #a0a0a0;
-  --text-white: #ffffff;
-  --accent-red: #ff4d4d;
-  --accent-red-r: 255;
-  --accent-red-g: 77;
-  --accent-red-b: 77;
-  --white-r: 255;
-  --white-g: 255;
-  --white-b: 255;
-  
-  --black-r: 0;
-  --black-g: 0;
-  --black-b: 0;
-  --border-radius: 12px;
-  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.4);
-  --shadow-card: 0 4px 10px rgba(0, 0, 0, 0.18);
-  --bg-dropdown: #1a1a1a;
-  --card-bg: var(--bg-secondary);
-  --card-border: rgba(0, 0, 0, 0.12);
-  --accent-emerald-dark: #00cc6a;
-}
 
-[data-theme="light"] {
-  /* Light Theme Colors - Adjusted for better readability */
---bg-primary: #e9e8e3ad;
---bg-secondary: #e3e1dc;
-
-
-
- /* Slightly off-white for secondary */
-  --bg-black: #495057; /* Dark gray for accents */
-  --accent-emerald: #00b36a; /* slightly darker emerald for better contrast */
-  --accent-emerald-r: 0;
-  --accent-emerald-g: 179;
-  --accent-emerald-b: 106;
-  --accent-emerald-dark: #00995a;
-  --card-bg: #e3e7ea; /* cards slightly darker than body */
-  --card-border: rgba(0, 0, 0, 0.08);
-  --shadow-card: 0 8px 22px rgba(0, 0, 0, 0.07);
-  --card-bg: #e0e5e8; /* slightly darker to improve separation */
-  --text-off-white: #212529; /* Dark text for readability */
-  --text-muted: #6c757d; /* Muted text */
-  --text-white: #ffffff;
-  --accent-red: #dc3545;
-  --accent-red-r: 220;
-  --accent-red-g: 53;
-  --accent-red-b: 69;
-  --white-r: 255;
-  --white-g: 255;
-  --white-b: 255;
-  --black-r: 0;
-  --black-g: 0;
-  --black-b: 0;
-  --border-radius: 12px;
-  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.15);
-  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.06);
-  --bg-dropdown: #ffffff;
-}
 
 
 
