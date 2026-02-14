@@ -1,5 +1,5 @@
 import styles from './Hero.module.css';
-import searchIcon from '../../assets/icon.png';
+import searchIcon from '../../assets/Icon.png';
 import Workers from '../../assets/workers.png'
 import { useEffect, useState } from 'react';
 
