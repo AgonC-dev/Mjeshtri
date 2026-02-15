@@ -7,7 +7,7 @@ import { httpsCallable, getFunctions } from "firebase/functions";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
-const functions = getFunctions();
+
 
 export default function ReviewPage() {
   const { token } = useParams();
@@ -74,6 +74,7 @@ export default function ReviewPage() {
 
     try {
       setIsSubmitting(true);
+      const functions = getFunctions();
       const submitReviewFn = httpsCallable(functions, "submitReview");
 
       await submitReviewFn({

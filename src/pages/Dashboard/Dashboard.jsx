@@ -26,6 +26,14 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 
 const functions = getFunctions();
 
+const DEFAULT_AVATARS = [
+  "/avatars/electrician.png",
+  "/avatars/plumber.png",
+  "/avatars/painter.png",
+  "/avatars/cleaner.png",
+  "/avatars/constructor.png"
+];
+
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -68,8 +76,9 @@ function Dashboard() {
   const reviewCount = reviews?.length || 0;
   const clickCount = whatsappRequests || 0;
   // Threshold: Flag if reviews are more than clicks + 3
-  const isFishy = user && (reviewCount > (clickCount + 3));
 
+   
+  
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
@@ -135,6 +144,49 @@ function Dashboard() {
     });
     return () => unsub();
   }, []);
+
+  
+const getHealthStatus = () => {
+  const clicks = clickCount || 0;
+  const revs = reviewCount || 0;
+
+  // 1. THE IMPOSSIBILITY CHECK
+  // If reviews > clicks, it means they might be bypassing the session logic 
+  // or there is a data sync error.
+  const isImpossible = revs > (clicks + 1) && revs > 3;
+
+  if (isImpossible) {
+    return { 
+      label: "ANOMALI DATA", 
+      color: "#ff4d4d", 
+      score: "Kritik",
+      desc: "Sistemi ka vërejtur më shumë vlerësime sesa klikime reale. Kjo mund të çojë në pezullim." 
+    };
+  }
+
+  // 2. THE SUCCESS CHECK (High conversion)
+  // If they have a high ratio but it's physically possible, it's a "Top Rated" profile.
+  const ratio = revs / (clicks + 1);
+
+  if (ratio > 0.7 && revs > 5) {
+    return { 
+      label: "ELITARE", 
+      color: "#00ff85", 
+      score: "Normal",
+      desc: "Keni një shkallë konvertimi të lartë! Klientët tuaj janë shumë të kënaqur." 
+    };
+  }
+
+  // 3. DEFAULT HEALTHY STATE
+  return { 
+    label: "I SHËNDETSHËM", 
+    color: "#00ff85", 
+    score: "Normal",
+    desc: "Profili juaj është i verifikuar dhe i rregullt." 
+  };
+};
+const health = getHealthStatus();
+const isFishy = health.score !== "Normal";
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -203,6 +255,12 @@ function Dashboard() {
     setProfileFile(null);
     setForm(prev => ({...prev, profileUrl: ''}));
      setIsDirty(true);
+  }
+
+  function handleSelectDefaultAvatar(url) {
+    setProfileFile(url)
+    setForm(prev => ({ ...prev, profileUrl: url}));
+    setIsDirty(true);
   }
 
   function handleDeleteExistingPortfolio(urlToDelete) {
@@ -284,14 +342,19 @@ function Dashboard() {
         useWebWorker: true,
       };
 
-      if (profileFile) {
-        setStatus({ message: "Duke procesuar foton e profilit...", type: "pending" });
-        const compressedProfile = await imageCompression(profileFile, options);
-        const profilePath = `workers/${user.uid}/profile-${Date.now()}`;
-        const url = await uploadFile(profilePath, compressedProfile);
-        updates.profilePic = url;
-        setForm(prev => ({ ...prev, profileUrl: url }));
-        setProfileFile(null);
+      if(profileFile) {
+        if(profileFile instanceof File) {
+          setStatus({ message: "Duke procesuar foton e profilit...", type: "pending" });
+          const compressedProfile = await imageCompression(profileFile, options);
+          const profilePath =  `workers/${user.uid}/profile-${Date.now()}`;
+          const url = await uploadFile(profilePath, compressedProfile);
+          updates.profilePic = url;
+          setForm(prev => ({ ...prev, profileUrl: url }));         
+         } else {
+           updates.profilePic = profileFile;
+         }
+
+         setProfileFile(null)
       }
 
       if (portfolioFiles.length > 0) {
@@ -367,6 +430,7 @@ function Dashboard() {
     }
   }
 
+  
   const baseUrl = window.location.origin;
   const personalLink = form.slug 
   ? `${baseUrl}/${form.slug}` 
@@ -396,7 +460,7 @@ function Dashboard() {
   </div>
 )}
 
-    <div className={styles.linkSharingBox}>
+  <div className={styles.linkSharingBox}>
   <label className={styles.label}>Linku i profilit tënd:</label>
   <div className={styles.linkInputWrapper}>
     <input 
@@ -412,6 +476,7 @@ function Dashboard() {
         setStatus({ message: "Linku u kopjua!", type: "success" });
       }}
       className={styles.copyBtn}
+      disabled={!form.isPro}
     >
       Kopjo
     </button>
@@ -472,20 +537,26 @@ function Dashboard() {
   </div>
 )}
 
+<div className={styles.healthStatusMini} onClick={() => setIsModalOpen(prev => ({...prev, health: true}))}>
+  <span className={styles.dot} style={{ backgroundColor: health.color }}></span>
+  Statusi i Profilit: <strong>{health.score}</strong>
+</div>
+
 {/* REDESIGNED HEALTH MODAL */}
-<Modal 
+ <Modal 
   open={isModalOpen.health} 
   onClose={() => setIsModalOpen(prev => ({...prev, health: false}))}
 >
   <div className={styles.themedHealthModal}>
-    <div className={styles.modalStatusGlow}></div>
+    {/* Dynamic glow color */}
+    <div className={styles.modalStatusGlow} style={{ backgroundColor: health.color }}></div>
     
     <header className={styles.modalHeader}>
       <h2 className={styles.dualTitle}>
         <span className={styles.partWhite}>INTEGRITETI</span>
-        <span className={styles.partRed}>I PROFILIT</span>
+        <span className={styles.partRed} style={{ color: health.color }}>I PROFILIT</span>
       </h2>
-      <p className={styles.modalSubtitle}>Raporti vlerësim/interesim nuk përputhet</p>
+      <p className={styles.modalSubtitle}>Analiza e përputhshmërisë së të dhënave</p>
     </header>
 
     <div className={styles.statsContainer}>
@@ -494,15 +565,15 @@ function Dashboard() {
         <span className={styles.statLab}>Klikime</span>
       </div>
       <div className={styles.statBox}>
-        <span className={styles.statVal} style={{color: 'var(--accent-red)'}}>{reviewCount}</span>
+        <span className={styles.statVal} style={{color: health.color}}>{reviewCount}</span>
         <span className={styles.statLab}>Vlerësime</span>
       </div>
     </div>
-<div className={styles.warningMessage}>
-  <p>
-    Sistemi ynë ka vënë re se keni më shumë <span className={styles.redWarningText}>vlerësime</span> se sa <span className={styles.redWarningText}>klientë realë</span> që ju kanë kontaktuar. Platforma jonë ndalon rreptësisht vlerësimet fiktive.
-  </p>
-</div>
+
+    <div className={styles.warningMessage}>
+      <p><strong>Statusi: {health.label}</strong></p>
+      <p>{health.desc}</p>
+    </div>
     
     <button 
       className={styles.modalCloseBtn} 
@@ -551,29 +622,66 @@ function Dashboard() {
 
      
       {/* SECTION 2: PROFILE PHOTO */}
-      <div className={`${styles.bentoCard} ${styles.mediaSection}`}>
-        <h3 className={styles.cardTitle}>🖼️ Foto Profili</h3>
-        <div className={styles.profileUploadWrapper}>
-          <div className={styles.profilePreview}>
-            {profileFile ? (
-              <img src={URL.createObjectURL(profileFile)} alt="preview" className={styles.profile} />
-            ) : form.profileUrl ? (
-              <img src={form.profileUrl} alt="profile" className={styles.profile} />
-            ) : (
-              <img 
-                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(form.name || 'M')}&background=00ff85&color=fff&bold=true`} 
-                alt="default-avatar" 
-                className={styles.profile} 
-              />
-            )}
-          </div>
-          <div className={styles.uploadControls}>
-            <input type="file" id="profile-upload" accept="image/*" onChange={handleProfileSelect} className={styles.hiddenInput} />
-            <label htmlFor="profile-upload" className={styles.uploadMiniBtn}>Ndërro</label>
-            <button onClick={handleDeleteProfile} type="button" className={styles.deleteMiniBtn}>Fshi</button>
-          </div>
-        </div>
+      {/* SECTION 2: PROFILE PHOTO & AVATAR PICKER */}
+<div className={`${styles.bentoCard} ${styles.mediaSection}`}>
+  <h3 className={styles.cardTitle}>🖼️ Foto e Profilit</h3>
+  
+  <div className={styles.profileSectionLayout}>
+    {/* Main Preview */}
+    <div className={styles.mainPreviewContainer}>
+      <div className={styles.profilePreview}>
+  {profileFile instanceof File ? (
+    /* 1. If user just picked a local file, show the blob preview */
+    <img 
+      src={URL.createObjectURL(profileFile)} 
+      alt="preview" 
+      className={styles.profile} 
+      onLoad={(e) => URL.revokeObjectURL(e.target.src)} // Good practice: free memory
+    />
+  ) : form.profileUrl ? (
+    /* 2. If no local file, but we have a URL (Uploaded or Default Avatar) */
+    <img src={form.profileUrl} alt="profile" className={styles.profile} />
+  ) : (
+    /* 3. Fallback: Initials */
+    <img 
+      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(form.name || 'M')}&background=00ff85&color=fff&bold=true`} 
+      alt="default-initials" 
+      className={styles.profile} 
+    />
+  )}
+</div>
+      
+      <div className={styles.uploadActions}>
+        <input type="file" id="profile-upload" accept="image/*" onChange={handleProfileSelect} className={styles.hiddenInput} />
+        <label htmlFor="profile-upload" className={styles.uploadBtn}>
+          <span>📷</span> Ngarko Foto
+        </label>
+        {form.profileUrl && (
+          <button onClick={handleDeleteProfile} type="button" className={styles.removeLink}>
+            Fshi foton
+          </button>
+        )}
       </div>
+    </div>
+
+    {/* Avatar Selection Grid */}
+    <div className={styles.avatarPickerContainer}>
+      <p className={styles.pickerLabel}>Ose zgjidh një ilustrim:</p>
+      <div className={styles.avatarGrid}>
+        {DEFAULT_AVATARS.map((url, index) => (
+          <div 
+            key={index} 
+            className={`${styles.avatarOption} ${form.profileUrl === url ? styles.selectedAvatar : ''}`}
+            onClick={() => handleSelectDefaultAvatar(url)}
+          >
+            <img src={url} alt={`Avatar ${index}`} />
+            {form.profileUrl === url && <div className={styles.checkBadge}>✓</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
 
       {/* SECTION 3: SERVICE DETAILS */}
       <div className={`${styles.bentoCard} ${styles.serviceDetails}`}>

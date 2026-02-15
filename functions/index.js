@@ -56,57 +56,74 @@ export const createContactSession = onCall({ cors: true }, async (req) => {
   })
 
   return { sessionId: sessionRef.id };
-})
+});
+
+
 
 export const createReviewRequest = onCall({ cors: true }, async (req) => {
   const uid = req.auth?.uid;
+  const { sessionId } = req.data;
 
-   const { sessionId } = req.data;
+  // 1. Auth Guard
+  if (!uid) {
+    throw new HttpsError("unauthenticated", "Ju duhet të jeni i kyçur.");
+  }
 
-   if (!uid) throw new HttpsError("unauthenticated", "Unauthorized");
+  // 2. Fetch Worker Data (The "Source of Truth")
+  const workerSnap = await db.collection("workers").doc(uid).get();
+  if (!workerSnap.exists) {
+    throw new HttpsError("not-found", "Mjeshtri nuk u gjet.");
+  }
+  const workerData = workerSnap.data();
 
-   const sessionRef = db.collection("contactSessions").doc(sessionId);
-   const sessionSnap = await sessionRef.get();
+  // 3. Fetch Session
+  const sessionRef = db.collection("contactSessions").doc(sessionId);
+  const sessionSnap = await sessionRef.get();
 
-   if (!sessionSnap.exists) throw new HttpsError("Invalid Session");
+  if (!sessionSnap.exists) {
+    throw new HttpsError("not-found", "Ky kontakt nuk ekziston.");
+  }
  
   const session = sessionSnap.data();
     
-   if (session.workerId !== uid) {
-    throw new Error("Not your contact");
+  // 4. Ownership Guard
+  if (session.workerId !== uid) {
+    throw new HttpsError("permission-denied", "Ky kontakt nuk ju përket juve.");
   }
 
+  // 5. Expiration Check (7 days)
   const createdAt = session.createdAt?.toDate();
   const now = new Date();
-
   if (!createdAt || now - createdAt > 1000 * 60 * 60 * 24 * 7) {
-  throw new HttpsError("failed-precondition", "Ky kontakt ka skaduar.");
-}
+    throw new HttpsError("failed-precondition", "Ky kontakt ka skaduar (mbi 7 ditë).");
+  }
 
-    if (session.usedForReview) {
-    throw new Error("Already used");
+  // 6. Usage Check
+  if (session.usedForReview) {
+    throw new HttpsError("already-exists", "Ky kontakt është përdorur njëherë.");
   }
 
   const token = crypto.randomBytes(8).toString("hex");
-  
 
+  // 7. Transaction for Atomic Updates
   await db.runTransaction(async (transaction) => {
-    transaction.update( sessionRef, { usedForReview: true});
+    transaction.update(sessionRef, { usedForReview: true });
 
     transaction.set(db.collection("reviewRequests").doc(token), {
       workerId: uid,
+      workerName: workerData.fullName || "Mjeshtër",
+      workerPic: workerData.profilePic || "", // Changed 'workerProfile' to 'workerPic' to match your ReviewPage
       sessionId,
       customerPhone: session.customerPhone,
-      customerName: session.customerName || "Klient", // From your background capture
-      customerFingerprint: session.fingerprint || null,
+      customerName: session.customerName || "Klient",
       status: "pending",
       createdAt: FieldValue.serverTimestamp(),
-    })
+    });
   });
 
   return {
     reviewUrl: `https://mjeshtri-blue.vercel.app/review/${token}`,
-  }
+  };
 });
 
 

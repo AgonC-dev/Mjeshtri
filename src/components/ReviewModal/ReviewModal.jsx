@@ -30,7 +30,8 @@ export default function ReviewModal({ user, onClose, sessions }) {
     try {
       // 1. Call your Cloud Function to generate the token and document
       const createRequest = httpsCallable(functions, "createReviewRequest");
-      const { data } = await createRequest({ sessionId });
+      const { data } = await createRequest({ sessionId  });
+   
 
       // 2. Format the message for WhatsApp
       const cleanPhone = phone.replace(/\D/g, "");

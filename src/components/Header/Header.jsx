@@ -106,65 +106,65 @@ function Header() {
              {showDropDown && (
   <div className={styles.dropdown} ref={menuRef}>
     <div className={styles.dropdownHeader}>
-      <p className={styles.userName}>{userData?.fullName || "Mjeshtër"}</p>
+      <div className={styles.headerTop}>
+         <p className={styles.userName}>{userData?.fullName || "Mjeshtër"}</p>
+         {userData?.isPro && <span className={styles.proBadgeMenu}>PRO</span>}
+      </div>
       <p className={styles.userEmail}>{user.email}</p>
     </div>
+
+    {/* NEW: Profile Strength / Completion Field */}
+    <div className={styles.strengthField}>
+       <div className={styles.strengthLabelRow}>
+          <span>Fuqia e Profilit</span>
+          <span>75%</span>
+       </div>
+       <div className={styles.progressBar}>
+          <div className={styles.progressFill} style={{width: '75%'}}></div>
+       </div>
+    </div>
+
+    {/* NEW: Status Row */}
+    <div className={styles.visibilityField}>
+      <div className={styles.statusIndicator}>
+        <span className={userData?.isAvailable ? styles.dotGreen : styles.dotGrey}></span>
+        {userData?.isAvailable ? "Aktiv & Online" : "I fshehur (Pushim)"}
+      </div>
+    </div>
+
     <hr className={styles.divider} />
     
-          <Link 
-             to="/dashboard" 
-             className={styles.dropdownItem}
-             onClick={() => setShowDropDown(false)}
-          >
-               Paneli
-            </Link>
-    
-    <Link 
-      to="/settings" 
-      className={styles.dropdownItem}
-      onClick={() => setShowDropDown(false)}
-    >
-      Cilësimet e Llogarisë
+    <Link to="/dashboard" className={styles.dropdownItem} onClick={() => setShowDropDown(false)}>
+      <span className={styles.icon}>📊</span> Paneli i Punës
     </Link>
     
-    <Link 
-      to="/profile"
-      className={styles.dropdownItem}
-      onClick={() => setShowDropDown(false)}
-    >
-      Shiko Profilin
-    </Link>
-    
-    <Link 
-      to="/review"
-      className={styles.dropdownItem}
-      onClick={() => setShowDropDown(false)}
-    >
-      Kërko Vlerësim ⭐ 
-      <span className={styles.helpIcon} data-tooltip="Dërgoni linkun klientit për vlerësim!">
-        ?
-      </span>
+    <Link to="/profile" className={styles.dropdownItem} onClick={() => setShowDropDown(false)}>
+      <span className={styles.icon}>👤</span> Profili Publik
     </Link>
 
-    {/* Separator for Support Section */}
+    <Link to="/settings" className={styles.dropdownItem} onClick={() => setShowDropDown(false)}>
+      <span className={styles.icon}>⚙️</span> Cilësimet
+    </Link>
+    
     <hr className={styles.divider} />
 
-    <Link 
-      to="/help" 
-      className={styles.dropdownItem}
-      onClick={() => setShowDropDown(false)}
-    >
-      Ndihmë & FAQ 💡
+    {!userData?.isPro && (
+      <Link to="/dashboard" className={styles.upgradePrompt} onClick={() => setShowDropDown(false)}>
+        🚀 Përmirëso rënditjen (PRO)
+      </Link>
+    )}
+
+    <Link to="/help" className={styles.dropdownItem} onClick={() => setShowDropDown(false)}>
+      <span className={styles.icon}>💡</span> Ndihmë & FAQ
     </Link>
+
+    <hr className={styles.divider} />
 
     <button 
-      onClick={() => {
-        auth.signOut();
-        setShowDropDown(false);
-      }} 
+      onClick={() => { auth.signOut(); setShowDropDown(false); }} 
       className={styles.logoutButton}
     >
-      Dil (Logout)
+      <span className={styles.icon}>🚪</span> Dil nga llogaria
     </button>
   </div>
 )}

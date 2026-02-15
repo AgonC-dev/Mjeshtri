@@ -21,6 +21,7 @@
   width: 30%;
 }
 
+
 .navLink {
 
   height: 35px;
@@ -109,116 +110,168 @@
   border: 2px solid #00000014;
 }
 
+/* =========================================
+   LIGHT THEME DROPDOWN
+   ========================================= */
 .dropdown {
   position: absolute;
-  top: 55px;
+  top: calc(100% + 12px);
   right: 0;
-  width: 240px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid #0000000d;
-  padding: 15px 0;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0; /* Soft border */
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  animation: slideDown 0.2s ease-out;
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Dropdown Header --- */
 .dropdownHeader {
-  padding: 0 20px 10px 20px;
+  padding: 8px 12px 12px;
 }
 
 .userName {
-    font-family: 'Graphik', sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  color: #000;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #1a202c; /* Deep slate */
   margin: 0;
 }
 
 .userEmail {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  color: #666;
-  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  color: #718096; /* Medium grey */
+  margin-top: 2px;
 }
+
+.proBadgeMenu {
+  background: #ecfdf5; /* Very light green */
+  color: #059669; /* Sharp emerald */
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1fae5;
+}
+
+/* Profile Strength Field */
+.strengthField {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.strengthLabelRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.progressBar {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #10b981; /* Primary Green */
+  border-radius: 10px;
+}
+
+/* Visibility Field */
+.visibilityField {
+  padding: 4px 12px 10px;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.dotGreen { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+.dotGrey { width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%; }
 
 .divider {
   border: 0;
-  border-top: 1px solid #0000000d;
-  margin: 10px 0;
+  border-top: 1px solid #f1f5f9;
+  margin: 8px 0;
 }
 
-/* --- Dropdown Items --- */
 .dropdownItem {
-  padding: 12px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  text-decoration: none;
   display: flex;
   align-items: center;
-  transition: background 0.2s ease;
+  gap: 12px;
+  padding: 10px 12px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.15s ease;
 }
 
 .dropdownItem:hover {
-  background-color: #f5f5f5;
-  color: #000;
+  background: #f1f5f9;
+  color: #1a202c;
 }
 
-.helpIcon {
-  margin-left: auto;
-  background: #f1f1f1;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 10px;
-  cursor: help;
+.icon {
+  font-size: 1.1rem;
 }
 
-/* --- Logout Button --- */
-.logoutButton {
-  margin-top: 5px;
-  padding: 12px 20px;
-  border: none;
-  background: none;
-  text-align: left;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
+/* Upgrade Prompt - Light Version */
+.upgradePrompt {
+  display: block;
+  background: #1a202c; /* Dark button for contrast */
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #ff4d4d; /* Red for logout */
-  cursor: pointer;
+  text-align: center;
+  margin: 10px 0;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.upgradePrompt:hover {
+  transform: scale(1.02);
+  background: #000;
+}
+
+.logoutButton {
   width: 100%;
-  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #ef4444; /* Light mode red */
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
 }
 
 .logoutButton:hover {
-  background-color: #fff0f0;
+  background: #fef2f2;
 }
-
-/* --- Dark Mode Support --- */
-[data-theme="dark"] .dropdown {
-  background-color: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-[data-theme="dark"] .userName { color: #fff; }
-[data-theme="dark"] .userEmail { color: #aaa; }
-[data-theme="dark"] .dropdownItem { color: #ddd; }
-[data-theme="dark"] .dropdownItem:hover { background-color: #2a2a2a; color: #fff; }
-[data-theme="dark"] .divider { border-top-color: rgba(255, 255, 255, 0.1); }
 /* --- TABLETS & SMALL LAPTOPS (under 1024px) --- */
 @media (max-width: 1024px) {
   .container {
