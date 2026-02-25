@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth"; // Remove connectAuthEmulator import
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -15,6 +16,13 @@ const firebaseConfig = {
 
 
 export const app = initializeApp(firebaseConfig);
+
+if (typeof window !== "undefined") {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider("6LfWeXMsAAAAANq-v7QKoXkLA3zvwfdaZauj3SBT"),
+    isTokenAutoRefreshEnabled: true
+  });
+}
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);

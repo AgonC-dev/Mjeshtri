@@ -4,15 +4,18 @@
 
 
 
+/* --- Success Modal Styling --- */
+
 .successModal {
   position: relative;
-  background: #1a1a1a;
-  padding: 2.5rem;
+  background: #ffffff;
+  padding: 3rem 2rem;
   border-radius: 24px;
   text-align: center;
-  max-width: 400px;
-  border: 1px solid rgba(0, 255, 133, 0.2);
+  max-width: 450px;
+  width: 100%;
   overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
 .successGlow {
@@ -20,79 +23,103 @@
   top: -50px;
   left: 50%;
   transform: translateX(-50%);
-  width: 150px;
-  height: 150px;
-  background: rgba(0, 255, 133, 0.15);
-  filter: blur(50px);
-  border-radius: 50%;
-  z-index: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
 }
 
 .iconCircle {
   width: 80px;
   height: 80px;
-  background: rgba(0, 255, 133, 0.1);
-  border: 2px solid #00ff85;
+  background: #f0fdf4;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
-  position: relative;
-  z-index: 1;
+  color: #10b981;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
 }
 
 .checkIcon {
   width: 40px;
   height: 40px;
-  color: #00ff85;
 }
 
 .dualTitle {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
 }
 
-.partWhite { color: #ffffff; margin-right: 8px; }
-.partGreen { color: #00ff85; }
+.partWhite {
+  color: #1e293b;
+}
+
+.partGreen {
+  color: #10b981;
+  font-size: 2.5rem;
+}
 
 .modalSubtitle {
-  color: #a0a0a0;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 2rem;
 }
 
 .successInfoBox {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 1rem;
-  border-radius: 12px;
+  background: #f8fafc;
+  padding: 1.25rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .successInfoBox p {
-  color: #d1d1d1;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
+
+/* --- Buttons --- */
 
 .dashboardBtn {
   width: 100%;
+  background: #1e293b;
+  color: white;
   padding: 1rem;
-  background: #00ff85;
-  color: #000;
-  border: none;
   border-radius: 12px;
   font-weight: 700;
   font-size: 1rem;
+  border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
+  margin-bottom: 0.75rem;
 }
 
 .dashboardBtn:hover {
-  background: #00cc6a;
+  background: #334155;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 255, 133, 0.2);
+  box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.2);
+}
+
+.closeBtn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #64748b;
+  text-decoration: underline;
 }

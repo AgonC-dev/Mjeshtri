@@ -1,104 +1,125 @@
-/* --- LOADING ANIMATIONS --- */
-/* --- THEMED LOADING --- */
 .loaderWrapper {
-  height: 80vh; /* Keeps it centered but not overlapping nav if you have one */
+  position: fixed;
+  inset: 0;
+  background: #ffffff; /* Sfondi i bardhë i pastër */
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background: transparent; /* Let the global body background show */
+  justify-content: center;
+  z-index: 9999;
 }
 
-.pulseCircle {
-  width: 70px;
-  height: 70px;
-  background-color: var(--accent-emerald);
-  border-radius: 50%;
+.animationContainer {
   position: relative;
-  /* Glowing effect using your theme's emerald */
-  box-shadow: 0 0 20px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4);
-  animation: themePulse 1.8s infinite ease-in-out;
-}
-
-@keyframes themePulse {
-  0% { transform: scale(0.9); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6); }
-  100% { transform: scale(0.9); opacity: 0.8; }
-}
-
-.shimmerText {
-  margin-top: 25px;
-  color: var(--text-off-white);
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  font-weight: 600;
-  /* Shimmer effect using your text colors */
-  background: linear-gradient(
-    90deg, 
-    var(--text-muted) 0%, 
-    var(--text-off-white) 50%, 
-    var(--text-muted) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: themeShimmer 2s linear infinite;
-}
-
-@keyframes themeShimmer {
-  to { background-position: 200% center; }
-}
-
-/* --- THEMED ERROR --- */
-.errorOverlay {
-  height: 70vh;
+  width: 120px;
+  height: 120px;
   display: flex;
-  justify-content: center;
   align-items: center;
-}
-
-.errorCard {
-  background-color: var(--bg-secondary);
-  padding: 3rem;
-  border-radius: var(--border-radius);
-  text-align: center;
-  border: 1px solid rgba(var(--white-r), var(--white-g), var(--white-b), 0.1);
-  box-shadow: var(--shadow-soft);
-  max-width: 450px;
-  animation: popIn 0.4s cubic-bezier(0.26, 0.53, 0.74, 1.48);
-}
-
-@keyframes popIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.errorTitle {
-  color: var(--text-off-white);
-  font-size: 1.8rem;
-  margin: 1rem 0;
-}
-
-.errorText {
-  color: var(--text-muted);
-  line-height: 1.6;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 
-.refreshBtn {
-  background-color: transparent;
-  color: var(--accent-emerald);
-  border: 2px solid var(--accent-emerald);
-  padding: 0.8rem 2.5rem;
-  border-radius: var(--border-radius);
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* Unaza kryesore - E gjelbër vibrante */
+.mainRing {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #f1f5f9; /* Ngjyrë hiri shumë e lehtë për bazën */
+  border-top-color: #00ff85;
+  border-bottom-color: #00ff85;
+  border-radius: 50%;
+  animation: rotate 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
-.refreshBtn:hover {
-  background-color: var(--accent-emerald);
-  color: var(--bg-primary);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.3);
+/* Unaza e brendshme - Nuancë blu e hapur */
+.innerRing {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border: 2px solid transparent;
+  border-left-color: #38bdf8;
+  border-right-color: #38bdf8;
+  border-radius: 50%;
+  animation: rotateOpposite 2s linear infinite;
+  opacity: 0.4;
+}
+
+/* Qendra pulsuese */
+.core {
+  width: 18px;
+  height: 18px;
+  background: #00ff85;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 255, 133, 0.6);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.coreGlow {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 255, 133, 0.05);
+  border-radius: 50%;
+  filter: blur(8px);
+}
+
+/* Grimcat - Tani më të dukshme mbi të bardhë */
+.particle, .particleTwo {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #1e293b; /* Ngjyrë e errët për kontrast */
+  border-radius: 50%;
+}
+
+.particle { animation: orbit 2.5s linear infinite; }
+.particleTwo { animation: orbit 3.5s linear reverse infinite; }
+
+/* Teksti dhe Progress Bar */
+.shimmerText {
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 5px;
+  background: linear-gradient(90deg, #64748b, #00ff85, #64748b);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+.subText {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: block;
+  margin-top: 12px;
+}
+
+.progressBar {
+  width: 140px;
+  height: 3px;
+  background: #f1f5f9;
+  margin: 12px auto 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progressFill {
+  width: 40%;
+  height: 100%;
+  background: #00ff85;
+  animation: progressMove 1.5s ease-in-out infinite;
+}
+
+/* Keyframes (Mbeten të njëjta për lëvizjen) */
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rotateOpposite { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+@keyframes shimmer { 0% { background-position: -200%; } 100% { background-position: 200%; } }
+@keyframes progressMove { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(55px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(55px) rotate(-360deg); }
 }

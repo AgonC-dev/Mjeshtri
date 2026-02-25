@@ -80,56 +80,59 @@ function Login() {
 
   return (
     <div className={styles.loginWrap}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Hyr në llogari (Si Mjeshter)</h1>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <label className={styles.label} htmlFor="email">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={styles.input}
-            placeholder="email@shembull.com"
-            required
-          />
-
-          <label className={styles.label} htmlFor="password">
-            Fjalëkalimi
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            className={styles.input}
-            placeholder="Fjalëkalimi"
-            required
-          />
-
-          <div className={styles.forgotDiv}>
-            <p>Ke harruar Fjalëkalimin?</p>
-            <button type="button" onClick={handleResetPassword}>Reseto</button>
-          </div>
-          
-          <div className={styles.loginDiv}>
-            <p>Nuk ke Llogari?</p>
-            <Link to='/register'>Krijo</Link>
-          </div>
-
-          {error && <div className={styles.errorMessage}>{error}</div>}
-          {resetMessage && <div className={styles.successMessage}>{resetMessage}</div>}
-   
-          <button type="submit" className={styles.submitButton} disabled={isPending}>
-            Hyr
-          </button>
-        </form>
+  <div className={styles.card}>
+    <h1 className={styles.title}>Hyr në llogari</h1>
+    
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.inputGroup}>
+        <label className={styles.label} htmlFor="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          className={styles.input}
+          placeholder="email@shembull.com"
+          required
+        />
       </div>
-    </div>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label} htmlFor="password">Fjalëkalimi</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          className={styles.input}
+          placeholder="Fjalëkalimi"
+          required
+        />
+      </div>
+
+      <div className={styles.footerActions}>
+        <div className={styles.resetRow}>
+          <button type="button" onClick={handleResetPassword} className={styles.textBtn}>
+            Harrove fjalëkalimin?
+          </button>
+        </div>
+        
+        <button type="submit" className={styles.submitButton} disabled={isPending}>
+          {isPending ? <div className={styles.spinner} /> : "Vazhdo"}
+        </button>
+
+        {error && <div className={styles.errorMessage}>{error}</div>}
+
+        <div className={styles.registerRow}>
+          <span>Nuk ke llogari?</span>
+          <Link to='/register'>Krijo një të re</Link>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
   );
 }
 

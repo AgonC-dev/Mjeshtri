@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     question: "Çfarë përfshin statusi PRO?",
-    answer: "Statusi PRO ju jep renditje prioritare në kërkime, një distinktiv verifikimi në profilin tuaj, dhe mundësinë për të ngarkuar foto të pakufizuara në portofolin tuaj të punës."
+    answer: "Statusi PRO ju jep renditje prioritare në kërkime (Live Ranking), një distinktiv verifikimi në profilin tuaj, dhe mundësinë për të ngarkuar foto të pakufizuara në portofolin tuaj të punës."
   },
   {
     question: "Si mund të ndryshoj të dhënat e mia?",
@@ -17,11 +17,11 @@ const faqs = [
   },
   {
     question: "Pse nuk po shfaqet profili im në listë?",
-    answer: "Sigurohuni që keni plotësuar të paktën emrin, kategorinë dhe keni vendosur një foto profili. Profilet pa informacion bazë fshihen automatikisht nga listimi publik për të ruajtur cilësinë."
+    answer: "Sigurohuni që keni plotësuar të paktën emrin, kategorinë dhe keni vendosur një foto profili. Profilet pa informacion bazë fshihen automatikisht nga listimi publik për të ruajtur cilësinë e Ustahëve tanë."
   },
   {
-    question: "A kushton regjistrimi në Mjeshtri.ks?",
-    answer: "Regjistrimi dhe përdorimi bazë i platformës është 100% falas për të gjithë mjeshtrit. Opsioni PRO është një zgjedhje opsionale për ata që duan më shumë shikueshmëri."
+    question: "A kushton regjistrimi në Gjejmjeshtrin.ks?",
+    answer: "Regjistrimi dhe përdorimi bazë i platformës është 100% falas për të gjithë mjeshtrit. Opsioni PRO është një zgjedhje opsionale për ata që duan më shumë shikueshmëri dhe shkëlqim në renditje."
   }
 ];
 
@@ -35,10 +35,9 @@ export default function Help() {
   return (
     <div className={styles.helpContainer}>
       <header className={styles.header}>
-    {/* Split color header */}
-    <h1 className={styles.title}>Si mund t'ju <span>ndihmojmë?</span></h1>
-    <p>Gjeni përgjigjet për pyetjet më të shpeshta rreth platformës sonë.</p>
-  </header>
+        <h1 className={styles.title}>Si mund t'ju <span>ndihmojmë?</span></h1>
+        <p>Gjeni përgjigjet për pyetjet më të shpeshta rreth platformës sonë.</p>
+      </header>
 
       <section className={styles.faqSection}>
         {faqs.map((faq, index) => (
@@ -57,16 +56,16 @@ export default function Help() {
           </div>
         ))}
       </section>
+
       <section className={styles.contactSupport}>
-    <div className={styles.supportCard}>
-      {/* Split color support card title */}
-      <h3 className={styles.supportTitle}>Nuk gjetët atë që <span>kërkonit?</span></h3>
-      <p>Na shkruani një mesazh dhe ekipi ynë do t'ju kthejë përgjigje sa më shpejt të jetë e mundur.</p>
-      <div className={styles.supportButtons}>
-        <Link to="/contact" className={styles.emailBtn}>Dërgo një Mesazh</Link>
-      </div>
-    </div>
-  </section>
+        <div className={styles.supportCard}>
+          <h3 className={styles.supportTitle}>Nuk gjetët atë që <span>kërkonit?</span></h3>
+          <p>Na shkruani një mesazh dhe ekipi ynë do t'ju kthejë përgjigje sa më shpejt të jetë e mundur.</p>
+          <div className={styles.supportButtons}>
+            <Link to="/contact" className={styles.emailBtn}>Dërgo një Mesazh</Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

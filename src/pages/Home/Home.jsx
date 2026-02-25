@@ -11,6 +11,7 @@ function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   const isModalOpen = location.state?.modalOpen;
+  const name = location.state?.name;
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (query) => {
@@ -29,7 +30,7 @@ function Home() {
       <FeaturedWorkers />
           <Modal 
   open={isModalOpen} 
-  onClose={() => navigate("/dashboard")}
+  onClose={() => navigate("/", { replace: true, state: {} })}
 >
   <div className={styles.successModal}>
     <div className={styles.successGlow}></div>
@@ -43,7 +44,7 @@ function Home() {
     <header className={styles.modalHeader}>
       <h2 className={styles.dualTitle}>
         <span className={styles.partWhite}>MIRËSEVINI</span>
-        <span className={styles.partGreen}>MBRET!</span>
+        <span className={styles.partGreen}>{name}</span>
       </h2>
       <p className={styles.modalSubtitle}>Llogaria juaj u krijua me sukses</p>
     </header>
@@ -57,6 +58,11 @@ function Home() {
       onClick={() => navigate("/dashboard")}
     >
       Vazhdo te Paneli
+    </button>
+    <button className={styles.closeBtn}
+  /* To "close" a modal coming from location.state, we just clear the state */
+  onClick={() => navigate("/", { replace: true, state: {} })}>
+      Close
     </button>
   </div>
 </Modal>

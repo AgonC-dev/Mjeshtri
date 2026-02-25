@@ -103,7 +103,7 @@ useEffect(() => {
   )}
 </div>
   
-  {!loading && featuredWorkers.length > 0 && (
+  {!loading && featuredWorkers.length === 0 && (
     <div className={styles.viewAll}>
       <button className={styles.viewAllButton} onClick={() => navigate('/workers')}>
         Shiko të gjithë mjeshtërit

@@ -8,7 +8,7 @@ import ContactForm from '../ContactForm/ContactForm';
 
 const functions = getFunctions();
 
-function WhatsAppButton({ id, phoneNumber, workerName}) {
+function WhatsAppButton({ workerId, phoneNumber, workerName, disabled}) {
 const [showContactModal, setShowContactModal] = useState(false);
 
 return (
@@ -16,6 +16,7 @@ return (
       <button 
         className={styles.button} 
         onClick={() => setShowContactModal(true)}
+        disabled={disabled}
       >
         Kontakto në WhatsApp
       </button>
@@ -25,7 +26,7 @@ return (
         onClose={() => setShowContactModal(false)}
       >
         <ContactForm 
-          workerId={id}
+          workerId={workerId}
           workerPhone={phoneNumber}
           workerName={workerName}
           onClose={() => setShowContactModal(false)}

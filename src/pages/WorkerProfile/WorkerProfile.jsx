@@ -1,270 +1,326 @@
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from "../../api/firebase.js";
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import WhatsAppButton from '../../components/WhatsAppButton/WhatsAppButton'
-import styles from './WorkerProfile.module.css'
-import { useEffect, useState } from 'react';
-
-// Mock data - in a real app, this would come from an API
+import WhatsAppButton from '../../components/WhatsAppButton/WhatsAppButton';
+import styles from './WorkerProfile.module.css';
+import MapPin from '../../assets/Mappin.png';
+import Verified from '../../assets/verified.png';
 
 function WorkerProfile() {
-  const { id, slug } = useParams()
+  const { id, slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const [worker, setWorker] = useState(location.state?.workerData || null)
-  const [loading, setLoading] = useState(!worker);
+
+  // Initialize with state if available (prevents loading flicker when navigating from home)
+  const [worker, setWorker] = useState(location.state?.workerData || null);
   const [reviews, setReviews] = useState([]);
-useEffect(() => { 
-  window.scroll(0, 0);
+  const [loading, setLoading] = useState(!worker);
 
- const fetchWorkerAndReviews = async () => {
-  if (!worker) setLoading(true);
+  const [isFav, setIsFav] = useState(false);
 
-  try {
-    let finalWorkerData = worker;
 
-    // 1. GET THE WORKER
-    if (!finalWorkerData) {
-      if (id) {
-        // DIRECT HIT (Fastest)
-        const docRef = doc(db, "workers", id);
-        const snap = await getDoc(docRef);
-        if (snap.exists()) {
-          finalWorkerData = { id: snap.id, ...snap.data() };
+  useEffect(() => {
+    const checkPersistence = () => {
+      const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]")
+      setIsFav(saved.some(item => item.id === worker.id));
+    }
+
+    checkPersistence();
+
+    window.addEventListener("favoritesUpdated", checkPersistence)
+    window.addEventListener("storage", checkPersistence)
+
+    return () => {
+      window.removeEventListener("favoritesUpdated", checkPersistence);
+     window.removeEventListener("storage", checkPersistence);
+    }
+  }, [worker.id])
+
+  // Sync with localStorage on mount
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]");
+    setIsFav(saved.some(item => item.id === worker.id));
+  }, [worker.id]);
+
+  const toggleFavorite = (e) => {
+    e.stopPropagation(); // Prevents clicking the card
+    e.preventDefault();
+
+    const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]");
+    const isAlreadyFav = saved.some(item => item.id === worker.id);
+
+    let updated;
+    if (isAlreadyFav) {
+      updated = saved.filter(item => item.id !== worker.id);
+    } else {
+      updated = [...saved, {
+        id: worker.id,
+        fullName: worker.fullName,
+        category: worker.category,
+        profilePic: worker.profilePic,
+        phoneNum: worker.phoneNumber || worker.phoneNum,
+        city: worker.city
+      }];
+    }
+
+    localStorage.setItem("mjeshtri_favs", JSON.stringify(updated));
+    setIsFav(!isAlreadyFav);
+
+    // Tell the Header to update its badge
+    window.dispatchEvent(new Event("favoritesUpdated"));
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const fetchWorkerAndReviews = async () => {
+      if (!worker) setLoading(true);
+
+      try {
+        let finalWorkerData = worker;
+
+        // 1. GET THE WORKER DATA
+        if (!finalWorkerData) {
+          if (id) {
+            // DIRECT HIT (Fastest - usually from internal navigation)
+            const docRef = doc(db, "workers", id);
+            const snap = await getDoc(docRef);
+            if (snap.exists()) {
+              finalWorkerData = { id: snap.id, ...snap.data() };
+            }
+          } else if (slug) {
+            // SLUG SEARCH (For personalized links)
+          
+            const q = query(collection(db, "workers"), where("slug", "==", slug));
+            const qSnap = await getDocs(q);
+            if (!qSnap.empty) {
+              const data = qSnap.docs[0].data();
+
+              if(data.isPro) {
+                finalWorkerData = { id: qSnap.docs[0].id, ...data};
+              } else {
+                finalWorkerData = null;
+              }
+            } 
+          }
         }
-      } else if (slug) {
-        // QUERY (Necessary for slugs)
-        const q = query(collection(db, "workers"), where("slug", "==", slug));
-        const qSnap = await getDocs(q);
-        if (!qSnap.empty) {
-          finalWorkerData = { id: qSnap.docs[0].id, ...qSnap.docs[0].data() };
+
+        if (finalWorkerData) {
+          setWorker(finalWorkerData);
+
+          // 2. GET APPROVED REVIEWS
+          const qReviews = query(
+            collection(db, "reviews"),
+            where("workerId", "==", finalWorkerData.id),
+            where("status", "==", "approved"), // Only show approved ones
+            orderBy("createdAt", "desc")
+          );
+          const revSnap = await getDocs(qReviews);
+          setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data() })));
         }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    if (finalWorkerData) {
-      setWorker(finalWorkerData);
+    fetchWorkerAndReviews();
+  }, [id, slug]); // Listen to both ID and Slug changes
 
-      // 2. GET THE REVIEWS (Always a query because one worker has many reviews)
-      const qReviews = query(
-        collection(db, "reviews"),
-        where("workerId", "==", finalWorkerData.id), // Use the ID we just found
-        orderBy("createdAt", "desc")
-      );
-      const revSnap = await getDocs(qReviews);
-      setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
-
-  fetchWorkerAndReviews();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [id]);
-
-  if (loading) return <div className={styles.loading}>Duke u ngarkuar...</div>;
-
+  if (loading) return <div className={styles.loader}><span></span></div>;
   if (!worker) {
-    return (
-      <div className={styles.notFound}>
-        <p>Mjeshtri nuk u gjet.</p>
-        <button onClick={() => navigate('/workers')} className={styles.backButton}>
-          Kthehu te lista
-        </button>
-      </div>
-    )
-  }
-
-const averageRating = (worker.reviewCount && worker.totalRatingPoints) 
-  ? (worker.totalRatingPoints / worker.reviewCount).toFixed(1) 
-  : 0;
-
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating)
-    const hasHalfStar = rating % 1 >= 0.5
-    const stars = []
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<span key={i}>⭐</span>)
-    }
-    if (hasHalfStar) {
-      stars.push(<span key="half">✨</span>)
-    }
-    const emptyStars = 5 - Math.ceil(rating)
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<span key={`empty-${i}`}>☆</span>)
-    }
-    return stars
-  }
-
-  const VerifiedBadge = ({ size = 18 }) => (
-  <svg 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    className={styles.badge}
-  >
-    {/* The "Burst" Shape */}
-    <path 
-      d="M9.707 2.13a3 3 0 014.586 0l.867.996a1 1 0 00.755.343l1.319-.015a3 3 0 013.243 3.243l-.015 1.319a1 1 0 00.343.755l.996.867a3 3 0 010 4.586l-.996.867a1 1 0 00-.343.755l.015 1.319a3 3 0 01-3.243 3.243l-1.319-.015a1 1 0 00-.755.343l-.867.996a3 3 0 01-4.586 0l-.867-.996a1 1 0 00-.755-.343l-1.319.015a3 3 0 01-3.243-3.243l.015-1.319a1 1 0 00-.343-.755l-.996-.867a3 3 0 010-4.586l.996-.867a1 1 0 00.343-.755l-.015-1.319a3 3 0 013.243-3.243l1.319.015a1 1 0 00.755-.343l.867-.996z" 
-      fill="#0095f6" /* The classic Instagram Blue */
-    />
-    {/* The Checkmark */}
-    <path 
-      d="M17.333 9.333L10.933 15.733L7.733 12.533" 
-      stroke="white" 
-      strokeWidth="2.5" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-    />
-  </svg>
-);
-
   return (
-    <div className={styles.profile}>
-      <div className={styles.header}>
-        <div className={styles.imageContainer}>
-          <img src={worker.profilePic} alt={worker.name} className={styles.image} />
-          <div className={styles.onlineBadge}></div>
+    <div className={styles.errorPageWrapper}>
+      <div className={styles.errorCircleBg}></div>
+      <div className={styles.errorCard}>
+        <div className={styles.errorIconWrapper}>
+           <span className={styles.lockEmoji}>🔒</span>
+           <div className={styles.iconPulse}></div>
         </div>
-        <div className={styles.info}>
-          <h1 className={styles.name}>
-            {worker.fullName} 
-            {worker.isPro && <VerifiedBadge size={22} />}
-          </h1>
-          <p className={styles.category}>{worker.category}</p>
-          <p className={styles.city}>{worker.city}</p>
-          <div className={styles.rating}>
-  <span className={styles.stars}>{renderStars(averageRating)}</span>
-  
-  <span className={styles.ratingValue}>
-    {averageRating > 0 ? averageRating : "Pa vlerësime"}
-  </span>
-
-  {/* Only show the count if there are reviews */}
-  {worker.reviewCount > 0 && (
-    <span className={styles.reviewCount}>
-      {worker.reviewCount} {worker.reviewCount === 1 ? 'vlerësim' : 'vlerësime'}
-    </span>
-  )}
-</div>
-          {worker.bio &&   
-            <div className={styles.bio}>
-              <p>{worker.bio}</p>
-            </div>}
+        
+        <h1 className={styles.errorTitle}>Link i Kufizuar</h1>
+        <p className={styles.errorSubtext}>
+          Ky profil kërkon një anëtarësim <span>PRO</span> për t'u hapur nëpërmjet linkut të personalizuar.
+        </p>
+        
+        <div className={styles.errorActionArea}>
+          <button onClick={() => navigate('/')} className={styles.backBtn}>
+            Kthehu në Ballinë
+          </button>
+          <p className={styles.helpText}>Nëse jeni ju pronari i këtij profili, ju lutem kyçuni.</p>
         </div>
       </div>
-
-    <div className={styles.stats}>
-  {/* WhatsApp Stat Card */}
-  <div className={styles.statCard}>
-    <div className={styles.statHeader}>
-      {/* The big number is now the SUM of clicks and reviews */}
-      <div className={styles.statValue}>
-        {(worker.whatsappRequests || 0) + (reviews?.length || 0)}
-      </div>
-      <div className={styles.infoTooltip}>
-        <span className={styles.infoIcon}>?</span>
-        <span className={styles.tooltipText}>
-          Ky profil monitorohet automatikisht. Raporti mes klikimeve dhe vlerësimeve duhet të jetë logjik për të ruajtur statusin "I Verifikuar".
-        </span>
-      </div>
     </div>
-    <div className={styles.statLabel}>Klientë të interesuar</div>
-    
-    {/* Transparency Breakdown */}
-    <div className={styles.transparencyBreakdown}>
-      <span>{worker.whatsappRequests || 0} Klikime</span>
-      <span className={styles.dot}>•</span>
-      <span>{reviews?.length || 0} Vlerësime</span>
-    </div>
-
-    <div className={styles.verificationBadge}>
-      <span className={styles.checkIcon}>✓</span>
-      Interaksione të Verifikuara
-    </div>
-  </div>
-
-  {/* Experience Stat Card */}
-  <div className={styles.statCard}>
-    <div className={styles.statValue}>{worker.experienceYears}</div>
-    <div className={styles.statLabel}>Vite përvojë</div>
-    <div className={styles.verificationBadge}>
-      <span className={styles.checkIcon}>✓</span>
-      Përvojë e konfirmuar
-    </div>
-  </div>
-</div>
-
-      <div className={styles.portfolioGrid}>
-  {/* Add a check to see if portfolio exists and has items */}
-       <section className={styles.portfolioSection}>
-  {worker.portfolio && worker.portfolio.length > 0 && (
-    <>
-      <h2 className={styles.portfolioTitle}>Portofoli i punimeve</h2>
-      <div className={styles.portfolioFlex}>
-        {worker.portfolio.map((image, index) => (
-          <div key={index} className={styles.portfolioItem}>
-            <img 
-              src={image} 
-              alt={`Punë ${index + 1}`} 
-              className={styles.portfolioImage} 
-            />
-          </div>
-        ))}
-      </div>
-    </>
-  )}
-</section>
-</div>
-{/* REVIEWS SECTION */}
- <section className={styles.reviewsSection}>
-  <div className={styles.reviewHeaderMain}>
-    <h2 className={styles.sectionTitle}>Eksperiencat e Klientëve</h2>
-    <span className={styles.reviewCount}>{ reviews?.length === 1 ? "1 Vlerësim" : `${reviews?.length} Vlerësime` }</span>
-  </div>
-
-  <div className={styles.reviewsGrid}>
-    {reviews.length === 0 ? (
-      <div className={styles.emptyState}>Nuk ka vlerësime ende.</div>
-    ) : (
-      reviews.map((r, index) => (
-        <div key={r.id} className={styles.reviewCard} style={{ "--delay": `${index * 0.1}s` }}>
-          <div className={styles.reviewTop}>
-            <div className={styles.starBadge}>
-              <span className={styles.starIcon}>★</span>
-              <span className={styles.ratingNumber}>{r.rating}</span>
-            </div>
-            <div className={styles.verifiedTag}>I Verifikuar</div>
-          </div>
-          
-          <p className={styles.comment}>{r.comment}</p>
-          
-          <div className={styles.reviewFooter}>
-            <div className={styles.customerInfo}>
-              <div className={styles.avatarMini}>{r.customerName?.[0] || "K"}</div>
-              <strong>{r.customerName || "Klient"}</strong>
-            </div>
-            <span className={styles.reviewDate}>
-               {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
-            </span>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-</section>
-
-      <div className={styles.ctaSection}>
-        <WhatsAppButton id={worker.id || worker.uid} phoneNumber={worker.phoneNumber} />
-      </div>
-    </div>
-  )
+  );
 }
 
-export default WorkerProfile
+
+
+  return (
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.heroBg} style={{ backgroundImage: `url(${worker.profilePic})` }}></div>
+        <div className={styles.heroContent}>
+          <div className={styles.heroMain}>
+            <div className={styles.visualSide}>
+              <div className={styles.imageFrame}>
+                <img src={worker.profilePic} alt={worker.fullName} className={styles.mainAvatar} />
+                <div className={styles.expTag}>
+                   <span className={styles.expNum}>{worker.experienceYears || 0}+</span>
+                   <span className={styles.expLabel}>VITE PËRVOJË</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.textSide}>
+               <button 
+                    onClick={toggleFavorite} 
+                    className={`${styles.heartBtn} ${isFav ? styles.active : ''}`}
+                    aria-label="Favorite"
+                  >
+                    <div className={styles.heartContainer}>
+                      {/* The Outline Heart */}
+                      <svg className={styles.heartOutline} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      
+                      {/* The Filled Heart */}
+                      <svg className={styles.heartFill} viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    </div>
+              
+                    {/* Floating particles effect for extra "pop" */}
+                    {isFav && <div className={styles.particles}>
+                      <span></span><span></span><span></span><span></span>
+                    </div>}
+                  </button>
+              <div className={styles.topBadges}>
+                <span className={styles.catBadge}>{worker.category}</span>
+                {worker.isPro && <span className={styles.verifiedPro}>PRO</span>}
+                {worker.isVerified && <span className={styles.verifiedBadge}>
+                   <img src={Verified} alt='verified badge' />
+                </span>}
+              </div>
+              <h1 className={styles.heroTitle}>{worker.fullName}</h1>
+              <div className={styles.heroStats}>
+                <div className={styles.statItem}>
+                  <img src={MapPin} alt="location" />
+                  <span>{worker.city}, KS</span>
+                </div>
+                <div className={styles.statDivider}></div>
+                <div className={styles.statItem}>
+                  <span className={styles.starIcon}>★</span>
+                  <span>{worker.rating || "5.0"} Score</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className={styles.bodyContainer}>
+        <div className={styles.contentGrid}>
+          <main className={styles.detailsArea}>
+            <div className={styles.cardSection}>
+              <h3 className={styles.miniTitle}>Rreth Meje</h3>
+              <p className={styles.descriptionText}>{worker.bio || "Ky mjeshtër nuk ka shtuar ende një biografi."}</p>
+            </div>
+
+            {worker.portfolio?.length > 0 && (
+              <div className={styles.cardSection}>
+                <h3 className={styles.miniTitle}>Punimet e fundit</h3>
+                <div className={styles.portfolioScrollContainer}>
+                  <div className={styles.portfolioDisplay}>
+                    {worker.portfolio.map((img, i) => (
+                      <div key={i} className={styles.portfolioItem}>
+                        <img src={img} alt={`Work ${i}`} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+
+          <aside className={styles.bookingSidebar}>
+            <div className={styles.stickyCard}>
+              <div className={styles.priceHeader}>
+                <p>Tarifa Fillestare</p>
+                <h2>{worker.startingPrice ? `${worker.startingPrice}€` : "Me marrëveshje"}</h2>
+              </div>
+              <div className={styles.actionButtons}>
+                <WhatsAppButton 
+                  workerId={worker.id} 
+                  phoneNumber={worker.phoneNumber} 
+                  workerName={worker.fullName} 
+                />
+                <a 
+                  href={`https://wa.me/${worker.phoneNumber.replace(/\D/g, '')}`} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className={styles.secondaryCallBtn}
+                >
+                   Bisedo direkt
+                </a>
+              </div>
+              <div className={styles.trustFooter}>
+                <p>✓ Verifikuar nga Mjeshtri.ks</p>
+                <p>✓ Reagim i shpejtë</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <section className={styles.feedbackSection}>
+          <div className={styles.feedbackHeader}>
+            <h2>Vlerësimet ({reviews.length})</h2>
+          </div>
+          <div className={styles.feedbackGrid}>
+            {reviews.length > 0 ? (
+              reviews.map((r) => (
+                <div key={r.id} className={styles.modernReviewCard}>
+                  <div className={styles.reviewScore}>
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className={i < r.rating ? styles.starFilled : styles.starEmpty}>★</span>
+                    ))}
+                  </div>
+                  <p className={styles.reviewText}>"{r.comment}"</p>
+                  <div className={styles.reviewerInfo}>
+                    <div className={styles.reviewerAvatar}>{r.customerName?.[0] || "?"}</div>
+                    <div>
+                      <p className={styles.reviewerName}>{r.customerName}</p>
+                      <p className={styles.reviewDate}>
+                        {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={styles.noReviews}>Ende nuk ka vlerësime për këtë mjeshtër.</p>
+            )}
+          </div>
+        </section>
+      </div>
+
+      <div className={styles.mobileAction}>
+        <div className={styles.mobileActionInner}>
+          <div className={styles.mobilePricing}>
+             <strong>{worker.startingPrice ? `${worker.startingPrice}€` : "Tarifa"}</strong>
+             <span>Fillon nga</span>
+          </div>
+          <WhatsAppButton 
+            workerId={worker.id} 
+            phoneNumber={worker.phoneNumber} 
+            workerName={worker.fullName} 
+          />
+        </div>
+      </div>
+    </div> 
+  );
+}
+
+export default WorkerProfile;

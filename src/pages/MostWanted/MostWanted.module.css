@@ -1,0 +1,144 @@
+:root {
+  --primary: #2563eb;
+  --gold: #fbbf24;
+  --up: #22c55e;
+  --down: #ef4444;
+  --stable: #94a3b8;
+}
+
+.pageWrapper { background: #f8fafc; min-height: 100vh; padding-bottom: 5rem; }
+
+.topBar {
+  background: white; padding: 1.2rem 4rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1000;
+}
+
+.mainTitle { font-size: 1.5rem; font-weight: 800; }
+
+.liveIndicator {
+  font-size: 0.65rem; font-weight: 900; color: #ef4444;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.liveIndicator::before {
+  content: ''; width: 6px; height: 6px; background: #ef4444; border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.filterPills { display: flex; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
+.pill, .pillActive { padding: 8px 16px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.pill { color: #64748b; background: transparent; }
+.pillActive { background: white; color: var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+
+.contentArea { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.sectionLabel { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 1px; }
+
+.mainGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+
+/* ITEM WRAPPERS */
+.eliteItem, .challengerItem {
+  position: relative; opacity: 0;
+  animation: cardEnter 0.5s forwards; animation-delay: var(--delay);
+}
+
+/* RANK BADGE */
+.eliteItem::before, .challengerItem::before {
+  content: "#" attr(data-rank); position: absolute; top: -10px; left: -10px;
+  width: 35px; height: 35px; background: #0f172a; color: white;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; font-weight: 900; z-index: 50; font-size: 0.85rem;
+}
+.eliteItem[data-rank="1"]::before { background: var(--gold); color: #000; }
+
+/* TREND INDICATOR */
+.trendIndicator {
+  position: absolute; top: 12px; right: 12px; z-index: 50;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.trendArrow { font-size: 0.8rem; font-weight: 900; }
+.trendText { font-size: 0.5rem; font-weight: 800; margin-top: -2px; }
+
+/* TREND COLORS */
+.rising { color: var(--up); border: 1px solid var(--up); }
+.falling { color: var(--down); border: 1px solid var(--down); }
+.stable { color: var(--stable); border: 1px solid var(--border-light); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) { .mainGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 650px) { .mainGrid { grid-template-columns: 1fr; } .topBar { flex-direction: column; gap: 10px; } }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes cardEnter { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.loaderContainer { display: flex; justify-content: center; padding: 5rem; }
+.spinner { width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+:root {
+  --rising-glow: rgba(34, 197, 94, 0.6);
+  --falling-glow: rgba(239, 68, 68, 0.6);
+}
+
+.pageWrapper { background: #f8fafc; min-height: 100vh; padding-bottom: 5rem; }
+
+.topBar {
+  background: white; padding: 1rem 4rem; display: flex; 
+  justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1000;
+}
+
+.livePulse {
+  width: 10px; height: 10px; background: #ef4444; border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.mainGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+
+/* TREND INDICATOR WITH GLOW */
+.trendIndicator {
+  position: absolute; top: 15px; right: 15px; z-index: 50;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 6px 12px; border-radius: 8px; font-weight: 900;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.rising {
+  background: #22c55e; color: white;
+  box-shadow: 0 0 15px var(--rising-glow);
+  animation: glow-green 1.5s infinite alternate;
+}
+
+.falling {
+  background: #ef4444; color: white;
+  box-shadow: 0 0 15px var(--falling-glow);
+}
+
+.trendArrow { font-size: 1rem; line-height: 1; }
+.trendText { font-size: 0.55rem; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* ANIMATIONS */
+@keyframes glow-green {
+  from { box-shadow: 0 0 5px var(--rising-glow); }
+  to { box-shadow: 0 0 20px var(--rising-glow); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* CARDS */
+.eliteItem, .challengerItem { position: relative; transition: 0.3s; }
+.sectionLabel { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 1.5rem; }
+
+@media (max-width: 1000px) { .mainGrid { grid-template-columns: 1fr; } }

@@ -21,16 +21,27 @@
   width: 30%;
 }
 
-
 .navLink {
-
-  height: 35px;
-  border-radius: 40px;
-    font-family: 'Graphik', sans-serif;
+  color: #71717a;
+  padding: 6px 18px;
+  border: 1px solid transparent;
+  border-radius: 100px; /* Capsule shape */
   font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 3%;
-  opacity: 0.6;
+  transition: 0.2s;
+}
+
+.active {
+  color: #000000 !important;
+  background-color: #ffffff;
+  border-color: #e4e4e7; /* Light grey border so it doesn't disappear on white */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* If the header is dark, we use this override */
+.darkHeader .active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .navLinkLogIn {
@@ -50,6 +61,10 @@
   line-height: 14px;
 }
 
+.logActive {
+  color: white;
+}
+
 .searchIcon {
 
  border-radius: 40px;
@@ -65,15 +80,6 @@
 
 }
 
-.navLink.active {
-    height: 35px;
-  border-radius: 40px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 3%;
-  opacity: 1;
-}
 
 
 
@@ -141,6 +147,9 @@
   font-size: 1.05rem;
   color: #1a202c; /* Deep slate */
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .userEmail {
@@ -272,6 +281,417 @@
 .logoutButton:hover {
   background: #fef2f2;
 }
+
+.strengthField {
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #edf2f7;
+}
+
+.strengthLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.progressBar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease, background-color 0.5s ease; /* Smooth color/width change */
+}
+
+.strengthHint {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+
+.criticalWarning {
+  background: #fff5f5; /* Soft red alert */
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #fed7d7;
+}
+
+.warningHeader {
+  color: #c53030; /* Deep red */
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.warningText {
+  font-size: 0.75rem;
+  color: #742a2a;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.fixLink {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c53030;
+  text-decoration: underline;
+}
+
+.fixLink:hover {
+  color: #9b2c2c;
+}
+
+.strengthHint {
+  font-size: 0.72rem;
+  color: #64748b; /* Subtle slate grey */
+  margin-top: 10px;
+  line-height: 1.4;
+  padding: 0 2px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+/* Optional: Add a slight fade-in animation for when the hint changes */
+.strengthHint {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.adminLink {
+  display: flex;
+  align-items: ce nter;
+  gap: 8px;
+  background-color: #fff7ed; /* Very light amber */
+  color: #c2410c; /* Deep amber/orange */
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid #fdba74; /* Orange-200 */
+  transition: all 0.2s ease;
+  margin-right: 12px;
+}
+
+.adminLink:hover {
+  background-color: #ffedd5;
+  border-color: #fb923c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.favoritesTrigger {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    margin-right: 10px; /* Space between heart and search */
+    transition: transform 0.2s ease;
+}
+
+.favoritesTrigger:hover {
+    transform: scale(1.1);
+}
+
+.favBadge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: #ef4444; /* Red */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.heartIcon {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* --- CONTAINER --- */
+.favModalContainer {
+  position: relative;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 550px; /* Wider container */
+  min-height: 300px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* --- CLOSE BUTTON --- */
+.modalCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f1f5f9;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #d31010;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  transform: rotate(90deg);
+}
+
+
+
+/* --- HEADER --- */
+.favHeader {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+
+.favHeader h2 {
+  font-size: 1.75rem;
+  color: #1e293b;
+  font-weight: 800;
+  margin: 0;
+}
+
+.favHeader p {
+  color: #64748b;
+  margin-top: 5px;
+  font-size: 0.95rem;
+}
+
+/* --- LIST ITEM --- */
+.favItem {
+  display: flex;
+  align-items: center;
+  padding: 18px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  animation: slideFadeIn 0.4s forwards ease-out;
+  opacity: 0;
+}
+
+.favItem:hover {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
+
+.favAvatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.favMainInfo {
+  margin-left: 20px;
+  margin-right: 20px;
+  flex: 1;
+}
+
+.favMainInfo h4 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #1e293b;
+}
+
+.favTag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 2px 10px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.favLocation {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* --- ACTIONS --- */
+.favActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.favCallBtn {
+  background: #22c55e;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.2s;
+}
+
+.favViewBtn {
+  background: #1e293b;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.favRemoveBtn {
+  background: #fee2e2;
+  border: none;
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.favCallBtn:hover { background: #16a34a; transform: scale(1.05); }
+.favViewBtn:hover { background: #334155; }
+.favRemoveBtn:hover { background: #fecaca; transform: scale(1.05); }
+
+/* --- FOOTER & EMPTY STATE --- */
+.favFooter {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.clearAllLink {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.confirmModal {
+  padding: 30px;
+  text-align: center;
+  background: white;
+  border-radius: 25px;
+  max-width: 400px;
+}
+
+.confirmIcon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  animation: shake 0.5s ease infinite alternate;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.confirmYes, .confirmNo {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+
+.confirmYes { background: #ef4444; color: white; }
+.confirmNo { background: #f1f5f9; color: #475569; }
+
+/* --- ANIMATIONS --- */
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: scale(0.9) translateY(40px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes itemReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(5deg); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.favBadge {
+    animation: heartBeat 1.5s infinite;
+}
+.emptyIllustration { font-size: 4rem; margin-bottom: 10px; opacity: 0.3; }
+
+
+@keyframes slideFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile tweak: If the screen is small, maybe hide the text and show only the gear */
+@media (max-width: 768px) {
+  .adminLink {
+    padding: 6px 8px;
+  }
+  .adminLink span {
+    display: none; /* If you wrap the text in a span */
+  }
+}
 /* --- TABLETS & SMALL LAPTOPS (under 1024px) --- */
 @media (max-width: 1024px) {
   .container {
@@ -342,12 +762,3 @@
 }
 
 /* --- DARK THEME OVERRIDES (Safety check) --- */
-[data-theme="dark"] .searchIcon {
-  background-color: var(--bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .navLinkLogIn {
-  background-color: var(--accent-emerald); /* Using your emerald for the button in dark mode */
-  color: #000;
-}

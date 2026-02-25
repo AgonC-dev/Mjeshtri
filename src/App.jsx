@@ -23,6 +23,9 @@ import Privacy from "./pages/Privacy/Privacy";
 import Terms from "./pages/Terms/Terms";
 import About from "./pages/About/About";
 import Help from "./pages/Help/Help";
+import AdminDashboard from "./pages/Admin/Admin";
+import AdminEnroll from "./components/AdminEnroll";
+import MostWanted from "./pages/MostWanted/MostWanted";
 
 
 const queryClient = new QueryClient();
@@ -46,7 +49,10 @@ const router = createBrowserRouter([
       { path: "terms", element: <Terms />},
       { path: "about", element: <About />},
       { path: "help", element: <Help />},
-      { path: ":slug", element: <WorkerProfile />}
+      { path: ":slug", element: <WorkerProfile />},
+      { path: "admin", element: <AdminDashboard />},
+      { path: 'enroll', element: <AdminEnroll />},
+      { path: 'wanted', element: <MostWanted />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},

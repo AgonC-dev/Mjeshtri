@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp, increment, writeBatch } from "firebase/firestore";
 import styles from "./ProfileSettings.module.css";
 import {
   verifyBeforeUpdateEmail,
@@ -104,11 +104,21 @@ const ProfileSettings = () => {
       const userUid = auth.currentUser.uid;
 
       const userDocRef = doc(db, "workers", userUid);
-      await updateDoc(userDocRef, {
+      const statusRef = doc(db, "metadata", "globalStats");
+
+      const batch = writeBatch(db);
+
+      batch.update(userDocRef, {
         isActive: false,
         deactivatedAt: serverTimestamp(),
-      });
-
+      })
+    
+      batch.update(statusRef, {
+        workerCount: increment(-1)
+      })
+      
+      await batch.commit();
+      
       await auth.currentUser.delete();
 
       setStatus({ msg: "Llogaria u fshi me sukses.", type: "success" });
@@ -340,7 +350,12 @@ const ProfileSettings = () => {
                 </div>
                 <div className={styles.buttonGroup}>
                   <button type="submit" className={styles.deleteButtonFull}>Konfirmo Fshirjen</button>
-                  <button type="button" className={styles.cancelButton} onClick={() => setIsEditing(p => ({ ...p, deleting: false }))}>Anulo</button>
+                  <button type="button" className={styles.cancelButton} 
+                   onClick={() => {
+                    setIsEditing(p => ({ ...p, deleting: false }));
+                    setPassword({ current: "", next: "" }); // Clear the sensitive data
+                  }}
+                    >Anulo</button>
                 </div>
               </form>
             )}

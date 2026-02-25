@@ -3,9 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./WorkerRegister.module.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../api/firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, increment, updateDoc } from "firebase/firestore";
 import PhoneInput from 'react-phone-input-2';
-import Modal from "../../components/Modal/Modal";
 import 'react-phone-input-2/lib/style.css';
 
 const cities = [
@@ -24,17 +23,11 @@ const categories = [
   'Klima/AC',
   'Plastifikim',
   'Pastrim',
-  'Fotograf',
-  'Përkthyes',
-  'Avokat',
-  'Kontabilist',
   'Kopshtar',
   'Mekanik',
   'Moler',
   'Murator',
   'Vullkanizer',
-  'Programer',
-  'Dizajner Grafik'
 ];
 
 function WorkerRegister() {
@@ -107,11 +100,11 @@ function WorkerRegister() {
         formData.password
       );
       const user = userCrendentials.user;
-     
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
   const baseSlug = formData.name.toLowerCase()
   .trim()
-  .replace(/[^\w\s-]/g, '')
+  .replace(/[^\w\s-]/g, '') 
   .replace(/[\s_-]+/g, '-')
   .replace(/^-+|-+$/g, '');
 
@@ -123,8 +116,9 @@ const initialSlug = `${baseSlug}-${user.uid.substring(0, 4)}`;
 await setDoc(doc(db, "workers", user.uid), {
   uid: user.uid,
   fullName: formData.name || "",
+  searchName: (formData.name || "").trim().toLowerCase(),
   email: formData.email || "",
-  phoneNumber: formData.phoneNumber || "",
+  phoneNumber: String(formData.phoneNumber || ""),
   slug: initialSlug, 
 
   // Use fallbacks to prevent "Bad Request"
@@ -148,13 +142,21 @@ await setDoc(doc(db, "workers", user.uid), {
   isActive: true,
   isVerified: false,
   
+  lastFingerprint: "", // Will be populated when they first use the dashboard
   createdAt: serverTimestamp(),
 });
 
+const statsRef = doc(db, "metadata", "globalStats");
+
+await updateDoc(statsRef, {
+  workerCount: increment(1)
+});
 
       
-      navigate("/", { state: { modalOpen: true } });
+      navigate("/", { state: { modalOpen: true, name: formData.name } });
     } catch(err) {
+
+
       
      switch (err.code) {
       case 'auth/email-already-in-use':
@@ -197,11 +199,12 @@ await setDoc(doc(db, "workers", user.uid), {
      
 
 
+
  return (
   <div className={styles.register}>
     <h1 className={styles.title}>Regjistrohu si Mjeshtër</h1>
     
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form  onSubmit={handleSubmit} className={styles.form}>
       
       {/* STEP 1: Account Credentials */}
       {step === 1 && (
@@ -222,13 +225,20 @@ await setDoc(doc(db, "workers", user.uid), {
             <label className={styles.label}>Fjalëkalimi *</label>
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} required className={styles.input} placeholder="Fjalëkalimi" />
           </div>
-
-           <div className={styles.formGroup}>
-            <div className={styles.checkboxRow}>
-              <input type="checkbox" name="acceptTerms" checked={formData.acceptTerms} onChange={handleInputChange} className={styles.checkbox} />
-              <label className={styles.tosText}>Pranoj <a href="/terms" className={styles.tosLink}>Kushtet e Shërbimit</a></label>
-            </div>
-          </div>
+<div className={styles.formGroup}>
+  <label className={styles.checkboxRow}>
+    <input 
+      type="checkbox" 
+      name="acceptTerms" 
+      checked={formData.acceptTerms} 
+      onChange={handleInputChange} 
+      className={styles.checkbox} 
+    />
+    <span className={styles.tosText}>
+      Pranoj <Link to="/terms" className={styles.tosLink} onClick={(e) => e.stopPropagation()}>Kushtet e Shërbimit</Link>
+    </span>
+  </label>
+</div>
           
           <button type="submit" className={styles.submitButton}>Vazhdo (Hapi Tjetër)</button>
         </div>
@@ -298,6 +308,8 @@ await setDoc(doc(db, "workers", user.uid), {
 
   
 );
+
+
 }
 
 export default WorkerRegister;

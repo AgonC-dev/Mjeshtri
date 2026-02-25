@@ -12,4 +12,13 @@
   letter-spacing: -0.02em;
   text-align: center;
   color: #FFFFFF;
+  cursor: pointer; /* Normal hand icon when active */
+  transition: all 0.2s ease;
+}
+
+.button:disabled {
+  cursor: not-allowed;     /* The "Stop Sign" icon */
+  opacity: 0.6;            /* Makes it look visually "faded" */
+  filter: grayscale(0.4);  /* Desaturates color for extra feedback */
+  pointer-events: none;    /* Optional: prevents hover effects/clicks entirely */
 }

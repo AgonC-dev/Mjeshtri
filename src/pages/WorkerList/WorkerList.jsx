@@ -6,7 +6,7 @@ import styles from './WorkerList.module.css'
 import { useQuery } from '@tanstack/react-query'
 import { fetchUsers } from '../../api/https'
 
-const cities = ['Të gjitha', 'Prishtinë', 'Prizren', 'Gjakovë', 'Mitrovicë', 'Pejë']
+const cities = ['Të gjitha', 'Prishtinë', 'Ferizaj', 'Prizren', 'Gjakovë', 'Mitrovicë', 'Pejë']
 const categories = [
   'Të gjitha',
   'Instalues',
@@ -14,17 +14,11 @@ const categories = [
   'Klima/AC',
   'Plastifikim',
   'Pastrim',
-  'Fotograf',
-  'Përkthyes',
-  'Avokat',
-  'Kontabilist',
   'Kopshtar',
   'Mekanik',
   'Moler',
   'Murator',
   'Vullkanizer',
-  'Programer',
-  'Dizajner Grafik'
 ]
 
 function WorkerList() {
@@ -65,26 +59,17 @@ function WorkerList() {
 
     if (categoryParam) {
       const categoryMap = {
-  // Original categories
+
      plumber: 'Instalues',
      electrician: 'Elektricist',
      hvac: 'Klima/AC',
      tiling: 'Plastifikim',
      cleaning: 'Pastrim',
-  
-  // Your new categories
-     photography: 'Fotograf',
-     translator: 'Përkthyes',
-     lawyer: 'Avokat',
-     accountant: 'Kontabilist',
      gardener: 'Kopshtar',
      mechanic: 'Mekanik',
      painter: 'Moler',
      mason: 'Murator',
-    'tire-service': 'Vullkanizer', // or 'gomister'
-     developer: 'Programer',
-     'graphic-design': 'Dizajner Grafik',
-  
+    'tire-service': 'Vullkanizer', 
     // All/Reset
      all: "Të gjitha"
 }
@@ -132,10 +117,16 @@ function WorkerList() {
     });
  
     return filtered.sort((a,b) => { 
-      const scoreA = (a.isPro ? 1000 : 0) + (Number(a.reviewCount) || 0)
-      const scoreB = (b.isPro ? 1000 : 0) + (Number(b.reviewCount) || 0)
+      const getScore = (w) => {
+        let score = 0;
 
-      return scoreB - scoreA;
+        if(w.isPro) score += 1000;
+        if(w.isVerified) score += 200;
+
+        score += (Number(w.reviewCount || 0) * 5);
+        return score;
+      }
+      return getScore(b) - getScore(a);
     }) 
   }, [allWorkers, debouncedSearchQuery, selectedCity, selectedCategory])
 

@@ -52,47 +52,53 @@ export default function ReviewModal({ user, onClose, sessions }) {
     }
   };
 
-  return (
-    <div className={styles.modalContent}>
-      <header className={styles.modalHeader}>
-        <h2>Zgjidhni Klientin</h2>
-        <p>Kërko vlerësim nga kontaktet e fundit që ju kanë shkruar:</p>
-      </header>
+   return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <header className={styles.modalHeader}>
+          <div className={styles.headerIcon}>⭐</div>
+          <h2>Zgjidhni Klientin</h2>
+          <p>Kërko vlerësim nga kontaktet e fundit:</p>
+        </header>
 
-      {loading ? (
-        <div className={styles.loader}>Duke ngarkuar...</div>
-      ) : (
-        <div className={styles.sessionList}>
-          {sessions.length === 0 ? (
-            <div className={styles.emptyState}>
-               <span className={styles.emptyIcon}>💬</span>
-               <p>Nuk u gjet asnjë kontakt i ri i disponueshëm për vlerësim.</p>
-            </div>
-          ) : (
-            sessions.map((s) => (
-              <div key={s.id} className={styles.sessionItem}>
-                <div className={styles.clientInfo}>
-                  <strong>{s.customerName}</strong>
-                  <span>{s.customerPhone}</span>
-                </div>
-                <button
-                  onClick={() => handleCreateLink(s.id, s.customerPhone)}
-                  disabled={generatingId !== null}
-                  className={styles.generateBtn}
-                >
-                  {generatingId === s.id ? (
-                    <span className={styles.spinner}>...</span>
-                  ) : (
-                    "Dërgo Linkun"
-                  )}
-                </button>
+        {loading ? (
+          <div className={styles.loaderContainer}>
+            <div className={styles.miniSpinner}></div>
+            <span>Duke ngarkuar...</span>
+          </div>
+        ) : (
+          <div className={styles.sessionList}>
+            {sessions.length === 0 ? (
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon}>💬</span>
+                <p>Nuk u gjet asnjë kontakt i ri i disponueshëm.</p>
               </div>
-            ))
-          )}
-        </div>
-      )}
-      
-      <button onClick={onClose} className={styles.closeModalBtn}>Mbyll</button>
+            ) : (
+              sessions.map((s) => (
+                <div key={s.id} className={styles.sessionItem}>
+                  <div className={styles.clientInfo}>
+                    <span className={styles.clientName}>{s.customerName}</span>
+                    <span className={styles.clientPhone}>{s.customerPhone}</span>
+                  </div>
+                  <button
+                    onClick={() => handleCreateLink(s.id, s.customerPhone)}
+                    disabled={generatingId !== null}
+                    className={styles.generateBtn}
+                  >
+                    {generatingId === s.id ? (
+                      <div className={styles.btnLoader}></div>
+                    ) : (
+                      "Dërgo"
+                    )}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+        
+        <button onClick={onClose} className={styles.closeModalBtn}>Mbyll</button>
+      </div>
     </div>
   );
 }
