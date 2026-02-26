@@ -685,81 +685,147 @@
 }
 
 /* Mobile tweak: If the screen is small, maybe hide the text and show only the gear */
-@media (max-width: 768px) {
-  .adminLink {
-    padding: 6px 8px;
-  }
-  .adminLink span {
-    display: none; /* If you wrap the text in a span */
-  }
-}
-/* --- TABLETS & SMALL LAPTOPS (under 1024px) --- */
+/* =========================================
+   1. TABLETS & SMALL LAPTOPS (Max-width: 1024px)
+   ========================================= */
 @media (max-width: 1024px) {
   .container {
-    padding: 20px; /* Reducing side padding */
+    padding: 20px;
   }
 
   .nav {
-    width: 50%; /* Giving nav more room */
-    gap: 15px;
+    width: 45%; /* Give nav slightly more breathing room */
+    gap: 10px;
   }
 
   .navLink {
-    font-size: 14px; /* Slightly smaller text */
+    font-size: 14px;
+    padding: 6px 12px;
   }
 }
 
-/* --- LARGE PHONES & TABLETS (under 768px) --- */
+/* =========================================
+   2. MOBILE & TABLETS (Max-width: 768px)
+   ========================================= */
 @media (max-width: 768px) {
+  /* --- Top Header Adjustment --- */
   .header {
-    height: 65px; /* Shorter header on mobile */
-  }
-
-  .logo img {
-    height: 30px; /* Scale down logo */
-    width: auto;
-  }
-
-  /* We hide the main nav links on mobile to prevent clutter 
-     and keep only the "Login" or "Profile" visible */
-  .nav {
-    display: none; 
+    height: 60px;
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 1000;
+    border-bottom: 1px solid #f1f5f9;
   }
 
   .container {
-    padding: 10px 15px;
+    padding: 0 16px;
+  }
+
+  /* Hide Top Nav - Replaced by Bottom Nav */
+  .nav {
+    display: none !important;
+  }
+
+  .logo img {
+    height: 28px;
+    width: auto;
+  }
+
+  /* Admin Link Tweak */
+  .adminLink {
+    padding: 6px 10px;
+    margin-right: 5px;
+  }
+  .adminLink span {
+    display: none; /* Icon only on small screens */
+  }
+
+  /* Compact Right Actions */
+  .right {
+    gap: 12px;
   }
 
   .navLinkLogIn {
     width: auto;
-    padding: 8px 16px;
-    font-size: 13px;
+    padding: 6px 14px;
+    font-size: 12px;
+    height: 32px;
   }
 
   .searchIcon {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+  }
+
+  /* --- NEW: Bottom Navigation Bar --- */
+  .mobileBottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #e2e8f0;
+    padding-bottom: env(safe-area-inset-bottom); /* Fix for iPhone notches */
+    z-index: 2000;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .mobileTab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #71717a;
+    font-size: 11px;
+    font-weight: 600;
+    gap: 4px;
+    transition: 0.2s;
+    flex: 1; /* Equal spacing */
+  }
+
+  .activeTab {
+    color: #000000 !important;
+  }
+
+  .tabIcon {
+    font-size: 20px;
   }
 }
 
-/* --- SMALL PHONES (under 480px) --- */
+/* =========================================
+   3. SMALL PHONES (Max-width: 480px)
+   ========================================= */
 @media (max-width: 480px) {
   .right {
-    gap: 5px;
+    gap: 8px;
   }
 
-  /* Make the Login button more compact */
   .navLinkLogIn {
-    font-size: 12px;
-    padding: 6px 12px;
-    white-space: nowrap;
+    font-size: 11px;
+    padding: 6px 10px;
   }
 
-  /* Profile pic slightly smaller */
   .avatar {
     width: 32px;
     height: 32px;
   }
+
+  /* Ensure bottom nav text isn't too crowded */
+  .mobileTab {
+    font-size: 10px;
+  }
 }
 
-/* --- DARK THEME OVERRIDES (Safety check) --- */
+/* =========================================
+   4. DESKTOP HIDER (Min-width: 769px)
+   ========================================= */
+@media (min-width: 769px) {
+  .mobileBottomNav {
+    display: none !important; /* Never show bottom bar on desktop */
+  }
+}

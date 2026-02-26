@@ -1,21 +1,23 @@
-.title {
- font-family: 'Graphik', sans-serif;
- font-weight: 600;
- font-style: semibold; 
- font-size: 55px;
- line-height: 1.1;
- letter-spacing: -0.05em;
- text-align: center;
- color:#141414;
- margin: 2rem auto;
+/* =========================================
+   1. BASE STYLES (Existing)
+   ========================================= */
+.workerList {
+    width: 100%;
 }
 
-.workerList {
-    
+.title {
+    font-family: 'Graphik', sans-serif;
+    font-weight: 600;
+    font-style: semibold; 
+    font-size: 55px;
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color:#141414;
+    margin: 2rem auto;
 }
 
 .resultsWrapper {
-   
     max-width: 1120px;
     width: 100%;
     margin: 0 auto;
@@ -24,141 +26,112 @@
     min-height: 400px;
 }
 
-
-/* This forces exactly 4 workers per row */
 .grid {
     display: grid;
-    /* This creates 4 equal columns */
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 32px;
     width: 100%;
-      transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-
-/* --- Fixed Loading & Fetching Styles --- */
-
-/* 1. Top Browser Progress Bar (Emerald Green) */
-/* --- 1. Top Loading Bar (Recolored to match Spinner Blue) --- */
+/* =========================================
+   2. LOADING & FETCHING STYLES (Existing)
+   ========================================= */
 .loadingBar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px; /* Slightly thicker for better visibility */
-  background: rgba(0, 89, 255, 0.05); 
-  overflow: hidden;
-  z-index: 10000;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 89, 255, 0.05); 
+    overflow: hidden;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .loadingBar.active {
-  opacity: 1;
+    opacity: 1;
 }
 
 .loadingBar::after {
-  content: "";
-  position: absolute;
-  width: 45%;
-  height: 100%;
-  /* Using your #0059FF blue */
-  background: linear-gradient(90deg, transparent, #0059FF, transparent);
-  animation: slide 1.2s infinite ease-in-out;
+    content: "";
+    position: absolute;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #0059FF, transparent);
+    animation: slide 1.2s infinite ease-in-out;
 }
 
-/* --- 2. Results Count (More "Pretty" & Professional) --- */
-.resultsCount {
-  font-family: 'Graphik', sans-serif;
-  font-size: 0.95rem;
-  color: #666;
-  margin: 0 auto;
-  padding: 8px 16px;
-  border-radius: 100px; /* Pill shape */
-   /* Keeps the background tight to the text */
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-/* --- 3. No Results State (Clean & Modern) --- */
-.noResults {
-  grid-column: 1 / -1; /* Spans full width if inside grid */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100px 20px;
-  background: #ffffff;
-  border: 2px dashed #e2e8f0;
-  border-radius: 24px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.noResults p {
-  color: #1a202c;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.noResults::after {
-  content: "Ju lutemi provoni të ndryshoni filtrat ose kërkimin tuaj.";
-  color: #718096;
-  font-size: 0.95rem;
-  font-weight: 400;
-}
-
-/* --- Keeping your Spinner & Animations as requested --- */
 .initialLoader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 5rem 2rem;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    width: 100%;
 }
 
 .spinner {
-  width: 42px;
-  height: 42px;
-  border: 3px solid rgba(0, 89, 255, 0.1); /* Updated base to match blue */
-  border-top: 3px solid #0059FF;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 1.5rem;
+    width: 42px;
+    height: 42px;
+    border: 3px solid rgba(0, 89, 255, 0.1);
+    border-top: 3px solid #0059FF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1.5rem;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes slide {
-  from { left: -50%; }
-  to { left: 150%; }
-}
-
-/* 3. Grid Blur (For Category/Filter Changes) */
 .grid.dimmed {
-  opacity: 0.5;
-  filter: blur(8px) grayscale(0.5);
-  pointer-events: none;
+    opacity: 0.5;
+    filter: blur(8px) grayscale(0.5);
+    pointer-events: none;
 }
 
-/* --- Animations --- */
-@keyframes spin {
-  to { transform: rotate(360deg); }
+/* =========================================
+   3. UI ELEMENTS & PAGINATION (Existing)
+   ========================================= */
+.resultsCount {
+    font-family: 'Graphik', sans-serif;
+    font-size: 0.95rem;
+    color: #666;
+    margin: 1rem auto;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-align: center;
 }
 
-@keyframes slide {
-  from { left: -50%; }
-  to { left: 150%; }
+.noResults {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 20px;
+    background: #ffffff;
+    border: 2px dashed #e2e8f0;
+    border-radius: 24px;
+    text-align: center;
+    margin-top: 2rem;
 }
 
+.noResults p {
+    color: #1a202c;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
 
-/* This centers the pagination buttons at the bottom */
+.noResults::after {
+    content: "Ju lutemi provoni të ndryshoni filtrat ose kërkimin tuaj.";
+    color: #718096;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
 .pagination {
     display: flex;
     justify-content: center;
@@ -166,108 +139,153 @@
     gap: 20px;
     padding: 40px 0;
     width: 100%;
-    
-}
-
-.resultsCount {
-    text-align: center;
-    margin: 1rem;
-     font-family: 'Graphik', sans-serif;
-    font-weight: 400;
 }
 
 /* =========================================
-   RESPONSIVE DESIGN (Media Queries)
+   4. ANIMATIONS (Existing)
+   ========================================= */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slide { from { left: -50%; } to { left: 150%; } }
+
+/* =========================================
+   5. RESPONSIVE DESIGN (Media Queries)
    ========================================= */
 
-/* Large Tablets & Small Laptops (under 1200px) */
+/* LARGE TABLETS & LAPTOPS */
 @media (max-width: 1200px) {
-  .container {
-    padding: 0 20px;
-    gap: 24px;
-  }
-  
-  .grid {
-    /* Transitions from 4 columns to 3 */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-  }
+    .container {
+        padding: 0 20px;
+        gap: 24px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        justify-content: center;
+        gap: 24px;
+    }
 }
 
-/* Tablets (under 992px) */
+/* TABLETS (992px) - Sidebar 2-Row Layout */
 @media (max-width: 992px) {
-  .title {
-    font-size: 42px; /* Shrinking the massive title */
-    padding: 0 15px;
-  }
+    .title {
+        font-size: 42px; 
+        padding: 0 20px;
+        margin: 1.5rem auto;
+    }
 
-  .container {
-    flex-direction: column; /* Stack FilterSidebar on top of Results */
-  }
+    .container {
+        flex-direction: column; 
+        align-items: center;
+    }
 
-  /* Make the sidebar full width when stacked */
-  .sidebar { 
-    width: 100%;
-    position: static;
-  }
+    /* Sidebar Grid Logic */
+    .sidebar { 
+        width: 100%;
+        max-width: 700px;
+        position: static;
+        margin: 0 auto 2rem auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        align-items: end;
+    }
 
-  .grid {
-    /* 2 Columns for tablet view */
-    grid-template-columns: repeat(2, 1fr);
-  }
+    /* Ensure specific sidebar elements span full width if needed */
+    .searchGroup { grid-column: 1 / -1; }
+    .verifiedGroup {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        padding-top: 10px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr); 
+        justify-items: center;
+    }
 }
 
-/* Mobile Devices (under 600px) */
+/* MOBILE & PHONES (768px) */
+@media (max-width: 768px) {
+    .workerList {
+        padding-bottom: 100px; /* Space for Bottom Nav Bar */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .resultsWrapper {
+        align-items: center;
+    }
+
+    .title {
+        font-size: 34px;
+        max-width: 90%;
+    }
+
+    .resultsCount {
+        display: inline-block;
+        margin: 10px auto !important;
+    }
+
+    .grid {
+        grid-template-columns: 1fr; 
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+        justify-content: center;
+    }
+
+    .pagination {
+        gap: 12px;
+    }
+}
+
+/* SMALL PHONES (600px - 480px) */
 @media (max-width: 600px) {
-  .title {
-    font-size: 32px; /* Small enough for phones */
-    margin: 1.5rem auto;
-    letter-spacing: -0.03em;
-  }
+    .sidebar {
+        grid-template-columns: 1fr 1fr; 
+        width: 95%;
+        padding: 15px;
+    }
 
-  .grid {
-    /* 1 Column for phone view */
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .resultsCount {
-    font-size: 0.85rem;
-    padding: 6px 12px;
-  }
-
-  .pagination {
-    flex-direction: row; /* Keep buttons side-by-side */
-    gap: 10px;
-    padding: 30px 0;
-  }
-
-  .pageInfo {
-    font-size: 0.8rem;
-  }
-
-  .pageBtn {
-    padding: 10px 16px;
-    font-size: 0.85rem;
-  }
-
-  .noResults {
-    padding: 60px 20px;
-    border-radius: 16px;
-  }
-
-  .noResults p {
-    font-size: 1.1rem;
-  }
+    .sidebar input, .sidebar select {
+        font-size: 14px;
+        height: 45px;
+        text-align: center;
+    }
+    
+    .sidebar label {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+    }
 }
 
-/* Extra Small Screens (under 380px) */
+@media (max-width: 480px) {
+    .title {
+        font-size: 28px;
+    }
+
+    .pageBtn {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+    }
+
+    .noResults {
+        width: 90%;
+        margin: 2rem auto;
+    }
+}
+
+/* EXTRA SMALL PHONES */
 @media (max-width: 380px) {
-  .title {
-    font-size: 28px;
-  }
-  
-  .pagination {
-    flex-wrap: wrap; /* Stack pagination if it's too tight */
-  }
+    .title { font-size: 24px; }
+    .pagination { transform: scale(0.9); }
 }
