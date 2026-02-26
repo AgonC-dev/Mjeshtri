@@ -124,6 +124,7 @@
   top: calc(100% + 12px);
   right: 0;
   width: 280px;
+  z-index: 500;
   background: #ffffff;
   border: 1px solid #e2e8f0; /* Soft border */
   border-radius: 18px;

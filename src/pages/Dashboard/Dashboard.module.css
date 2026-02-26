@@ -1319,3 +1319,141 @@
     gap: 12px;
   }
 }
+
+/* ===== RESPONSIVE & CENTERING ===== */
+
+@media (max-width: 1024px) {
+  .dashboardContainer {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    align-items: center; /* Centers everything on the page */
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    height: auto;
+    background: #fff;
+  }
+
+  /* Centering the Brand and Profile in the new top area */
+  .brand { 
+    margin-bottom: 1.5rem; 
+    justify-content: center;
+  }
+
+  .profileBrief { 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  /* SIDE NAV: The fix for "Verifikohu" access on mobile */
+  .sideNav {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto; /* Allows swiping through tabs on small screens */
+    padding: 5px 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hides scrollbar on Firefox */
+  }
+
+  .sideNav::-webkit-scrollbar {
+    display: none; /* Hides scrollbar on Chrome/Safari */
+  }
+
+  .navItem, .navItemActive {
+    margin-bottom: 0;
+    padding: 10px 20px;
+    white-space: nowrap; /* Prevents text from wrapping to 2 lines */
+    flex-shrink: 0; /* Keeps buttons from squishing */
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .mainContent {
+    width: 100%;
+    max-width: 800px; /* Keeps content from getting too wide/ugly on tablets */
+    padding: 2rem 1.5rem;
+  }
+
+  .rightRail {
+    width: 100%;
+    max-width: 800px;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    background: #fff;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Header adjustments for smaller phones */
+  .topHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .headerActions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr; /* Stack stats vertically for centering */
+    width: 100%;
+  }
+
+  .statBox {
+    justify-content: center; /* Centers icons and text inside stat box */
+  }
+
+  .inputRow {
+    grid-template-columns: 1fr;
+  }
+
+  .glassCard {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  /* Floating save action adjustment */
+  .stickyAction {
+    width: 90%;
+    bottom: 20px;
+    flex-direction: column;
+    padding: 1.2rem;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .footerBtns {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .btnSave, .btnCancel {
+    flex: 1; /* Makes buttons equal width on mobile */
+  }
+}
+
+/* Fix for very small devices */
+@media (max-width: 480px) {
+  .brand h2 {
+    font-size: 1.2rem;
+  }
+  
+  .headerText h1 {
+    font-size: 1.5rem;
+  }
+}

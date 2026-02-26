@@ -46,49 +46,7 @@
 /* DESKTOP TWEAK
    3 Columns makes the cards wider and match your Search List width
 */
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 2.5rem;
-  }
-  
-  .featuredWorkers {
-    padding: 4rem 2rem;
-    max-width: 1150px; /* Perfectly balances 3 wide cards */
-  }
-}
 
-.viewAll {
-  text-align: center;
-  margin-top: 3.5rem;
-}
-
-
-
-/* TABLET & MOBILE 
-*/
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
-  }
-}
-
-@media (max-width: 600px) {
-  .featuredWorkers {
-    padding: 2rem 1rem;
-  }
-
-  .title {
-    font-size: 1.5rem;
-    text-align: center;
-  }
-
-  .grid {
-    grid-template-columns: 1fr; /* 1 wide card per row on phones */
-    max-width: 400px; /* Keeps the card from stretching too far on big phones */
-    margin: 0 auto;
-  }
-}
 
 /* LIGHT THEME OVERRIDES */
 :global([data-theme="light"]) :local(.title) {
@@ -262,4 +220,111 @@
   background: #0059FF;
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 255, 133, 0.3);
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .featuredWorkers {
+    max-width: 950px;
+  }
+}
+
+/* 2. TABLETS (Under 900px) */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .categoryNav {
+    max-width: 90%; /* Let nav take more space on tablets */
+  }
+}
+
+/* 3. PHONES (Under 600px) */
+@media (max-width: 600px) {
+  .categoryNavWrapper {
+    margin-top: 2rem;
+  }
+
+
+
+  /* Make the Category Nav scrollable horizontally if categories grow */
+  .categoryNav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    border-radius: 12px;
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .categoryNav::-webkit-scrollbar { display: none; } /* Hide scrollbar for clean look */
+
+  .categoryTab {
+    flex: none;
+    padding: 0 20px;
+    height: 42px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* 1 card per row */
+    max-width: 100%;
+    align-items: center;
+    justify-items: center;
+    gap: 2rem;
+  }
+
+  .featuredWorkers {
+    padding: 2rem 1.2rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+    text-align: center; /* Alignment change for mobile editorial look */
+    width: 100%;
+  }
+
+  .viewAllButton {
+    width: 100%; /* Full width button on mobile */
+    padding: 1.1rem;
+  }
+}
+
+/* 4. TINY PHONES (Under 380px) */
+@media (max-width: 380px) {
+  .title {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+}
+
+/* --- LOADING & STATUS --- */
+.loaderContainer, .noResults {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px;
+  width: 100%;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 89, 255, 0.1);
+  border-top: 3px solid #0059FF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
