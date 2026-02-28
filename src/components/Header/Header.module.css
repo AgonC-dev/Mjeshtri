@@ -688,78 +688,64 @@
 /* =========================================
    1. TABLETS & SMALL LAPTOPS (Max-width: 1024px)
    ========================================= */
+/* =========================================
+   1. TABLETS (1024px)
+   ========================================= */
 @media (max-width: 1024px) {
-  .container {
-    padding: 20px;
-  }
-
-  .nav {
-    width: 45%; /* Give nav slightly more breathing room */
-    gap: 10px;
-  }
-
-  .navLink {
-    font-size: 14px;
-    padding: 6px 12px;
-  }
+  .container { padding: 20px; }
+  .nav { width: 45%; gap: 10px; }
+  .navLink { font-size: 14px; padding: 6px 12px; }
 }
 
 /* =========================================
-   2. MOBILE & TABLETS (Max-width: 768px)
+   2. MOBILE & TABLETS (768px)
    ========================================= */
 @media (max-width: 768px) {
-
   .header {
     height: 60px;
     position: sticky;
     top: 0;
     background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px); /* Premium blurry header */
+    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 1000;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  .container {
-    padding: 0 16px;
-  }
-
-  /* Hide Top Nav - Replaced by Bottom Nav */
-  .nav {
-    display: none !important;
-  }
-
-  .logo img {
-    height: 28px;
-    width: auto;
-  }
-
-  /* Admin Link Tweak */
-  .adminLink {
-    padding: 6px 10px;
-    margin-right: 5px;
-  }
-  .adminLink span {
-    display: none; 
-  }
+  .container { padding: 0 16px; }
+  .nav { display: none !important; }
+  .logo img { height: 28px; width: auto; }
 
   /* Compact Right Actions */
-  .right {
-    gap: 12px;
-  }
+  .right { gap: 12px; }
+  .loggedOutActions { gap: 8px; }
 
+  .hideOnMobile { display: none !important; }
+
+  /* Admin Link Tweak */
+  .adminLink { padding: 6px 10px; margin-right: 5px; }
+  .adminLink span { display: none; }
+
+  /* SQUARE LOGIN BUTTON */
   .navLinkLogIn {
-    width: auto;
-    padding: 6px 14px;
-    font-size: 12px;
-    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;  /* Slightly increased for better tap target */
+    height: 38px; 
+    padding: 0;   /* Removed padding to keep it a perfect square */
+    margin-left: 18px;
+    border-radius: 10px;
+    aspect-ratio: 1 / 1;
   }
 
-  .searchIcon {
-    width: 32px;
-    height: 32px;
+  .mobileLoginIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  
+
+  /* Bottom Navigation */
   .mobileBottomNav {
     position: fixed;
     bottom: 0;
@@ -772,10 +758,17 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0 12px env(safe-area-inset-bottom) 12px; /* iOS support */
+    padding: 0 12px env(safe-area-inset-bottom) 12px;
     border-top: 1px solid #f1f5f9;
     z-index: 2000;
     box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.03);
+  }
+
+  .loggedOutActions { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
   }
 
   .mobileTab {
@@ -789,17 +782,13 @@
     font-size: 10px;
     font-weight: 600;
     padding-top: 5px;
-    color: #94a3b8; /* Slate gray */
+    color: #94a3b8;
     transition: all 0.2s ease;
     position: relative;
   }
 
-  /* Dashboard Primary Blue for Active */
-  .activeTab {
-    color: #3b82f6 !important;
-  }
+  .activeTab { color: #3b82f6 !important; }
 
-  /* Premium Top Indicator Bar */
   .activeTab::after {
     content: '';
     position: absolute;
@@ -812,45 +801,29 @@
   }
 
   .tabIcon {
-    /* Ensures SVGs stay sharp and consistent */
     stroke-width: 2.2; 
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .activeTab .tabIcon {
-    transform: translateY(-2px) scale(1.05);
-  }
+  .activeTab .tabIcon { transform: translateY(-2px) scale(1.05); }
+
+  .favoritesTrigger { padding: 6px; }
+  .strengthHint { font-size: 0.85rem; line-height: 1.3; }
 }
 
 /* =========================================
-   3. SMALL PHONES (Max-width: 480px)
+   3. SMALL PHONES (480px)
    ========================================= */
 @media (max-width: 480px) {
-  .right {
-    gap: 8px;
-  }
-
-  .navLinkLogIn {
-    font-size: 11px;
-    padding: 6px 10px;
-  }
-
-  .avatar {
-    width: 32px;
-    height: 32px;
-  }
-
-  /* Ensure bottom nav text isn't too crowded */
-  .mobileTab {
-    font-size: 10px;
-  }
+  .right { gap: 8px; }
+  .loggedOutActions { gap: 6px; }
+  
+  .avatar { width: 32px; height: 32px; }
 }
 
 /* =========================================
-   4. DESKTOP HIDER (Min-width: 769px)
+   4. VERY SMALL PHONES (380px)
    ========================================= */
-@media (min-width: 769px) {
-  .mobileBottomNav {
-    display: none !important; /* Never show bottom bar on desktop */
-  }
+@media (max-width: 380px) {
+  .navLinkLogIn { width: 34px; height: 34px; }
 }

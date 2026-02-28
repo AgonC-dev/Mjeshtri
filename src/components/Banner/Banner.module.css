@@ -119,27 +119,117 @@
 
 /* --- RESPONSIVE DESIGN --- */
 
+/* --- 1. TABLETS & SMALL LAPTOPS --- */
 @media (max-width: 1100px) {
-    .blockCon { gap: 20px; }
+    .container { padding: 60px 30px; }
+    .blockCon { gap: 24px; }
     .title { font-size: 48px; }
 }
 
+/* --- 2. MOBILE LANDSCAPE & SMALL TABLETS --- */
 @media (max-width: 850px) {
+    .container { 
+        gap: 3.5rem; 
+        margin-bottom: 4rem;
+    }
     .blockCon {
         grid-template-columns: 1fr;
-        max-width: 550px;
+        max-width: 500px;
         margin: 0 auto;
-        gap: 50px;
+        gap: 48px;
     }
-    .visualBlock { aspect-ratio: 1.6 / 1; }
-    .title { font-size: 40px; }
+    .visualBlock { 
+        aspect-ratio: 1.4 / 1; 
+        border-radius: 28px;
+    }
+    .title { 
+        font-size: 38px; 
+        max-width: 100%;
+    }
 }
 
+/* --- 3. PHONES (The "Premium" Update) --- */
 @media (max-width: 480px) {
-    .container { padding: 50px 20px; gap: 3rem; }
-    .title { font-size: 34px; text-align: left; }
-    .visualBlock { height: 260px; border-radius: 20px; }
-    .title2, .subtitle { text-align: left; max-width: 100%; }
-    .cardWrapper { align-items: flex-start; }
-    .animationArea img { width: 70px; }
+    .container { 
+        padding: 40px 20px 80px 20px; /* Extra bottom padding for Bottom Nav */
+        gap: 2.5rem; 
+    }
+
+    .title { 
+        font-size: 32px; 
+        text-align: center; /* Centered looks more "Hero" on mobile */
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+    }
+
+    .blockCon {
+        gap: 40px;
+    }
+
+    .cardWrapper { 
+        align-items: center; /* Keep items centered for balance */
+        width: 100%;
+    }
+
+    .visualBlock { 
+        height: 220px; /* Fixed height for consistency */
+        width: 100%;
+        border-radius: 24px;
+        margin-bottom: 20px;
+        /* Subtle entrance animation */
+        animation: cardPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    }
+
+    /* Staggered animation for the 3 blocks */
+    .cardWrapper:nth-child(2) .visualBlock { animation-delay: 0.1s; }
+    .cardWrapper:nth-child(3) .visualBlock { animation-delay: 0.2s; }
+
+    .title2 { 
+        text-align: center; 
+        font-size: 20px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .subtitle { 
+        text-align: center; 
+        font-size: 15px;
+        line-height: 1.45;
+        max-width: 95%; 
+        color: #666; /* Slightly lighter for modern look */
+    }
+
+    /* Adjusting asset sizes for smaller mobile screens */
+    .animationArea img { 
+        width: 65px; 
+    }
+    
+    .chatImg {
+        width: 90% !important;
+        transform: translateY(20px);
+    }
+
+    /* Prevent horizontal overflow if any images rotate too much */
+    .animationArea {
+        overflow: hidden;
+        border-radius: 24px;
+    }
+}
+
+/* --- 4. TINY PHONES --- */
+@media (max-width: 360px) {
+    .title { font-size: 28px; }
+    .visualBlock { height: 190px; }
+}
+
+/* --- ENTRANCE ANIMATION --- */
+@keyframes cardPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
