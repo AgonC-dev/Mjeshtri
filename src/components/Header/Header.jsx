@@ -8,6 +8,7 @@ import Logo from '../../assets/Logo.png';
 import Search from '../../assets/Search.png';
 import Modal from '../Modal/Modal';
 import { CheckCircle2 } from "lucide-react";
+import { Home, Search as SearchIcon, Flame, LayoutDashboard, User } from 'lucide-react';
 
 const ADMIN_UID = "KMQyw2VBhUbzjKWPbV3A0ntO6Ho2";
 
@@ -534,47 +535,52 @@ return (
     </header>
 
     {/* MOBILE BOTTOM MENU - Only visible via CSS Media Queries */}
-    <nav className={styles.mobileBottomNav}>
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
-        }
-      >
-        <span className={styles.tabIcon}>🏠</span>
-        <span>Kryefaqja</span>
-      </NavLink>
 
-      <NavLink
-        to="/workers"
-        className={({ isActive }) =>
-          isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
-        }
-      >
-        <span className={styles.tabIcon}>🔍</span>
-        <span>Kërko</span>
-      </NavLink>
+<nav className={styles.mobileBottomNav}>
+  <NavLink
+    to="/"
+    className={({ isActive }) =>
+      isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
+    }
+  >
+    <Home size={22} className={styles.tabIcon} />
+    <span>Kryefaqja</span>
+  </NavLink>
 
-      <NavLink
-        to="/wanted"
-        className={({ isActive }) =>
-          isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
-        }
-      >
-        <span className={styles.tabIcon}>🔥</span>
-        <span>Popullore</span>
-      </NavLink>
+  <NavLink
+    to="/workers"
+    className={({ isActive }) =>
+      isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
+    }
+  >
+    <SearchIcon size={22} className={styles.tabIcon} />
+    <span>Kërko</span>
+  </NavLink>
 
-      <NavLink
-        to={user ? "/dashboard" : "/login"}
-        className={({ isActive }) =>
-          isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
-        }
-      >
-        <span className={styles.tabIcon}>{user ? "📊" : "👤"}</span>
-        <span>{user ? "Paneli" : "Kyqu"}</span>
-      </NavLink>
-    </nav>
+  <NavLink
+    to="/wanted"
+    className={({ isActive }) =>
+      isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
+    }
+  >
+    <Flame size={22} className={styles.tabIcon} />
+    <span>Popullore</span>
+  </NavLink>
+
+  <NavLink
+    to={user ? "/dashboard" : "/login"}
+    className={({ isActive }) =>
+      isActive ? `${styles.mobileTab} ${styles.activeTab}` : styles.mobileTab
+    }
+  >
+    {user ? (
+      <LayoutDashboard size={22} className={styles.tabIcon} />
+    ) : (
+      <User size={22} className={styles.tabIcon} />
+    )}
+    <span>{user ? "Paneli" : "Kyqu"}</span>
+  </NavLink>
+</nav>
   </>
 );
 }
