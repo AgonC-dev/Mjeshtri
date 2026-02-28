@@ -714,6 +714,7 @@
 
   .container { padding: 0 16px; }
   .nav { display: none !important; }
+  .logo { display: flex; justify-content: center; align-self: center;}
   .logo img { height: 28px; width: auto; }
 
   /* Compact Right Actions */
