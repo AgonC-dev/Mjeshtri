@@ -1229,108 +1229,25 @@
 /* Primary button (already in your file, kept for reference) */
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .dashboardContainer {
-    display: flex;
-    flex-direction: column;
-    height: auto;
-    overflow-y: auto;
-  }
 
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 1001;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    height: 70px;
-  }
 
-  .brand { margin-bottom: 0; }
-  .profileBrief, .healthCard { display: none; }
-  
-  .sideNav {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .navItem, .navItemActive {
-    margin-bottom: 0;
-    padding: 8px 15px;
-    white-space: nowrap;
-    width: auto;
-  }
 
-  .mainContent {
-    padding: 2rem;
-  }
-
-  .rightRail {
-    display: block; 
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--border);
-    padding: 2rem;
-    background: #fff;
-  }
-}
-
-@media (max-width: 768px) {
-  .sideNav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    padding: 10px 5px;
-    border-top: 1px solid var(--border);
-    justify-content: space-around;
-    z-index: 1001;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-  }
-
-  .navItem, .navItemActive {
-    flex-direction: column;
-    font-size: 0.7rem;
-    gap: 4px;
-    padding: 5px;
-    text-align: center;
-    flex: 1;
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .inputRow {
-    grid-template-columns: 1fr;
-  }
-
-  .stickyAction {
-    width: 92%;
-    bottom: 80px;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 12px;
-  }
-}
 
 /* ===== RESPONSIVE & CENTERING ===== */
 
+
+/* ===== CONSOLIDATED RESPONSIVE DESIGN ===== */
+
 @media (max-width: 1024px) {
   .dashboardContainer {
     display: flex;
     flex-direction: column;
     height: auto;
     overflow-y: auto;
-    align-items: center; /* Centers everything on the page */
+    align-items: center;
   }
 
+  /* Sidebar turns into a top header/brand area */
   .sidebar {
     width: 100%;
     flex-direction: column;
@@ -1342,7 +1259,6 @@
     background: #fff;
   }
 
-  /* Centering the Brand and Profile in the new top area */
   .brand { 
     margin-bottom: 1.5rem; 
     justify-content: center;
@@ -1352,99 +1268,107 @@
     display: flex; 
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
-  /* SIDE NAV: The fix for "Verifikohu" access on mobile */
+  /* Horizontal scroll for Nav on Tablets */
   .sideNav {
     display: flex;
     gap: 8px;
     width: 100%;
-    overflow-x: auto; /* Allows swiping through tabs on small screens */
-    padding: 5px 10px;
+    overflow-x: auto;
+    padding: 10px;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Hides scrollbar on Firefox */
+    scrollbar-width: none;
   }
 
-  .sideNav::-webkit-scrollbar {
-    display: none; /* Hides scrollbar on Chrome/Safari */
-  }
+  .sideNav::-webkit-scrollbar { display: none; }
 
   .navItem, .navItemActive {
     margin-bottom: 0;
     padding: 10px 20px;
-    white-space: nowrap; /* Prevents text from wrapping to 2 lines */
-    flex-shrink: 0; /* Keeps buttons from squishing */
-    font-size: 0.9rem;
-    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  .mainContent {
-    width: 100%;
-    max-width: 800px; /* Keeps content from getting too wide/ugly on tablets */
-    padding: 2rem 1.5rem;
-  }
-
-  .rightRail {
+  .mainContent, .rightRail {
     width: 100%;
     max-width: 800px;
-    border-left: none;
-    border-top: 1px solid var(--border);
-    padding: 2rem;
-    background: #fff;
+    padding: 2rem 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  /* Header adjustments for smaller phones */
+  /* YOUR PREFERRED BOTTOM NAVIGATION */
+  .sideNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* Fixed height for consistency */
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+    border-top: 1px solid var(--border);
+    z-index: 2000; /* Higher than stickyAction */
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+  }
+
+  .navItem, .navItemActive {
+    flex-direction: column;
+    font-size: 0.7rem;
+    gap: 4px;
+    padding: 8px 5px;
+    text-align: center;
+    flex: 1;
+    background: transparent;
+    border: none;
+  }
+
+  /* Layout Adjustments */
+  .dashboardContainer {
+    padding-bottom: 100px; /* Space so bottom nav doesn't cover content */
+  }
+
   .topHeader {
     flex-direction: column;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
-  .headerActions {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr; /* Stack stats vertically for centering */
-    width: 100%;
-  }
-
-  .statBox {
-    justify-content: center; /* Centers icons and text inside stat box */
-  }
-
-  .inputRow {
+  .statsGrid, .inputRow {
     grid-template-columns: 1fr;
   }
 
-  .glassCard {
-    padding: 1.5rem;
-    width: 100%;
+  .healthCard, .profileBrief p {
+    display: none; /* Hide extra clutter on small mobile */
   }
 
-  /* Floating save action adjustment */
+  /* Floating Save Bar adjustment to stay ABOVE the bottom nav */
   .stickyAction {
-    width: 90%;
-    bottom: 20px;
+    width: 95%;
+    bottom: 85px; /* Sits right above the 70px bottom nav */
     flex-direction: column;
-    padding: 1.2rem;
-    gap: 15px;
-    text-align: center;
+    padding: 1rem;
+    gap: 10px;
   }
 
   .footerBtns {
     width: 100%;
-    justify-content: center;
   }
   
   .btnSave, .btnCancel {
-    flex: 1; /* Makes buttons equal width on mobile */
+    flex: 1;
   }
+}
+
+@media (max-width: 480px) {
+  .brand h2 { font-size: 1.1rem; }
+  .headerText h1 { font-size: 1.4rem; }
+  .statVal { font-size: 1.5rem; }
 }
 
 /* Fix for very small devices */
