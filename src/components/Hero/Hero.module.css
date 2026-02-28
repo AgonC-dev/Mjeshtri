@@ -38,6 +38,46 @@
   letter-spacing: -0.04;
 }
 
+.typeContainer {
+  position: relative;
+  display: inline-block;
+}
+
+/* This keeps layout width stable */
+.hiddenWord {
+  visibility: hidden;
+}
+
+/* This sits on top and animates */
+.visibleWord {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+/* Question mark style */
+.questionMark {
+  color: black;
+  margin-left: 15px;
+}
+
+/* Cursor */
+.visibleWord::after {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  background-color: black;
+  margin-left: 4px;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
 .subtitle {
     font-family: 'Graphik', sans-serif;
   font-weight: 400;

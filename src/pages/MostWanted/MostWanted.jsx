@@ -73,7 +73,7 @@ function MostWanted() {
         </div>
       )}
 
-      <WorkerCard worker={worker} rank={index + 1} verifyIcon={true} />
+      <WorkerCard worker={worker}  verifyIcon={true} />
     </div>
   );
 

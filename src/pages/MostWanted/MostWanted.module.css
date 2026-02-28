@@ -31,10 +31,30 @@
 .pill { color: #64748b; background: transparent; }
 .pillActive { background: white; color: var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
-.contentArea { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.contentArea {
+  max-width: 1200px;
+  width: 100%;
+  margin: 2rem auto;
+
+  padding: 0 2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .sectionLabel { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 1px; }
 
-.mainGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+.mainGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem;
+
+  justify-items: center;
+  align-items: start;
+
+  width: 100%;
+  margin: 0 auto;
+}
 
 /* ITEM WRAPPERS */
 .eliteItem, .challengerItem {
@@ -141,4 +161,122 @@
 .eliteItem, .challengerItem { position: relative; transition: 0.3s; }
 .sectionLabel { font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 1.5rem; }
 
-@media (max-width: 1000px) { .mainGrid { grid-template-columns: 1fr; } }
+
+/* ==============================
+   RESPONSIVE BREAKPOINTS (CLEAN)
+============================== */
+
+/* LARGE TABLETS / SMALL LAPTOPS */
+@media (max-width: 1200px) {
+
+  .topBar {
+    padding: 1rem 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .contentArea {
+    padding: 0 1.5rem;
+  }
+
+  .mainGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+}
+
+
+/* TABLETS */
+@media (max-width: 900px) {
+
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.5rem;
+  }
+
+  .filterPills {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+
+  .filterPills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mainGrid {
+    grid-template-columns: 1fr;
+  justify-items: center;
+   
+  }
+
+  .sectionLabel {
+    text-align: center;
+  }
+
+}
+
+
+/* MOBILE */
+@media (max-width: 650px) {
+
+  .pageWrapper {
+    overflow-x: hidden;
+  }
+
+  .mainTitle {
+    font-size: 1.3rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  .topBar {
+    align-items: center;
+    text-align: center;
+  }
+
+  .filterPills {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .pill,
+  .pillActive {
+    white-space: nowrap;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+  }
+
+  .contentArea {
+    padding: 0 1rem;
+  }
+
+  .eliteItem,
+  .challengerItem {
+    width: 100%;
+  }
+
+}
+
+
+/* SMALL PHONES */
+@media (max-width: 400px) {
+
+  .mainTitle {
+    font-size: 1.1rem;
+  }
+
+  .pill,
+  .pillActive {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .sectionLabel {
+    font-size: 0.7rem;
+  }
+
+}

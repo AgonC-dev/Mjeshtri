@@ -58,11 +58,26 @@ useEffect(() => {
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
-        <h1 className={styles.title}>
-         A po t'duhet një <span className={styles.typewriter} style={{ color: words[index].color }}>
-            {displayText} ?
-          </span>
-        </h1>
+      <h1 className={styles.title}>
+  A po t'duhet një{" "}
+  <span className={styles.typeContainer}>
+    
+    {/* Invisible full word + ? (reserves width) */}
+    <span className={styles.hiddenWord}>
+      {words[index].text}?
+    </span>
+
+    {/* Visible animated word + ? */}
+    <span
+      className={styles.visibleWord}
+      style={{ color: words[index].color }}
+    >
+      {displayText}
+      <span className={styles.questionMark}> ?</span>
+    </span>
+
+  </span>
+</h1>
         <p className={styles.subtitle}>
           Zgjidhja ideale për çdo nevojë të shtëpisë apo biznesit tuaj. Gjeni mjeshtrin e duhur dhe kryeni punën shpejt e sigurt.
         </p>

@@ -56,6 +56,7 @@
   padding: 10px 26px;
     font-family: 'Graphik', sans-serif;
   font-weight: 500;
+  margin-left: 10px;
   font-size: 14px;
   color: #FFFFFF;
   line-height: 14px;
@@ -678,6 +679,20 @@
 }
 .emptyIllustration { font-size: 4rem; margin-bottom: 10px; opacity: 0.3; }
 
+.mobileBottomNav {
+  display: none;
+}
+
+.mobileLoginIcon {
+  display: none;
+}
+
+.loggedOutActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
 
 @keyframes slideFadeIn {
   from { opacity: 0; transform: translateY(15px); }

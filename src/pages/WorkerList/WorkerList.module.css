@@ -151,141 +151,219 @@
    5. RESPONSIVE DESIGN (Media Queries)
    ========================================= */
 
-/* LARGE TABLETS & LAPTOPS */
+/* =========================================
+   RESPONSIVE DESIGN – CLEAN STRUCTURE
+   ========================================= */
+
+
+/* ==============================
+   LARGE LAPTOPS (1400px ↓)
+============================== */
+/* =========================================
+   RESPONSIVE DESIGN – FIXED & STABLE
+   ========================================= */
+
+
+/* ==============================
+   LARGE LAPTOPS (1400px ↓)
+============================== */
+@media (max-width: 1400px) {
+
+  .container {
+    width: 100%;
+    padding: 0 32px;
+    gap: 32px;
+    display: flex;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+
+/* ==============================
+   LAPTOPS (1200px ↓)
+============================== */
 @media (max-width: 1200px) {
-    .container {
-        padding: 0 20px;
-        gap: 24px;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        justify-content: center;
-        gap: 24px;
-    }
+
+  .title {
+    font-size: 46px;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 24px;
+    gap: 32px;
+  }
+
+  .resultsWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: 900px;
+    min-width: 0; /* IMPORTANT */
+  }
 }
 
-/* TABLETS (992px) - Sidebar 2-Row Layout */
+
+/* ==============================
+   TABLETS (992px ↓)
+============================== */
 @media (max-width: 992px) {
-    .title {
-        font-size: 42px; 
-        padding: 0 20px;
-        margin: 1.5rem auto;
-    }
 
-    .container {
-        flex-direction: column; 
-        align-items: center;
-    }
+  .title {
+    font-size: 38px;
+    padding: 0 16px;
+  }
 
-    /* Sidebar Grid Logic */
-    .sidebar { 
-        width: 100%;
-        max-width: 700px;
-        position: static;
-        margin: 0 auto 2rem auto;
-        padding: 20px;
-        background: #ffffff;
-        border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        align-items: end;
-    }
+  .container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+  }
 
-    /* Ensure specific sidebar elements span full width if needed */
-    .searchGroup { grid-column: 1 / -1; }
-    .verifiedGroup {
-        grid-column: 1 / -1;
-        display: flex;
-        justify-content: center;
-        padding-top: 10px;
-    }
+  .sidebar {
+    width: 100%;
+    max-width: 720px;
+    min-width: 0; /* CRITICAL */
+    margin: 0 auto 2rem auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+  }
 
-    .grid {
-        grid-template-columns: repeat(2, 1fr); 
-        justify-items: center;
-    }
+  .sidebar * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .sidebar input,
+  .sidebar select {
+    width: 100%;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
 }
 
-/* MOBILE & PHONES (768px) */
+
+/* ==============================
+   MOBILE (768px ↓)
+============================== */
 @media (max-width: 768px) {
-    .workerList {
-        padding-bottom: 100px; /* Space for Bottom Nav Bar */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .resultsWrapper {
-        align-items: center;
-    }
+  .workerList {
+    width: 100%;
+    overflow-x: hidden; /* Safety */
+  }
 
-    .title {
-        font-size: 34px;
-        max-width: 90%;
-    }
+  .container {
+    width: 100%;
+    padding: 0 12px;
+    overflow-x: hidden;
+  }
 
-    .resultsCount {
-        display: inline-block;
-        margin: 10px auto !important;
-    }
+  .title {
+    font-size: 30px;
+    text-align: center;
+  }
 
-    .grid {
-        grid-template-columns: 1fr; 
-        width: 100%;
-        max-width: 350px;
-        margin: 0 auto;
-        justify-content: center;
-    }
+  .sidebar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 16px;
+    border-radius: 16px;
+    gap: 14px;
+    box-sizing: border-box;
+  }
 
-    .pagination {
-        gap: 12px;
-    }
+  .sidebar * {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .sidebar input,
+  .sidebar select {
+    width: 100%;
+    height: 46px;
+    font-size: 15px;
+  }
+
+  .verifiedGroup {
+    justify-content: flex-start;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .pagination {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
 }
 
-/* SMALL PHONES (600px - 480px) */
-@media (max-width: 600px) {
-    .sidebar {
-        grid-template-columns: 1fr 1fr; 
-        width: 95%;
-        padding: 15px;
-    }
 
-    .sidebar input, .sidebar select {
-        font-size: 14px;
-        height: 45px;
-        text-align: center;
-    }
-    
-    .sidebar label {
-        display: block;
-        text-align: center;
-        font-size: 12px;
-    }
-}
-
+/* ==============================
+   SMALL PHONES (480px ↓)
+============================== */
 @media (max-width: 480px) {
-    .title {
-        font-size: 28px;
-    }
 
-    .pageBtn {
-        padding: 10px 14px;
-        font-size: 0.8rem;
-    }
+  .title {
+    font-size: 24px;
+  }
 
-    .noResults {
-        width: 90%;
-        margin: 2rem auto;
-    }
+  .sidebar {
+    padding: 14px;
+  }
+
+  .sidebar label {
+    font-size: 13px;
+  }
+
+  .sidebar input,
+  .sidebar select {
+    font-size: 14px;
+    height: 42px;
+  }
+
+  .pageBtn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .noResults {
+    width: 95%;
+    padding: 60px 16px;
+  }
 }
 
-/* EXTRA SMALL PHONES */
+
+/* ==============================
+   EXTRA SMALL (380px ↓)
+============================== */
 @media (max-width: 380px) {
-    .title { font-size: 24px; }
-    .pagination { transform: scale(0.9); }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .pagination {
+    transform: scale(0.9);
+  }
 }
