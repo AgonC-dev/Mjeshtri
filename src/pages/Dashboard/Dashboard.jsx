@@ -21,9 +21,41 @@ import { Power } from "lucide-react";
 import Modal from "../../components/Modal/Modal";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import VerificationSection from "../../components/VerificationSection/VerificationSection";
+import Pro from "../../components/Pro/Pro";
 
 const functions = getFunctions();
-const DEFAULT_AVATARS = ["/avatars/electrician.png", "/avatars/plumber.png", "/avatars/painter.png"];
+const DEFAULT_AVATARS = [
+  "/avatars/Avatar-1.jpg", 
+  "/avatars/Avatar-2.jpg", 
+  "/avatars/Avatar-3.jpg", 
+  "/avatars/Avatar-4.jpg", 
+  "/avatars/Avatar-5.jpg", 
+  "/avatars/Avatar-6.jpg", 
+  "/avatars/Avatar-7.jpg", 
+  "/avatars/Avatar-8.jpg", 
+];
+
+const cities = [
+  "Prishtinë",
+  "Prizren",
+  "Gjakovë",
+  "Mitrovicë",
+  "Pejë",
+  "Ferizaj",
+  "Gjilan",
+];
+const categories = [
+  'Instalues',
+  'Elektricist',
+  'Klima/AC',
+  'Plastifikim',
+  'Pastrim',
+  'Kopshtar',
+  'Mekanik',
+  'Moler',
+  'Murator',
+  'Vullkanizer',
+];
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -33,7 +65,8 @@ function Dashboard() {
   const [form, setForm] = useState({
     name: "", category: "", yearsExperience: "", hourlyRate: "",
     phoneNumber: "", bio: "", isPro: false, isAvailable: true,
-    profileUrl: "", portfolio: [], slug: "",
+    profileUrl: "", portfolio: [], slug: "", isFeatured: false, showProStar: false,
+    quickResponse: false, reviewCount: 0, avgRating: null
   });
   const [profileFile, setProfileFile] = useState(null);
   const [portfolioFiles, setPortfolioFiles] = useState([]);
@@ -84,6 +117,11 @@ function Dashboard() {
             slug: data.slug || "",
             isAvailable: data.isAvailable !== false,
             isVerified: isActuallyVerified,
+            isFeatured: data.isFeatured,
+            showProStar: data.showProStar,
+            quickResponse: data.quickResponse,
+            reviewCount: data.reviewCount,
+            avgRating: data.avgRating,
           };
 
           setForm(initialForm);
@@ -189,6 +227,31 @@ function Dashboard() {
       }
     });
   };
+
+  // Add this to your Dashboard.js
+const handleInstantSave = async (key, value) => {
+  // 1. Update UI state immediately (Optimistic UI)
+  setForm(prev => ({ ...prev, [key]: value }));
+
+  // 2. Write ONLY this specific change to the database
+  try {
+    const docRef = doc(db, "workers", user.uid);
+    await updateDoc(docRef, { 
+      [key]: value,
+      updatedAt: serverTimestamp() 
+    });
+    
+    // Optional: Show a quick success toast
+    setStatus({ message: "Ndryshimi u ruajt!", type: "success" });
+    setTimeout(() => setStatus({ message: "", type: "" }), 2000);
+    
+  } catch (err) {
+    console.error("Instant save failed:", err);
+    // Rollback if DB update fails
+    setForm(prev => ({ ...prev, [key]: !value }));
+    setStatus({ message: "Gabim gjatë ruajtjes!", type: "error" });
+  }
+};
 
  const handleSave = async (e) => {
     if (e) e.preventDefault();
@@ -436,7 +499,7 @@ function Dashboard() {
             {form.isVerified ? "✅ I Verifikuar" : "🛡️ Verifikohu"}
           </button>
 
-          <button className={styles.navItem} onClick={() => setIsModalOpen(p => ({...p, pro: true}))}>🚀 Bëhu PRO</button>
+          <button className={styles.navItem} onClick={() => setActiveTab('pro')}>🚀 Bëhu PRO</button>
         </nav>
 
         <div className={styles.healthCard} onClick={() => setIsModalOpen(p => ({...p, health: true}))}>
@@ -530,12 +593,11 @@ function Dashboard() {
   <div className={styles.inputRow}>
     <div className={styles.field}>
       <label>Qyteti</label>
-      <input 
-        name="city" 
-        value={form.city} 
-        onChange={handleChange} 
-        placeholder="Prishtinë, etj..."
-      />
+     <select name="city" value={form.city} onChange={handleChange} required className={styles.select}>
+        <option value="">Zgjidh Qytetin</option>
+          {cities.map((cit) => <option key={cit} value={cit}>{cit}
+        </option>)}
+      </select>
     </div>
     <div className={styles.field}>
       <label>Përshkrimi i punës (Bio)</label>
@@ -558,7 +620,11 @@ function Dashboard() {
                 <div className={styles.inputRow}>
                   <div className={styles.field}>
                     <label>Kategoria</label>
-                    <input name="category" value={form.category} onChange={handleChange} />
+                     <select name="category" value={form.category} onChange={handleChange}>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                     </select>
                   </div>
                   <div className={styles.field}>
                     <label>Çmimi Fillestar (€)</label>
@@ -569,25 +635,11 @@ function Dashboard() {
                   <label>Vite Përvojë</label>
                   <input name="yearsExperience" value={form.yearsExperience} onChange={handleChange} />
                 </div>
-                <div className={styles.linkBox}>
-                  <label>Linku juaj publik</label>
-                  <div className={styles.copyGroup}>
-                    <input readOnly value={personalLink} />
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(personalLink);
-                        setStatus({ message: "Linku u kopjua!", type: "success" });
-                      }}
-                    >
-                      Kopjo
-                    </button>
-                  </div>
-                  {!form.isPro && <span className={styles.linkHint}>Bëhu PRO për link të personalizuar</span>}
-                </div>
+              
               </section>
             </div>
           </>
-        ) : (
+        ) : activeTab === 'verification' ? (
           /* --- VERIFICATION TAB CONTENT --- */
           <VerificationSection 
             isVerified={form.isVerified}
@@ -603,7 +655,16 @@ function Dashboard() {
             setActiveTab={setActiveTab}
           />
  
-        )}
+        ) : activeTab === 'pro' ? (
+           <Pro 
+            isPro={form.isPro}
+            onUpgradeClick={() => setIsModalOpen(p => ({ ...p, pro:true}))}
+            form={form}
+            onStatus={setStatus}
+            handleChange={handleInstantSave}
+            link={personalLink}
+           />
+        ) : null}
       </main>
 
       {/* RIGHT RAIL */}
@@ -731,7 +792,12 @@ function Dashboard() {
             <button className={styles.primaryBtn} onClick={async () => {
               const getPro = httpsCallable(functions, "handleGetPro");
               await getPro();
-              setForm(prev => ({ ...prev, isPro: true }));
+              setForm(prev => ({ ...prev, 
+                isPro: true, 
+                showProStar: true,
+                isFeatured: true,
+                quickResponse: true,
+              }));
               setIsModalOpen(p => ({...p, pro: false}));
             }}>Vazhdo te Pagesa (€14.99)</button>
             <button className={styles.secondaryBtn} onClick={() => setIsModalOpen(p => ({...p, pro: false}))}>Më vonë</button>

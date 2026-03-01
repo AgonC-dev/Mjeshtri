@@ -116,7 +116,7 @@ useEffect(() => {
           {worker.isVerified && (
          <img src={Verified} className={verifyIcon ? styles.verifyBadge : styles.verifiedBadge} alt="verified" />
         )}
-        {worker.isPro && (
+        {worker.showProStar && (
          <div className={styles.proBadgeContainer} title="Anëtar PRO">
            <span className={styles.starIcon}>★</span>
          </div>

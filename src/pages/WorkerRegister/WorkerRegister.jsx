@@ -141,6 +141,9 @@ await setDoc(doc(db, "workers", user.uid), {
   isAvailable: true,
   isActive: true,
   isVerified: false,
+  isFeatured: false,
+  showProStar: false,
+  quickResponse: false,
   
   lastFingerprint: "", // Will be populated when they first use the dashboard
   createdAt: serverTimestamp(),

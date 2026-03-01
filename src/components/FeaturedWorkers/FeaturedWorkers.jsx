@@ -26,7 +26,8 @@ useEffect(() => {
       q = query(
         workersRef,
         where("isPro", "==", true),
-        // where("isVerified", "==", true),
+        where("isFeatured", "==", true),
+        where("isAvailable", "==", true),
         limit(10)
       );
       } else {
@@ -34,7 +35,7 @@ useEffect(() => {
           workersRef,
           where("category", "==", activeTab),
           where("isPro", "==", true),
-          // where("isVerified", "==", true),
+          where("isFeatured", "==", true),
           limit(10)
         )
       }

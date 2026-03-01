@@ -207,7 +207,7 @@ function WorkerProfile() {
                
               <div className={styles.topBadges}>
                 <span className={styles.catBadge}>{worker.category}</span>
-                {worker.isPro && <span className={styles.verifiedPro}>PRO</span>}
+                {worker.showProStar && <span className={styles.verifiedPro}>PRO</span>}
                 {worker.isVerified && <span className={styles.verifiedBadge}>
                    <img src={Verified} alt='verified badge' />
                 </span>}
@@ -276,7 +276,9 @@ function WorkerProfile() {
               </div>
               <div className={styles.trustFooter}>
                 <p>✓ Verifikuar nga Mjeshtri.ks</p>
-                <p>✓ Reagim i shpejtë</p>
+               {worker.quickResponse === true && (
+                 <p>✓ Reagim i shpejtë</p>
+              )}
               </div>
             </div>
           </aside>

@@ -336,7 +336,8 @@
 }
 
 .field input,
-.field textarea {
+.field textarea,
+.field select {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
@@ -348,7 +349,8 @@
 }
 
 .field input:focus,
-.field textarea:focus {
+.field textarea:focus,
+.field select:focus {
   outline: none;
   border-color: var(--primary);
   background: #fff;
@@ -1080,34 +1082,7 @@
   cursor: pointer;
 }
 
-.infoNote {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 1.5rem;
-  border-radius: 20px;
-  margin: 2rem 0;
-}
 
-.infoNote h4 {
-  color: #1e293b;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.infoList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.infoList li {
-  margin-bottom: 0.4rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 /* --- ANIMATIONS --- */
 @keyframes rotate {
@@ -1230,8 +1205,46 @@
 
 /* ===== RESPONSIVE ===== */
 
+.titleCon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.titleCon img {
+  width: 32px;
+  height: 32px;
+}
 
+.secondTitle {
+  font-family: "Graphik", sans-serif;
+  font-weight: 700;
+  font-style: bold;
+  font-size: 25px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  color: #000000;
+}
+
+.secondSubtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.46;
+  letter-spacing: 0.03em;
+  color: #000000;
+}
+
+.excuseBlock {
+  background-color: #D3E2FE;
+  border: 1px solid #0059FF;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  margin-top: 1rem;
+  flex-direction: column;
+  gap: 8px;
+}
 
 /* ===== RESPONSIVE & CENTERING ===== */
 

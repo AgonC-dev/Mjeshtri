@@ -19,7 +19,8 @@ export const app = initializeApp(firebaseConfig);
 
 if (typeof window !== "undefined") {
   initializeAppCheck(app, {
-    provider: new ReCaptchaEnterpriseProvider("6LfWeXMsAAAAANq-v7QKoXkLA3zvwfdaZauj3SBT"),
+    provider: new ReCaptchaEnterpriseProvider(
+      import.meta.env.VITE_RECAPTCHA_KEY),
     isTokenAutoRefreshEnabled: true
   });
 }

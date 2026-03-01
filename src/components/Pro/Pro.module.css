@@ -1,0 +1,296 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.proSettings {
+  pointer-events: auto;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.message {
+  text-align: center;
+  padding: 20px;
+}
+
+.message p {
+  font-weight: 700;
+  color: #1a1b1e;
+  font-size: 1.1rem;
+}
+
+.upgradeBtn {
+  margin-top: 10px;
+  padding: 12px 30px;
+  background-color: #0059FF;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 89, 255, 0.3);
+}
+
+.upgradeBtn:hover {
+  background-color: #0046cc;
+  transform: translateY(-2px);
+}
+
+.section {
+  background-color: #FFFFFF;
+  border: 1px solid #0000001A;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.copyGroup {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  margin-top: 0.8rem;
+}
+
+.copyGroup input {
+  background-color: #F8F9FA;
+  border: 1px solid #F0F0F0;
+  padding: 12px 16px;
+  flex: 1;
+  border-radius: 40px;
+  outline: none;
+  font-size: 14px;
+  color: #666;
+  text-overflow: ellipsis;
+}
+
+.copyGroup button {
+  background-color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  border-radius: 40px;
+  padding: 0 20px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.copyGroup button:active {
+  opacity: 0.7;
+}
+
+/* Switches & Lists */
+.settingsList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.settingsList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 15px;
+  color: #333;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #e9e9ea;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px; width: 22px;
+  left: 2px; bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input:checked + .slider { background-color: #34c759; }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Pro Badge Style */
+.proBadgeContainer {
+  width: 18px; height: 18px;
+  background-color: #0f172a;
+  border: 1.2px solid #fbbf24;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: 6px;
+}
+
+.starIcon { color: #fbbf24; font-size: 11px; }
+.starPro { display: flex; align-items: center; font-weight: 600; }
+
+/* Analytics Section */
+.analyticsSection {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid #f1f3f5;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerTitle h4 { margin: 0; font-size: 17px; font-weight: 800; color: #1a1b1e; }
+.headerTitle p { margin: 2px 0 0 0; font-size: 12px; color: #909294; }
+
+.pulseContainer {
+  display: flex; align-items: center; gap: 6px;
+  background: #f0fff4; padding: 6px 12px; border-radius: 30px;
+}
+
+.pulseDot {
+  width: 7px; height: 7px; background: #22c55e;
+  border-radius: 50%; animation: pulseAnim 2s infinite;
+}
+
+@keyframes pulseAnim {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.liveText { font-size: 9px; font-weight: 800; color: #166534; }
+
+/* Visual Table Rows */
+.visualTable { display: flex; flex-direction: column; gap: 10px; }
+
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+}
+
+.rowInfo { display: flex; align-items: center; gap: 12px; }
+
+.iconBox {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; font-size: 18px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+}
+
+.rowText strong { font-size: 14px; color: #2d3748; display: block; }
+.rowText p { font-size: 11px; color: #718096; margin: 0; }
+
+.sparkline { width: 60px; height: 25px; }
+.sparkline path {
+  stroke-dasharray: 150; stroke-dashoffset: 150;
+  animation: drawPath 2s ease-out forwards;
+}
+
+@keyframes drawPath { to { stroke-dashoffset: 0; } }
+
+.percentageValue { font-size: 18px; font-weight: 800; color: #2fb344; }
+.statusBadge {
+  background: #fff; color: #7950f2; font-size: 10px;
+  font-weight: 800; padding: 4px 10px; border-radius: 8px;
+}
+
+/* Row Colors */
+.blueRow { background: #f8faff; border-color: #e0e7ff; }
+.orangeRow { background: #fffcf5; border-color: #fff3bf; }
+.greenRow { background: #f8fff9; border-color: #d3f9d8; }
+.purpleRow { background: #fdfaff; border-color: #f3f0ff; }
+
+.proFooter { margin-top: 15px; text-align: center; font-size: 11px; color: #adb5bd; }
+
+/* =============================================
+   MEDIA QUERIES
+   ============================================= */
+
+/* TABLETS (Up to 1024px) */
+@media (max-width: 1024px) {
+  .section { padding: 24px; }
+}
+
+/* PHONES (Up to 768px) */
+@media (max-width: 768px) {
+  .analyticsHeader {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .headerTitle h4 { font-size: 15px; }
+  
+  .tableRow {
+    padding: 12px;
+  }
+  
+  .iconBox {
+    width: 35px; height: 35px; font-size: 16px;
+  }
+}
+
+/* SMALL PHONES (Up to 480px) */
+@media (max-width: 480px) {
+  .section { padding: 20px 15px; }
+  
+  .copyGroup { flex-direction: column; }
+  .copyGroup button { padding: 12px; }
+  
+  .settingsList li span { font-size: 13px; max-width: 70%; }
+  
+  .sparkline {
+    display: none; /* Hide charts on tiny screens to save space */
+  }
+  
+  .rowText strong { font-size: 13px; }
+  .rowText p { font-size: 10px; }
+  
+  .percentageValue { font-size: 16px; }
+  
+  .headerTitle p { font-size: 11px; }
+  
+  .pulseContainer { padding: 4px 8px; }
+  .liveText { font-size: 8px; }
+}

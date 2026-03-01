@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import styles from "../../pages/Dashboard/Dashboard.module.css";
+import styles from "./VerificationSection.module.css";
+import verifiesBadge from '../../assets/verify.png';
 
 export default function VerificationSection({
   isVerified,
@@ -72,7 +73,15 @@ export default function VerificationSection({
               <p className={styles.statusDescription}>Dokumenti juaj po rishikohet nga stafi ynë. Zakonisht zgjat 24-48 orë.</p>
               <div className={styles.loadingDots}><span></span><span></span><span></span></div>
               <button className={styles.secondaryBtn} onClick={() => setActiveTab('main')}>Dashboard</button>
+              <div className={styles.excuseBlock}>
+                <div className={styles.titleCon}>
+                   <p className={styles.secondTitle}>Pse duhet ta bëj këtë?</p>
+                   <img src={verifiesBadge} alt='verifiedbadge' />
+                </div>
+                <p className={styles.secondSubtitle}>Duke verifikuar identitetin, ju shtoni shansat për të fituar besimin e klientëve duke shfaqur ikonën ‘I verifikuar’ në profilin tënd. Informatat sensitive largohen nga databaza e platformës pasi që të verfikoheni nga ana jonë.</p>
+              </div>
             </div>
+            
           ) : isRejected ? (
 
             /* 3. ERROR / REJECTED STATE (STANDALONE) */
@@ -104,6 +113,11 @@ export default function VerificationSection({
                       <button className={styles.secondaryBtn} onClick={onRetake}>
                         🔄 Ndrysho foton
                       </button>
+                       {idFile && (
+                          <button className={styles.btnSaveAction} onClick={onUpload} disabled={isVerifying}>
+                            {isVerifying ? "Duke u dërguar..." : "Dërgo Dokumentin"}
+                           </button>
+                    )}
                     </div>
                   </div>
                 ) : (
@@ -120,20 +134,17 @@ export default function VerificationSection({
                  </label>
                 )}
               </div>
+              
 
-              <div className={styles.infoNote}>
-                <h4>Pse verifikimi?</h4>
-                <ul className={styles.infoList}>
-                  <li> Fitoni distinktivin e besueshmërisë ✅</li>
-                  <li> Rritni mundësinë për t'u përzgjedhur nga klientët</li>
-                </ul>
+              <div className={styles.excuseBlock}>
+                <div className={styles.titleCon}>
+                   <p className={styles.secondTitle}>Pse duhet ta bëj këtë?</p>
+                   <img src={verifiesBadge} alt='verifiedbadge' />
+                </div>
+                <p className={styles.secondSubtitle}>Duke verifikuar identitetin, ju shtoni shansat për të fituar besimin e klientëve duke shfaqur ikonën ‘I verifikuar’ në profilin tënd. Informatat sensitive largohen nga databaza e platformës pasi që të verfikoheni nga ana jonë.</p>
               </div>
 
-              {idFile && (
-                <button className={styles.btnSaveAction} onClick={onUpload} disabled={isVerifying}>
-                  {isVerifying ? "Duke u dërguar..." : "Dërgo Dokumentin"}
-                </button>
-              )}
+             
             </div>
           )}
         </div>

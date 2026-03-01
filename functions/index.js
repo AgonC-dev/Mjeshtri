@@ -395,6 +395,8 @@ export const handleGetPro = onCall({ cors: true }, async (request) => {
 
       transaction.update(workerRef, {
         isPro: true,
+        showProStar: true,
+        isFeatured: true,
         proSubscribedAt: FieldValue.serverTimestamp(),
       });
 
