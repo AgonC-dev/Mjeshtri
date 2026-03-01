@@ -4,6 +4,7 @@ import styles from './WorkerCard.module.css'
 import MapPin from '../../assets/Mappin.png';
 import Verified from '../../assets/verified.png';
 import { useEffect, useRef, useState } from 'react';
+import { auth } from '../../api/firebase';
 
 function WorkerCard({ worker, rank, verifyIcon }) {
 const { id } = useParams();
@@ -145,9 +146,9 @@ useEffect(() => {
       <span className={styles.icon}>🚩</span> Raporto
     </Link>
     
-    <div className={styles.divider} />
-
-    <button 
+    {!auth.currentUser && <div className={styles.divider} />}
+  
+   {!auth.currentUser && <button 
        onClick={(e) => {
     e.preventDefault();
     e.stopPropagation(); // 1. Stop the card from navigating
@@ -157,7 +158,7 @@ useEffect(() => {
        className={styles.dropdownItem}
     >
       <span className={styles.icon}>❤️</span> {isFav ? "Hiqe" : "Ruaje"}
-    </button>
+    </button>}  
   </div>
 )}
         </div>
@@ -188,7 +189,7 @@ useEffect(() => {
         
         <div className={styles.buttonContainer} onClick={(e) => e.stopPropagation()}>
           <WhatsAppButton workerId={id || worker.uid} phoneNumber={worker.phoneNumber} workerName={worker.fullName}/>
-          <button 
+    {!auth.currentUser &&  <button 
       onClick={toggleFavorite} 
       className={`${styles.heartBtn} ${isFav ? styles.active : ''}`}
       aria-label="Favorite"
@@ -209,7 +210,7 @@ useEffect(() => {
       {isFav && <div className={styles.particles}>
         <span></span><span></span><span></span><span></span>
       </div>}
-    </button>
+    </button>}
         </div>
       </div>
     </div>

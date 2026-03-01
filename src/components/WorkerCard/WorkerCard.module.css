@@ -1,7 +1,8 @@
 .card {
 
   width: 100%;        /* Fill the space provided by the grid */
-  max-width: 280px;   /* But don't get too giant on desktop */
+  max-width: 280px;
+  padding: 4px;   /* But don't get too giant on desktop */
   min-height: 396px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import { db } from "../../api/firebase.js";
+import { db, auth } from "../../api/firebase.js";
 import WhatsAppButton from '../../components/WhatsAppButton/WhatsAppButton';
 import styles from './WorkerProfile.module.css';
 import MapPin from '../../assets/Mappin.png';
@@ -21,6 +21,9 @@ function WorkerProfile() {
 
 
   useEffect(() => {
+
+    if (!worker?.id) return;
+
     const checkPersistence = () => {
       const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]")
       setIsFav(saved.some(item => item.id === worker.id));
@@ -35,13 +38,17 @@ function WorkerProfile() {
       window.removeEventListener("favoritesUpdated", checkPersistence);
      window.removeEventListener("storage", checkPersistence);
     }
-  }, [worker.id])
+  }, [worker?.id])
+
+
 
   // Sync with localStorage on mount
   useEffect(() => {
+
+       if (!worker?.id) return;
     const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]");
     setIsFav(saved.some(item => item.id === worker.id));
-  }, [worker.id]);
+  }, [worker?.id]);
 
   const toggleFavorite = (e) => {
     e.stopPropagation(); // Prevents clicking the card
@@ -175,7 +182,7 @@ function WorkerProfile() {
             </div>
 
             <div className={styles.textSide}>
-               <button 
+             {!auth.currentUser && <button 
                     onClick={toggleFavorite} 
                     className={`${styles.heartBtn} ${isFav ? styles.active : ''}`}
                     aria-label="Favorite"
@@ -196,7 +203,8 @@ function WorkerProfile() {
                     {isFav && <div className={styles.particles}>
                       <span></span><span></span><span></span><span></span>
                     </div>}
-                  </button>
+                  </button>} 
+               
               <div className={styles.topBadges}>
                 <span className={styles.catBadge}>{worker.category}</span>
                 {worker.isPro && <span className={styles.verifiedPro}>PRO</span>}

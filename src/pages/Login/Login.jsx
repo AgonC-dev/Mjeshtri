@@ -111,7 +111,8 @@ function Login() {
           required
         />
       </div>
-
+      {resetMessage &&  <p className={styles.resetMessage}>{resetMessage}</p> }
+     
       <div className={styles.footerActions}>
         <div className={styles.resetRow}>
           <button type="button" onClick={handleResetPassword} className={styles.textBtn}>

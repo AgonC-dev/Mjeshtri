@@ -32,6 +32,7 @@ function WorkerList() {
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery)
   const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
   const itemsPerPage = 8;
 
 
@@ -156,19 +157,29 @@ function WorkerList() {
       <h1 className={styles.title}>Kërko punëtorin e duhur</h1>
       
       <div className={styles.container}>
-        <FilterSidebar
-          cities={cities}
-          categories={categories}
-          workerNames={allWorkers?.map(w => w.fullName) || [] }
-          selectedCity={selectedCity}
-          selectedCategory={selectedCategory}
-          isVerified={isVerifiedOnly}
-          onVerifiedChange={setIsVerifiedOnly}
-          onCityChange={setSelectedCity}
-          onCategoryChange={setSelectedCategory}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
+       <button
+          className={styles.mobileFilterBtn}
+          onClick={() => setShowFilters(prev => !prev)}
+        >
+          {showFilters ? 'Mbyll Filtrat' : 'Filtrat'}
+        </button>
+
+        {/* SIDEBAR WRAPPER */}
+        <div className={`${styles.sidebarWrapper} ${showFilters ? styles.showMobile : ''}`}>
+          <FilterSidebar
+            cities={cities}
+            categories={categories}
+            workerNames={allWorkers?.map(w => w.fullName) || []}
+            selectedCity={selectedCity}
+            selectedCategory={selectedCategory}
+            isVerified={isVerifiedOnly}
+            onVerifiedChange={setIsVerifiedOnly}
+            onCityChange={setSelectedCity}
+            onCategoryChange={setSelectedCategory}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        </div>
         
         <div className={styles.results}>
   {/* The count stays visible but is "placeholder-y" during initial load */}

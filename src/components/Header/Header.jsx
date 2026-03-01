@@ -8,7 +8,8 @@ import Logo from '../../assets/Logo.png';
 import Search from '../../assets/Search.png';
 import Modal from '../Modal/Modal';
 import { CheckCircle2 } from "lucide-react";
-import { Home, Search as SearchIcon, Flame, LayoutDashboard, User } from 'lucide-react';
+import { Home, Heart, Search as SearchIcon, Flame, LayoutDashboard, User } from 'lucide-react';
+import { style } from 'framer-motion/client';
 
 const ADMIN_UID = "KMQyw2VBhUbzjKWPbV3A0ntO6Ho2";
 
@@ -388,7 +389,13 @@ return (
         className={styles.favoritesTrigger}
         onClick={() => setShowFavorites(true)}
       >
-        <span className={styles.heartIcon}>❤️</span>
+        <Heart 
+         size={24} 
+          color={favCount > 0 ? "#ff4d4d" : "#333"} 
+         fill={favCount > 0 ? "#ff4d4d" : "none"} 
+         strokeWidth={2.3}
+         className={style.heartIcon}
+        />
         {favCount > 0 && (
           <span className={styles.favBadge}>{favCount}</span>
         )}
