@@ -42,9 +42,13 @@
 */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  /* Change 1: Use auto-fill instead of auto-fit */
+  /* Change 2: Optional - set a hard max-width for the cards, e.g., 350px */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 300px)); 
   gap: 2rem;
   align-items: start;
+  /* Change 3: Center the grid itself if there are few cards */
+  justify-content: center; 
 }
 
 /* DESKTOP TWEAK

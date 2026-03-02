@@ -40,7 +40,7 @@ export default function ReviewModal({ user, onClose, sessions }) {
       );
 
       // 3. Open WhatsApp Web/App
-      window.open(`https://wa.me/${cleanPhone}?text=${message}`, "_blank");
+      window.location.href = `https://wa.me/${cleanPhone}?text=${message}`, "_blank";
 
       // 4. Close the modal
       onClose();

@@ -66,7 +66,7 @@ function Dashboard() {
     name: "", category: "", yearsExperience: "", hourlyRate: "",
     phoneNumber: "", bio: "", isPro: false, isAvailable: true,
     profileUrl: "", portfolio: [], slug: "", isFeatured: false, showProStar: false,
-    quickResponse: false, reviewCount: 0, avgRating: null
+    quickResponse: false, reviewCount: 0, avgRating: null, whatsappRequests: 0,
   });
   const [profileFile, setProfileFile] = useState(null);
   const [portfolioFiles, setPortfolioFiles] = useState([]);
@@ -122,6 +122,7 @@ function Dashboard() {
             quickResponse: data.quickResponse,
             reviewCount: data.reviewCount,
             avgRating: data.avgRating,
+            whatsappRequests: data.whatsappRequests,
           };
 
           setForm(initialForm);
@@ -663,6 +664,7 @@ const handleInstantSave = async (key, value) => {
             onStatus={setStatus}
             handleChange={handleInstantSave}
             link={personalLink}
+            lastReviewDate={reviews.length > 0 ? (reviews[0].createdAt || reviews[0].approvedAt) : null}
            />
         ) : null}
       </main>

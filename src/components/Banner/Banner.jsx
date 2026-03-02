@@ -3,7 +3,7 @@ import Worker1 from '../../assets/image1.png';
 import Worker2 from '../../assets/image2.png';
 import Worker3 from '../../assets/image3.png';
 import Chat from '../../assets/chat.png';
-import Star from '../../assets/star.png';
+import Frame from '../../assets/frame.png';
 
 export default function Banner() {
     return (
@@ -32,16 +32,10 @@ export default function Banner() {
                 <div className={styles.cardWrapper}>
                     
                       <div className={`${styles.visualBlock} ${styles.bgLightBlue}`}>
-                        <div className={styles.animationArea}>
-                            {[...Array(5)].map((_, i) => (
-                                <img 
-                                    key={i} 
-                                    src={Star} 
-                                    className={`${styles.star} ${styles[`star${i + 1}`]}`} 
-                                    alt='star icon' 
-                                />
-                            ))}
-                        </div>
+                    
+                           
+                         <img src={Frame} className={styles.reviewImg}/>
+                     
                     </div>
                     <h3 className={styles.title2}>Shiko eksperiencën</h3>
                     <p className={styles.subtitle}>

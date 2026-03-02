@@ -7,7 +7,7 @@ const StarIcon = () => (
   </div>
 );
 
-const Pro = ({ isPro, onUpgradeClick, form, handleChange, onStatus, link }) => {
+const Pro = ({ isPro, onUpgradeClick, form, lastReviewDate, handleChange, onStatus, link }) => {
   return (
     <div className={styles.wrapper}>
       {/* PRO SETTINGS CONTAINER */}
@@ -138,17 +138,23 @@ const Pro = ({ isPro, onUpgradeClick, form, handleChange, onStatus, link }) => {
 
             {/* Row 4: Last Activity */}
             <div className={`${styles.tableRow} ${styles.purpleRow}`}>
-              <div className={styles.rowInfo}>
-                <div className={styles.iconBox}>🕒</div>
-                <div className={styles.rowText}>
-                  <strong>Aktiviteti i fundit</strong>
-                  <p>Fundit: {form.lastReviewAt ? (form.lastReviewAt.toDate ? form.lastReviewAt.toDate().toLocaleDateString('sq-AL') : new Date(form.lastReviewAt).toLocaleDateString('sq-AL')) : "Asnjë vlerësim"}</p>
-                </div>
-              </div>
-              <div className={styles.statusBadge}>
-                {form.lastReviewAt ? "AKTIV" : "I RI"}
-              </div>
-            </div>
+      <div className={styles.rowInfo}>
+        <div className={styles.iconBox}>🕒</div>
+        <div className={styles.rowText}>
+          <strong>Aktiviteti i fundit</strong>
+          <p>
+            Vlerësimi i fundit: {lastReviewDate 
+              ? (lastReviewDate.toDate 
+                  ? lastReviewDate.toDate().toLocaleDateString('sq-AL') 
+                  : new Date(lastReviewDate).toLocaleDateString('sq-AL')) 
+              : "Asnjë vlerësim"}
+          </p>
+        </div>
+      </div>
+      <div className={styles.statusBadge}>
+        {lastReviewDate ? "AKTIV" : "I RI"}
+      </div>
+    </div>
           </div>
 
           <div className={styles.proFooter}>

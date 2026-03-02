@@ -354,7 +354,7 @@ export const approveReview = onCall({ cors: true }, async (request) => {
     transaction.update(workerRef, {
       reviewCount: newCount,
       totalRatingPoints: newPoints,
-      avgRating: newAvg
+      avgRating: newAvg,
     });
 
     // 3. Update global stats (optional: track total verified reviews)
