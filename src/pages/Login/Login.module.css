@@ -213,7 +213,7 @@
 
 @media (max-width: 600px) {
   .card {
-    padding: 40px 24px;
+    padding: 5px 24px;
     border: none;
     box-shadow: none;
   }

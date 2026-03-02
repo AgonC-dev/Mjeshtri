@@ -223,9 +223,12 @@
 @media (max-width: 480px) {
   .container {
     padding: 12px;
-    margin-top: 40px;
-    align-items: flex-start; /* Better for long forms on small screens */
+    align-items: center; /* Better for long forms on small screens */
     background-color: #f8fafc; /* Keep the background to maintain card definition */
+  }
+
+  .form {
+    width: 90%;
   }
 
   .card {
@@ -234,6 +237,7 @@
     margin-top: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.04);
     max-width: 100%;
+    align-items: center;
   }
 
   .header h2 {

@@ -163,6 +163,11 @@
         letter-spacing: -0.04em;
     }
 
+    .reviewImg {
+        width: 80%;
+        margin-top: 1rem;
+    }
+
     .blockCon {
         gap: 40px;
     }

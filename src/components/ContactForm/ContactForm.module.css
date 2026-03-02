@@ -167,9 +167,110 @@
 }
 
 /* Responsive Tweak */
-@media (max-width: 480px) {
+/* --- COMPREHENSIVE RESPONSIVE DESIGN --- */
+
+@media (max-width: 600px) {
   .proContent {
     padding: 24px 20px;
     border-radius: 20px;
+    margin: 10px; /* Ensures it doesn't touch screen edges if used in a flexible wrapper */
+  }
+
+  .proContent h2 {
+    font-size: 21px; /* Slightly smaller to prevent text wrapping weirdly */
+    text-align: center;
+  }
+
+  .proContent p {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .contactForm {
+    gap: 16px; /* Tighter gap on mobile */
+  }
+
+  .input {
+    padding: 16px; /* Larger tap target */
+    font-size: 16px; /* Prevents iOS from auto-zooming on focus */
+  }
+
+  /* Adjust PhoneInput for touch */
+  .phoneContainer :global(.form-control) {
+    height: 56px !important; /* Taller for mobile */
+    font-size: 16px !important;
+  }
+
+  /* Make sure the country dropdown doesn't overlap the input text on small screens */
+  .phoneContainer :global(.flag-dropdown) {
+    border-radius: 14px 0 0 14px !important;
+  }
+
+  .actions {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .purchaseBtn {
+    padding: 18px; /* High-visibility primary action */
+    font-size: 16px;
+    order: 1; /* Button stays on top */
+  }
+
+  .disabledBtn {
+    padding: 18px;
+    order: 1;
+  }
+
+  .cancelBtn {
+    padding: 12px;
+    order: 2; /* "Cancel" is secondary, stays at bottom */
+    font-size: 15px;
+  }
+
+  /* Hide the aura animation on mobile to save CPU/Battery */
+  .proContent::before {
+    width: 120px;
+    height: 120px;
+    top: -5%;
+    right: -5%;
+  }
+}
+
+/* Specific fix for very small phones (e.g., iPhone SE) */
+@media (max-width: 380px) {
+  .proContent h2 {
+    font-size: 19px;
+  }
+  
+  .proContent {
+    padding: 20px 16px;
+  }
+
+  .phoneContainer :global(.form-control) {
+    padding-left: 48px !important; /* Ensure enough space for the flag */
+  }
+}
+
+/* Fix for landscape mode height issues */
+@media (max-height: 500px) and (orientation: landscape) {
+  .proContent {
+    padding: 15px;
+  }
+  .proContent p {
+    margin-bottom: 10px;
+  }
+  .contactForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .actions {
+    grid-column: span 2;
+    flex-direction: row;
+  }
+  .purchaseBtn, .cancelBtn {
+    flex: 1;
   }
 }

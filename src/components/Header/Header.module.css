@@ -843,3 +843,145 @@
 @media (max-width: 380px) {
   .navLinkLogIn { width: 34px; height: 34px; }
 }
+
+/* --- FAVORITES MODAL RESPONSIVENESS --- */
+
+@media (max-width: 600px) {
+  .favModalContainer {
+    width: 95% !important;
+    max-height: 90vh; /* Ensure it doesn't overflow the screen */
+    padding: 20px 15px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+      margin: 0 auto;
+  }
+
+  .favHeader h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .favHeader p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  /* Make the list scrollable internally */
+  .favList {
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-top: 15px;
+  }
+
+  /* Responsive Fav Item Row */
+  .favItem {
+    padding: 12px;
+    gap: 12px;
+    flex-wrap: wrap; /* Allows actions to wrap if name is long */
+  }
+
+  .favAvatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .favMainInfo h4 {
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .favTag {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  /* Stack actions or make them icons-only to save space */
+  .favActions {
+    width: 100%; /* Full width on mobile for better alignment */
+    justify-content: space-between;
+    margin-top: 8px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+  }
+
+  .favCallBtn, .favViewBtn {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .favRemoveBtn {
+    padding: 8px 12px;
+  }
+
+  .modalCloseBtn {
+    top: 10px;
+    right: 10px;
+    background: #f8fafc;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+}
+
+/* --- CONFIRMATION MODAL RESPONSIVENESS --- */
+
+@media (max-width: 480px) {
+  .confirmModal {
+    width: 85% !important;
+    padding: 25px 20px;
+    border-radius: 24px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .confirmIcon {
+    font-size: 40px;
+    margin-bottom: 15px;
+  }
+
+  .confirmModal p {
+    font-size: 15px;
+    line-height: 1.4;
+    color: #334155;
+  }
+
+  .confirmActions {
+    flex-direction: column; /* Stack buttons on small screens */
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .confirmYes, .confirmNo {
+    width: 100%; /* Full width buttons for easier tapping */
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .confirmNo {
+    order: 2; /* Put "Cancel" at the bottom */
+    background: transparent;
+    color: #94a3b8;
+  }
+  
+  .confirmYes {
+    order: 1;
+    background: #ef4444; /* Alert red */
+  }
+}
+
+/* iPhone SE / Very small screen tweaks */
+@media (max-width: 350px) {
+  .favActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .favMainInfo {
+    flex: 1;
+  }
+}
