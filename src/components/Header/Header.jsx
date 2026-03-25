@@ -4,7 +4,7 @@ import styles from './Header.module.css';
 import { auth, db } from '../../api/firebase'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import Logo from '../../assets/Logo.png';
+import Logo from '../../assets/Logo2.png';
 import Search from '../../assets/Search.png';
 import Modal from '../Modal/Modal';
 import { CheckCircle2 } from "lucide-react";

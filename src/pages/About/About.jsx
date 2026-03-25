@@ -8,20 +8,20 @@ export default function About() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heroTitle}>Misioni ynë: <span>Gjejmjeshtrin.ks</span></h1>
+      <h1 className={styles.heroTitle}>Misioni ynë: <span>GjejNjerin</span></h1>
       <p className={styles.leadText}>
-        Në një treg ku koha është flori, ne kemi krijuar urën lidhëse mes Ustahit profesionist dhe klientit që ka nevojë për zgjidhje të shpejta dhe të besueshme.
+        Në një treg ku koha është flori, ne kemi krijuar urën lidhëse mes Njeriut profesionist dhe klientit që ka nevojë për zgjidhje të shpejta dhe të besueshme.
       </p>
       
       <div className={styles.contentSection}>
-        <h2>Pse Gjejmjeshtrin.ks?</h2>
+        <h2>Pse GjejNjerin.com</h2>
         <p>
           Ideja lindi nga një nevojë e thjeshtë: vështirësia për të gjetur një mjeshtër të besueshëm në Kosovë pa pasur nevojë të pyesësh të gjithë rrethin shoqëror. Ne besojmë se teknologjia duhet t'u shërbejë njerëzve të punës dhe të rrisë vlerën e zanatit.
         </p>
         
         <div className={styles.gridFeatures}>
           <div className={styles.feature}>
-            <h3>Për Ustahët</h3>
+            <h3>Për Mjeshtrit</h3>
             <p>Një hapësirë ku puna juaj vlerësohet, ku renditja bëhet në mënyrë transparente dhe ku klientët ju gjejnë direkt.</p>
           </div>
           <div className={styles.feature}>

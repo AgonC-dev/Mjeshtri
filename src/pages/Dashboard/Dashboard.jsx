@@ -500,7 +500,12 @@ const handleInstantSave = async (key, value) => {
             {form.isVerified ? "✅ I Verifikuar" : "🛡️ Verifikohu"}
           </button>
 
-          <button className={styles.navItem} onClick={() => setActiveTab('pro')}>🚀 Bëhu PRO</button>
+          <button 
+            onClick={() => setActiveTab('pro')}
+            className={activeTab === 'pro' ? styles.navItemActive : styles.navItem} 
+          >
+               {form.isPro ? "🌟Cilësimet PRO" : "🚀 Bëhu PRO"}
+          </button>
         </nav>
 
         <div className={styles.healthCard} onClick={() => setIsModalOpen(p => ({...p, health: true}))}>

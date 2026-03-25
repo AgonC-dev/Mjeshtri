@@ -38,14 +38,14 @@ function Footer() {
     Dërgo Mesazh
   </Link>
   <div className={styles.socialInfo}>
-    <span>info@mjeshtri.ks</span>
+    <span>info@gjejNjerin.com</span>
   </div>
 </div>
         </div>
 
         <div className={styles.bottomBar}>
           <p className={styles.text}>
-            © 2026 Mjeshtri.ks - Të gjitha të drejtat e rezervuara.
+            © 2026 GjejNjerin.com - Të gjitha të drejtat e rezervuara.
           </p>
         </div>
       </div>
