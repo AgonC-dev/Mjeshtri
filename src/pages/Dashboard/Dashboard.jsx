@@ -456,7 +456,7 @@ const handleInstantSave = async (key, value) => {
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <div className={styles.logoSquare}>M</div>
-          <h2>Mjeshtri<span>.ks</span></h2>
+          <h2>GjejNjerin<span></span></h2>
         </div>
 
         <div className={styles.profileBrief}>
