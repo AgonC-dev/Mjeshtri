@@ -14,7 +14,7 @@ export default function Privacy() {
 
       <div className={styles.contentSection}>
         <p className={styles.leadText}>
-          Mirë se vini në <strong>Gjejmjeshtrin.ks</strong>. Ne e respektojmë privatësinë
+          Mirë se vini në <strong>GjejNjerin.com</strong>. Ne e respektojmë privatësinë
           tuaj dhe jemi të përkushtuar për mbrojtjen e të dhënave personale të çdo
           përdoruesi, përfshirë Ustahët dhe Klientët.
           Duke përdorur platformën tonë, ju pranoni praktikat e përshkruara në këtë
@@ -50,7 +50,7 @@ export default function Privacy() {
 
         <h3>3. Shfaqja e Numrit të Telefonit</h3>
         <p>
-          Numri i telefonit i Ustahëve shfaqet si pjesë e shërbimit të platformës
+          Numri i telefonit i Mjeshtërve shfaqet si pjesë e shërbimit të platformës
           për t’u mundësuar klientëve kontakt direkt. Ne nuk i shesim apo
           shpërndajmë të dhënat tuaja personale tek palë të treta për qëllime marketingu.
         </p>

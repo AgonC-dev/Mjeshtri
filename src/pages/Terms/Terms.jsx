@@ -16,7 +16,7 @@ export default function Terms() {
         <p className={styles.date}>Përditësuar së fundmi: Mars 2026</p>
 
         <p className={styles.leadText}>
-          Mirë se vini në <strong>Gjejmjeshtrin.ks</strong>. Duke përdorur
+          Mirë se vini në <strong>GjejNjerin.com</strong>. Duke përdorur
           platformën tonë, ju pranoni këto Kushte Përdorimi. Nëse nuk pajtoheni
           me to, ju lutemi mos përdorni platformën.
         </p>
@@ -30,7 +30,7 @@ export default function Terms() {
 
         <h3>2. Roli i Platformës</h3>
         <p>
-          Gjejmjeshtrin.ks është një platformë ndërlidhëse që lidh klientët me
+          GjejNjerin.com është një platformë ndërlidhëse që lidh klientët me
           profesionistët (Ustahët). Ne nuk jemi punëdhënës, agjenci punësimi apo
           garantues i cilësisë së punës së kryer.
         </p>
@@ -39,9 +39,9 @@ export default function Terms() {
           drejtpërdrejt mes klientit dhe Ustahut.
         </p>
 
-        <h3>3. Përgjegjësia e Ustahëve</h3>
+        <h3>3. Përgjegjësia e Mjeshtrit</h3>
         <p>
-          Çdo Ustah është përgjegjës për saktësinë e të dhënave, përvojës,
+          Çdo Mjeshtër është përgjegjës për saktësinë e të dhënave, përvojës,
           fotografive dhe shërbimeve të publikuara në profil.
           Informacioni i rremë ose mashtrues mund të çojë në pezullim ose
           mbyllje të llogarisë.
@@ -84,7 +84,7 @@ export default function Terms() {
 
         <h3>8. Ndryshimet në Kushtet</h3>
         <p>
-          Gjejmjeshtrin.ks mund të përditësojë këto Kushte Përdorimi
+          GjejNjerin.com mund të përditësojë këto Kushte Përdorimi
           në çdo kohë. Ndryshimet hyjnë në fuqi menjëherë pas publikimit.
         </p>
 
