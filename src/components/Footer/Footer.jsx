@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import { useEffect } from 'react';
-import Logo from '../../assets/FooterLogo2.png'
+import Logo from '../../assets/footerLogo2.png'
 
 function Footer() {
 
