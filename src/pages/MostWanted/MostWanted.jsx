@@ -3,6 +3,7 @@ import { collection, onSnapshot, query, limit, orderBy } from 'firebase/firestor
 import WorkerCard from '../../components/WorkerCard/WorkerCard';
 import styles from './MostWanted.module.css';
 import { db } from '../../api/firebase';
+import Logo from '../../assets/Logo2.png';
 
 function MostWanted() {
   const [workers, setWorkers] = useState([]);
@@ -87,6 +88,7 @@ function MostWanted() {
           <h1 className={styles.mainTitle}>Më të kërkuarit</h1>
 
         </div>
+   
         <nav className={styles.filterPills}>
           {categories.map(cat => (
             <button 
