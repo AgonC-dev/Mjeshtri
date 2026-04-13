@@ -373,7 +373,7 @@ const handleInstantSave = async (key, value) => {
   };
   const health = getHealthStatus();
   const baseUrl = window.location.origin;
-  const personalLink = form.slug ? `${baseUrl}/${form.slug}` : `${baseUrl}/worker/${user?.uid}`;
+  const personalLink = form.slug ? `${baseUrl}/p/${form.slug}` : `${baseUrl}/worker/${user?.uid}`;
 
   const handleIdSelect = (e) => {
     const file = e.target.files[0];

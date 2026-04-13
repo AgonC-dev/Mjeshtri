@@ -51,7 +51,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About />},
       { path: 'pricing', element: <PricingPage />},
       { path: "help", element: <Help />},
-      { path: ":slug", element: <WorkerProfile />},
+      { path: "p/:slug", element: <WorkerProfile />},
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},

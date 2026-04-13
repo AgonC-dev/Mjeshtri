@@ -1,4 +1,4 @@
-import classes from './price.module.css';
+import classes from './Price.module.css';
 
 export default function PricingPage() {
   return (
