@@ -15,7 +15,7 @@ export default function PricingPage() {
         </div>
 
         <ul className={classes.features}>
-          <li>🚀 Renditje Prioritare në kërkime</li>
+          <li>🚀 Renditje Prioritare në kërkime.</li>
           <li>💎 Distinktiv i Verifikuar</li>
           <li>🖼️ Portofolio pa limit</li>
           <li>🔗 Link publik i profilit</li>
