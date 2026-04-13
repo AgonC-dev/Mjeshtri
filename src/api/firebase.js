@@ -3,7 +3,8 @@ import { getAuth } from "firebase/auth"; // Remove connectAuthEmulator import
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -17,14 +18,15 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
-// if (typeof window !== "undefined") {
-//   initializeAppCheck(app, {
-//     provider: new ReCaptchaEnterpriseProvider(
-//       import.meta.env.VITE_RECAPTCHA_KEY),
-//     isTokenAutoRefreshEnabled: true
-//   });
-// }
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
+if (typeof window !== "undefined") {
+  // Use ReCaptchaV3Provider for classic v3 keys
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_KEY),
+    isTokenAutoRefreshEnabled: true
+  });
+}
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
