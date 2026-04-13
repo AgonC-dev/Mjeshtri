@@ -26,6 +26,7 @@ import Help from "./pages/Help/Help";
 import AdminDashboard from "./pages/Admin/Admin";
 import AdminEnroll from "./components/AdminEnroll";
 import MostWanted from "./pages/MostWanted/MostWanted";
+import PricingPage from "./pages/Pricing/Price";
 
 
 const queryClient = new QueryClient();
@@ -52,7 +53,8 @@ const router = createBrowserRouter([
       { path: ":slug", element: <WorkerProfile />},
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
-      { path: 'wanted', element: <MostWanted />}
+      { path: 'wanted', element: <MostWanted />},
+      { path: 'pricing', element: <PricingPage />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},
