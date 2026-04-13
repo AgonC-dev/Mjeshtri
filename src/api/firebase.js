@@ -21,6 +21,7 @@ export const app = initializeApp(firebaseConfig);
 if (typeof window !== "undefined") {
   // Use ReCaptchaV3Provider for classic v3 keys
   // Note: Ensure VITE_RECAPTCHA_KEY is your SITE KEY
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_KEY),
     isTokenAutoRefreshEnabled: true
