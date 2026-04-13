@@ -5,7 +5,6 @@ import { getStorage } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
-
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -15,16 +14,19 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
+// Initialize App Check
 if (typeof window !== "undefined") {
   // Use ReCaptchaV3Provider for classic v3 keys
+  // Note: Ensure VITE_RECAPTCHA_KEY is your SITE KEY
   initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_KEY),
     isTokenAutoRefreshEnabled: true
   });
 }
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
