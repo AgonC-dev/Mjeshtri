@@ -18,8 +18,6 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
-
 if (typeof window !== "undefined") {
   // Use ReCaptchaV3Provider for classic v3 keys
   initializeAppCheck(app, {
