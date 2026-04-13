@@ -27,6 +27,7 @@ import AdminDashboard from "./pages/Admin/Admin";
 import AdminEnroll from "./components/AdminEnroll";
 import MostWanted from "./pages/MostWanted/MostWanted";
 import PricingPage from "./pages/Pricing/Price";
+import Refund from "./pages/Refund/Refund";
 
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       { path: "about", element: <About />},
       { path: 'pricing', element: <PricingPage />},
       { path: "help", element: <Help />},
+      { path: 'refund', element: <Refund />},
       { path: "p/:slug", element: <WorkerProfile />},
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},

@@ -1,0 +1,116 @@
+/* Same global font system */
+.container, .container * {
+  font-family: 'Graphik', sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Title */
+.title {
+  font-size: clamp(2.5rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2rem;
+  letter-spacing: -1.5px;
+}
+
+.title span {
+  color: #0059FF;
+}
+
+/* Date */
+.date {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+/* Lead text */
+.leadText {
+  font-size: 1.25rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 4rem;
+  border-left: 5px solid #0059FF;
+  padding-left: 24px;
+}
+
+/* Content */
+.contentSection {
+  line-height: 1.8;
+}
+
+.contentSection h3 {
+  color: #0f172a;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+}
+
+.contentSection p {
+  color: #64748b;
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.contentSection ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1.2rem;
+  color: #64748b;
+}
+
+.contentSection li {
+  margin-bottom: 0.5rem;
+}
+
+/* Link */
+.contentSection a {
+  color: #0059FF;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contentSection a:hover {
+  text-decoration: underline;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark mode support */
+:global([data-theme="dark"]) .title {
+  color: #f8fafc;
+}
+
+:global([data-theme="dark"]) .contentSection h3 {
+  color: #f1f5f9;
+}
+
+:global([data-theme="dark"]) .contentSection p,
+:global([data-theme="dark"]) .contentSection ul {
+  color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .leadText {
+    font-size: 1.1rem;
+  }
+
+  .container {
+    padding: 40px 20px;
+  }
+}
