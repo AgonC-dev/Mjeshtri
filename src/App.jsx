@@ -49,12 +49,12 @@ const router = createBrowserRouter([
       { path: "privacy", element: <Privacy />},
       { path: "terms", element: <Terms />},
       { path: "about", element: <About />},
+      { path: 'pricing', element: <PricingPage />},
       { path: "help", element: <Help />},
       { path: ":slug", element: <WorkerProfile />},
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},
-      { path: 'pricing', element: <PricingPage />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},
