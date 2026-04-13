@@ -28,7 +28,7 @@ if (typeof window !== "undefined") {
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const functions = getFunctions(app);
+export const functions = getFunctions(app, "us-central1");
 
 // if (import.meta.env.DEV || window.location.hostname === "localhost") {
 //   console.log("Connecting to Local Functions and Firestore...");
