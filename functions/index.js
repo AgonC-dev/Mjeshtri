@@ -310,7 +310,7 @@ export const submitReview = onCall({ cors: true }, async (request) => {
 
 export const approveReview = onCall({ cors: true }, async (request) => {
   // Check if caller is Admin
-  const ADMIN_UID = "KMQyw2VBhUbzjKWPbV3A0ntO6Ho2";
+  const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
   if (!request.auth || request.auth.uid !== ADMIN_UID) {
     throw new HttpsError("permission-denied", "Vetëm admini mund të miratojë.");
   }

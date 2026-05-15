@@ -11,7 +11,7 @@ import { CheckCircle2 } from "lucide-react";
 import { Home, Heart, Search as SearchIcon, Flame, LayoutDashboard, User } from 'lucide-react';
 import { style } from 'framer-motion/client';
 
-const ADMIN_UID = "KMQyw2VBhUbzjKWPbV3A0ntO6Ho2";
+const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
 
 function Header() {
   

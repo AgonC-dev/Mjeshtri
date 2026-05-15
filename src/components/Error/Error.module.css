@@ -3,102 +3,81 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
-  max-width: 100vw; /* Crucial: ensures 3D transforms don't stretch the page */
+  max-width: 100vw;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 1200px;
-  background-color: #000; /* Fallback for the error page */
+  /* Deep navy/black background - much easier on the eyes */
+  background-color: #020617; 
+  font-family: "Graphik", sans-serif;
 }
 
+/* Background Elements */
 .background {
   position: absolute;
   inset: 0;
-  overflow: hidden; /* Contains the floating orbs */
+  overflow: hidden;
   pointer-events: none;
 }
 
 .orb {
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
+  /* Subtle deep blue glow */
   background: radial-gradient(
     circle,
-    rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.4),
+    rgba(0, 89, 255, 0.12),
     transparent 70%
   );
-  filter: blur(90px);
-  animation: float 22s infinite alternate ease-in-out;
+  filter: blur(100px);
+  animation: float 25s infinite alternate ease-in-out;
   will-change: transform;
 }
 
-/* Rest of your card/glitch styles remain the same but use relative units */
-.card {
-  position: relative;
-  z-index: 2;
-  width: 90%; /* Ensures it doesn't hit edges on mobile */
-  max-width: 600px;
-  padding: 3rem;
-  border-radius: 24px;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(18px);
-  text-align: center;
-  transform-style: preserve-3d;
-}
-
-.glitch {
-  font-size: clamp(4rem, 15vw, 10rem);
-  font-weight: 900;
-  position: relative;
-  color: #fff;
-}
-/* ... rest of your CSS ... */
-
-/* ---------- BACKGROUND ---------- */
-
-
-
-
-.orb:nth-child(1) { top: -15%; left: -15%; }
-.orb:nth-child(2) { bottom: -20%; right: -10%; animation-duration: 28s; }
-.orb:nth-child(3) { top: 40%; left: 60%; animation-duration: 32s; }
-
-@keyframes float {
-  to { transform: translate(80px, -80px); }
-}
+.orb:nth-child(1) { top: -20%; left: -10%; }
+.orb:nth-child(2) { bottom: -20%; right: -5%; animation-delay: -5s; }
 
 .grid {
   position: absolute;
   inset: 0;
+  /* Very faint grid to add depth without brightness */
   background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 45px 45px;
-  animation: gridMove 18s linear infinite;
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
 }
 
-@keyframes gridMove {
-  to { transform: translateY(45px); }
+/* The Card - Dark Glassmorphism */
+.card {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 500px;
+  padding: 3.5rem 2rem;
+  border-radius: 28px;
+  /* Darker surface with a slight blue tint */
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  transform-style: preserve-3d;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.scanlines {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.15),
-    rgba(0,0,0,0.15) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+/* Typography */
+.glitch {
+  font-size: clamp(5rem, 15vw, 8rem);
+  font-weight: 800;
+  position: relative;
+  color: #f8fafc; /* Soft white, not pure #fff */
+  line-height: 1;
+  letter-spacing: -3px;
 }
-
-/* ---------- CARD ---------- */
-
-
-
 
 .glitch::before,
 .glitch::after {
@@ -108,51 +87,57 @@
 }
 
 .glitch::before {
-  color: var(--accent-red);
-  transform: translate(4px, -4px);
-  clip-path: inset(0 0 55% 0);
-  animation: glitch 2s infinite;
+  color: #ef4444; /* Muted red */
+  transform: translate(2px, -1px);
+  clip-path: inset(0 0 50% 0);
+  animation: glitch 3s infinite;
 }
 
 .glitch::after {
-  color: var(--accent-emerald);
-  transform: translate(-4px, 4px);
-  clip-path: inset(45% 0 0 0);
-  animation: glitch 1.6s infinite reverse;
-}
-
-@keyframes glitch {
-  20% { transform: translate(-6px, 6px); }
-  40% { transform: translate(6px, -6px); }
+  color: #0059FF; /* Your professional blue */
+  transform: translate(-2px, 1px);
+  clip-path: inset(50% 0 0 0);
+  animation: glitch 2.5s infinite reverse;
 }
 
 .subtitle {
   font-size: 1.4rem;
-  margin-top: 0.5rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-top: 1.5rem;
 }
 
 .desc {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
+  color: #94a3b8; /* Muted slate text */
+  font-size: 1rem;
+  margin: 1rem 0 2rem 0;
+  line-height: 1.6;
 }
 
-/* ---------- MINI GAME ---------- */
-
+/* Mini Game - Muted Dark Style */
 .game {
-  margin: 1.5rem 0;
+  margin: 2rem 0;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .gameTitle {
-  margin-bottom: 0.5rem;
-  color: var(--accent-emerald);
+  margin-bottom: 0.8rem;
+  color: #38bdf8; /* Soft blue sky color */
   font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 .gameArea {
   position: relative;
-  height: 160px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.04);
+  height: 130px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   overflow: hidden;
 }
 
@@ -160,115 +145,55 @@
   position: absolute;
   width: 14px;
   height: 14px;
-  background: var(--accent-emerald);
+  background: #0059FF;
   border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.8);
+  box-shadow: 0 0 15px rgba(0, 89, 255, 0.6);
 }
 
 .score {
-  margin-top: 0.5rem;
-  color: var(--text-muted);
+  margin-top: 0.8rem;
+  color: #64748b;
+  font-size: 0.85rem;
 }
 
-/* ---------- BUTTON ---------- */
-
+/* Button - The only bright primary element */
 .homeBtn {
-  margin-top: 2rem;
-  padding: 1rem 2.5rem;
-  border-radius: var(--border-radius);
-  background: linear-gradient(
-    135deg,
-    var(--accent-emerald),
-    var(--accent-emerald-dark)
-  );
-  color: var(--text-white);
-  font-size: 1rem;
-  box-shadow: 0 0 30px rgba(var(--accent-emerald-r), var(--accent-emerald-g), var(--accent-emerald-b), 0.6);
+  margin-top: 1rem;
+  padding: 14px 36px;
+  border-radius: 12px;
+  font-weight: 700;
+  background-color: #0059FF;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
-/* ================= RESPONSIVE ================= */
-
-/* Tablets */
-@media (max-width: 1024px) {
-  .card {
-    padding: 2.5rem 3rem;
-  }
-
-  .glitch {
-    font-size: clamp(5rem, 16vw, 9rem);
-  }
-
-  .gameArea {
-    height: 140px;
-  }
+.homeBtn:hover {
+  background-color: #1e6aff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 89, 255, 0.3);
 }
 
-/* Phones */
-@media (max-width: 768px) {
-  .wrapper {
-    padding: 1.5rem;
-  }
-
-  .card {
-    width: 100%;
-    padding: 2rem 1.5rem;
-    border-radius: 20px;
-  }
-
-  .glitch {
-    font-size: clamp(4rem, 22vw, 7rem);
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-  }
-
-  .desc {
-    font-size: 0.95rem;
-  }
-
-  .gameArea {
-    height: 120px;
-  }
-
-  .pixel {
-    width: 16px;
-    height: 16px;
-  }
-
-  .homeBtn {
-    width: 100%;
-    padding: 1rem;
-  }
+/* Transitions & Animations */
+@keyframes float {
+  to { transform: translate(30px, -30px); }
 }
 
-/* Small phones */
-@media (max-width: 420px) {
-  .card {
-    padding: 1.5rem 1.2rem;
-  }
-
-  .glitch {
-    font-size: 4rem;
-  }
-
-  .gameTitle {
-    font-size: 0.95rem;
-  }
-
-  .score {
-    font-size: 0.9rem;
-  }
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
 }
 
-/* Reduce motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .orb,
-  .grid,
-  .glitch::before,
-  .glitch::after {
-    animation: none !important;
-  }
+/* Responsive */
+@media (max-width: 600px) {
+  .card { padding: 2.5rem 1.5rem; }
+  .glitch { font-size: 5rem; }
+  .homeBtn { width: 100%; }
 }
-
