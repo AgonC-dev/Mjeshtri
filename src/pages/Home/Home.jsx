@@ -9,6 +9,8 @@ import Banner from '../../components/Banner/Banner';
 import { db,functions } from '../../api/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../api/firebase';
 
 function Home() {
   const navigate = useNavigate();
@@ -21,8 +23,21 @@ function Home() {
   const [metadata, setMetaData] = useState(null);
   const [showProModal, setShowProModal] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
+  const [user, setUser] = useState(null)
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      setUser(u)
+      setAuthLoading(false);
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+  if (authLoading || !user) return;
+
     const docRef = doc(db, "metadata", "globalStats")
 
     const fetchDoc = async () => {
@@ -33,7 +48,7 @@ function Home() {
            setMetaData(data);
            
            const hasSeenProModal = localStorage.getItem('proModalDismissed');
-           if (data.workerCount < 50 && !hasSeenProModal) {
+           if (data.workerCount < 50 && !hasSeenProModal && user) {
              setShowProModal(true);
            }
          }
@@ -43,7 +58,7 @@ function Home() {
     }
     
     fetchDoc()
-  }, [])
+  }, [user, authLoading])
 
   const handleSearch = (query) => {
     if (query.trim()) {
