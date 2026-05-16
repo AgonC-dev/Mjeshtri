@@ -7,11 +7,10 @@ export default function AdminWorkers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  // State for controlling the Details Modal
+  const [selectedWorker, setSelectedWorker] = useState(null);
 
-  
-  
-
-  const handleSearch = async  (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     const term = searchTerm.trim().toLowerCase(); 
     if (!term) return;
@@ -31,8 +30,6 @@ export default function AdminWorkers() {
         ...doc.data()
       }));
 
-
-
       setResults(workers)
     } catch (err) {
       console.error("Search error:", err);
@@ -43,30 +40,30 @@ export default function AdminWorkers() {
 
  async function handleTogglePro(id, isPro) {
    try {
-        // 2. Correct the reference (use doc, not collection)
         const workerRef = doc(db, "workers", id); 
         const statsRef = doc(db, "metadata", "globalStats");
 
-        // 3. Await the update
         await updateDoc(workerRef, { isPro: !isPro });
         await updateDoc(statsRef, {
           proCount: isPro ? increment(-1) : increment(1)
         });
 
-        // 4. THE UI MAGIC: Update your local results array
         setResults(results.map(w => 
             w.id === id ? { ...w, isPro: !isPro } : w
         ));
         
+        // Dynamic modal update if open
+        if (selectedWorker && selectedWorker.id === id) {
+          setSelectedWorker(prev => ({ ...prev, isPro: !isPro }));
+        }
     } catch (e) {
         console.error("Gabim!", e);
     }
   }
 
-
   async function handleIsActive(id, isActive) {
     try {
-      const workerRef = doc(db, "workers",id);
+      const workerRef = doc(db, "workers", id);
       await updateDoc(workerRef, {
         isActive: !isActive
       })
@@ -74,6 +71,10 @@ export default function AdminWorkers() {
       setResults(results.map(w => 
             w.id === id ? { ...w, isActive: !isActive } : w
         ));
+
+      if (selectedWorker && selectedWorker.id === id) {
+        setSelectedWorker(prev => ({ ...prev, isActive: !isActive }));
+      }
     } catch (err) {
       console.error("Gabim!", err);
     }
@@ -89,14 +90,17 @@ export default function AdminWorkers() {
        setResults(results.map(w => 
             w.id === id ? { ...w, isVerified: !isVerified } : w
         ));
+
+       if (selectedWorker && selectedWorker.id === id) {
+         setSelectedWorker(prev => ({ ...prev, isVerified: !isVerified }));
+       }
      } catch (err) {
        console.error("Gabim!", err);
      }
   }
 
- // 1. Pass the whole worker object instead of just the ID
 async function handleDelete(worker) {
-  const { id, isPro, fullName } = worker; // Destructure what we need
+  const { id, isPro, fullName } = worker; 
   
   const confirmDelete = window.confirm(`A jeni i sigurt që dëshironi të fshini ${fullName}?`);
   if (!confirmDelete) return;
@@ -105,30 +109,40 @@ async function handleDelete(worker) {
     const workerRef = doc(db, "workers", id);
     const statsRef = doc(db, "metadata", "globalStats");
 
-    // 1. Perform the deletion
     await deleteDoc(workerRef);
 
-    // 2. Prepare the stats update
     const statsUpdate = {
       workerCount: increment(-1)
     };
 
-    // If the deleted worker was PRO, we must decrement that too!
     if (isPro) {
       statsUpdate.proCount = increment(-1);
     }
 
     await updateDoc(statsRef, statsUpdate);
 
-    // 3. Update UI
     setResults(prevResults => prevResults.filter(w => w.id !== id));
+    if (selectedWorker && selectedWorker.id === id) setSelectedWorker(null);
     alert('Mjeshtri u fshi me sukses');
 
   } catch (err) {
-    console.error("Gabim gjatë fshirjes:", err); // Fixed: was 'error'
+    console.error("Gabim gjatë fshirjes:", err); 
     alert("Nuk keni autorizim ose ndodhi një gabim.");
   }
 }
+
+// Helper to format Firestore timestamps elegantly
+const formatTimestamp = (timestamp) => {
+  if (!timestamp) return "N/A";
+  const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+  return date.toLocaleString('sq-AL', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
 return (
   <div className={styles.adminWrapper}>
@@ -144,7 +158,6 @@ return (
     </form>
 
     <ul className={styles.resultsList}>
-      {/* 1. Map through results only if they exist */}
      <div className={styles.tableContainer}>
   <table className={styles.adminTable}>
     <thead>
@@ -164,6 +177,14 @@ return (
               <strong>{worker.fullName}</strong>
               <span className={styles.workerEmail}>{worker.email}</span>
               <span>ID: {worker.id.substring(0, 5)}...</span>
+              
+              {/* Inline account timestamps at the end of the block */}
+              <div className={styles.inlineMetaTime}>
+                <span>📅 Krijuar: {formatTimestamp(worker.createdAt)}</span>
+                {worker.isPro && worker.proSubscribedAt && (
+                  <span className={styles.proTimeBadge}>✨ PRO që nga: {formatTimestamp(worker.proSubscribedAt)}</span>
+                )}
+              </div>
             </div>
           </td>
           <td>{worker.category}</td>
@@ -204,7 +225,16 @@ return (
       onClick={() => handleDelete(worker)} 
       className={`${styles.adminBtn} ${styles.deleteBtn}`}
     >
-      🗑️ Fshij
+     🗑️ Fshij
+    </button>
+
+    {/* THREE DOTS / SEE DETAILS */}
+    <button 
+      onClick={() => setSelectedWorker(worker)}
+      className={`${styles.adminBtn} ${styles.detailsBtn}`}
+      title="Shiko Detajet e Plota"
+    >
+      •••
     </button>
   </div>
 </td>
@@ -213,13 +243,82 @@ return (
     </tbody>
   </table>
 </div>
-      {/* 2. The Correct "If" Check: 
-          Show 'No Results' ONLY if we searched, finished loading, and found nothing */}
       {!loading && searchTerm && results.length === 0 && (
         <p>Asnjë rezultat u gjet për "{searchTerm}"</p>
       )}
     </ul>
+
+    {/* ADVANCED PROFILE DETAILS MODAL */}
+    {selectedWorker && (
+      <div className={styles.modalOverlay} onClick={() => setSelectedWorker(null)}>
+        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalHeader}>
+            <h2>Profili i Plotë i Mjeshtrit</h2>
+            <button className={styles.closeModalBtn} onClick={() => setSelectedWorker(null)}>&times;</button>
+          </div>
+          
+          <div className={styles.modalBody}>
+            <div className={styles.infoSection}>
+              <h3>🔑 Informacioni Bazik</h3>
+              <div className={styles.infoGrid}>
+                <div><strong>Emri i Plotë:</strong> {selectedWorker.fullName}</div>
+                <div><strong>Slug:</strong> {selectedWorker.slug || "N/A"}</div>
+                <div><strong>UID (Firebase):</strong> {selectedWorker.uid}</div>
+                <div><strong>Email:</strong> {selectedWorker.email}</div>
+                <div><strong>Numri i Telefonit:</strong> {selectedWorker.phoneNumber || "N/A"}</div>
+                <div><strong>Qyteti:</strong> {selectedWorker.city || "N/A"}</div>
+              </div>
+            </div>
+
+            <div className={styles.infoSection}>
+              <h3>🛠️ Specifikacionet Profesionale</h3>
+              <div className={styles.infoGrid}>
+                <div><strong>Kategoria:</strong> {selectedWorker.category}</div>
+                <div><strong>Përvoja:</strong> {selectedWorker.experienceYears} Vite</div>
+                <div><strong>Çmimi Fillestar:</strong> {selectedWorker.startingPrice} €</div>
+                <div><strong>Përgjigje e Shpejtë:</strong> {selectedWorker.quickResponse ? "Po" : "Jo"}</div>
+                <div><strong>I Disponueshëm:</strong> {selectedWorker.isAvailable ? "Po ✅" : "Jo ❌"}</div>
+              </div>
+              <div className={styles.bioBlock}>
+                <strong>Biografia / Përshkrimi:</strong>
+                <p>{selectedWorker.bio || "Nuk ka biografi të shkruar..."}</p>
+              </div>
+            </div>
+
+            <div className={styles.infoSection}>
+              <h3>📊 Statistikat & Metrikat</h3>
+              <div className={styles.infoGrid}>
+                <div><strong>Vlerësimi Mesatar:</strong> ⭐ {selectedWorker.avgRating !== null ? selectedWorker.avgRating : "0"}</div>
+                <div><strong>Numri i Rishikimeve:</strong> {selectedWorker.reviewCount}</div>
+                <div><strong>Klikime në WhatsApp:</strong> {selectedWorker.whatsappRequests}</div>
+                <div><strong>Rishikimi i Fundit më:</strong> {formatTimestamp(selectedWorker.lastReviewAt)}</div>
+              </div>
+            </div>
+
+            <div className={styles.infoSection}>
+              <h3>🛡️ Statusi Administrativ & Siguria</h3>
+              <div className={styles.infoGrid}>
+                <div><strong>Statusi i Llogarisë:</strong> {selectedWorker.isActive ? "Aktive ✅" : "E Suspenduar 🚫"}</div>
+                <div><strong>I Verifikuar:</strong> {selectedWorker.isVerified ? "Po 🛡️" : "Jo 🔍"}</div>
+                <div><strong>Verifikimi i Refuzuar:</strong> {selectedWorker.verificationRejected ? "Po ❌" : "Jo"}</div>
+                <div><strong>Plan Anëtarësimi:</strong> {selectedWorker.isPro ? "PRO ⭐" : "Basic"}</div>
+                <div><strong>Ylli PRO i Shfaqur:</strong> {selectedWorker.showProStar ? "Po" : "Jo"}</div>
+                <div><strong>I Rekomanduar (Featured):</strong> {selectedWorker.isFeatured ? "Po 🔥" : "Jo"}</div>
+                <div className={styles.fullWidthGridItem}><strong>Gjurmë Digjitale (Fingerprint):</strong> <code className={styles.codeSnippet}>{selectedWorker.lastFingerprint || "Pa të dhëna"}</code></div>
+              </div>
+            </div>
+
+            <div className={styles.infoSection}>
+              <h3>⏳ Historiku i Kohës</h3>
+              <div className={styles.infoGrid}>
+                <div><strong>Regjistrimi në Platformë:</strong> {formatTimestamp(selectedWorker.createdAt)}</div>
+                <div><strong>Abonimi PRO:</strong> {formatTimestamp(selectedWorker.proSubscribedAt)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
   </div>
 );
-
 }
