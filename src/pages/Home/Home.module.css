@@ -103,6 +103,8 @@
   margin-bottom: 0.75rem;
 }
 
+
+
 .dashboardBtn:hover {
   background: #334155;
   transform: translateY(-2px);
@@ -122,4 +124,306 @@
 .closeBtn:hover {
   color: #64748b;
   text-decoration: underline;
+}
+
+.home {
+  width: 100%;
+}
+
+/* --- Success Modal Styling --- */
+.successModal {
+  position: relative;
+  background: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.successGlow {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+.iconCircle {
+  width: 80px;
+  height: 80px;
+  background: #f0fdf4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: #10b981;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+.checkIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.dualTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.partWhite {
+  color: #1e293b;
+}
+
+.partGreen {
+  color: #10b981;
+  font-size: 2.5rem;
+}
+
+.modalSubtitle {
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.successInfoBox {
+  background: #f8fafc;
+  padding: 1.25rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+
+.successInfoBox p {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* --- Buttons & General Actions --- */
+.dashboardBtn {
+  width: 100%;
+  background: #1e293b;
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 0.75rem;
+}
+
+.dashboardBtn:hover {
+  background: #334155;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.2);
+}
+
+.closeBtn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #64748b;
+  text-decoration: underline;
+}
+
+/* ========================================== */
+/* --- NEW LIGHT THEME PRO MODAL STYLING --- */
+/* ========================================== */
+
+.proModal {
+  position: relative;
+  background: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.partGold {
+  color: #eab308; /* Premium Gold/Amber tailored to white backgrounds */
+  font-size: 2.3rem;
+}
+
+.proGlow {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(234, 179, 8, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.badgeContainer {
+  margin-bottom: 1rem;
+  z-index: 2;
+  position: relative;
+}
+
+.proBadge {
+  background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+  color: #854d0e;
+  font-weight: 800;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2);
+}
+
+.proInfoBox {
+  background: #fdfbf7; /* Slight warm tone tint */
+  padding: 1.5rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid #fef08a;
+  margin-bottom: 2rem;
+  z-index: 2;
+  position: relative;
+}
+
+.proInfoBox p {
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+/* Custom Styled Progress Tracker */
+.counterContainer {
+  width: 100%;
+}
+
+.progressBar {
+  width: 100%;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+  border: 1px solid #e2e8f0;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #fde047, #eab308);
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.counterText {
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+.counterText strong {
+  color: #eab308;
+  font-size: 0.95rem;
+}
+
+/* Call to Action Button */
+.claimBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 0.75rem;
+  z-index: 2;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+.claimBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.25);
+}
+
+/* --- PURE CSS ANIMATED FIREWORKS EFFECT --- */
+.fireworksContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.firework {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: explode 2.5s infinite ease-in-out;
+}
+
+/* Firework positions & colors */
+.firework:nth-child(1) {
+  top: 20%;
+  left: 20%;
+  box-shadow: 0 0 #eab308, 20px -30px #eab308, -20px -10px #eab308, -10px -40px #eab308, 30px -10px #eab308;
+  animation-delay: 0s;
+}
+
+.firework:nth-child(2) {
+  top: 15%;
+  left: 75%;
+  box-shadow: 0 0 #60a5fa, -25px -20px #60a5fa, 20px -40px #60a5fa, 5px -30px #60a5fa, -15px -40px #60a5fa;
+  animation-delay: 0.6s;
+}
+
+.firework:nth-child(3) {
+  top: 35%;
+  left: 45%;
+  box-shadow: 0 0 #f43f5e, -15px -30px #f43f5e, 25px -20px #f43f5e, -20px -10px #f43f5e, 15px -40px #f43f5e;
+  animation-delay: 1.2s;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(12);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }

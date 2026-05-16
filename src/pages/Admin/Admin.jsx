@@ -34,7 +34,7 @@ export default function AdminDashboard() {
     const inputRef = useRef(null);
     const ADMIN_PIN_HASH = "8c2cd4a7bcff84654004d26d74ae332c7e24d701db2e5433ef672c2daf4b499c" 
     
-    const ADMIN_UID = "KMQyw2VBhUbzjKWPbV3A0ntO6Ho2";
+    const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
     const navigate = useNavigate();
   
     useEffect(() => {
