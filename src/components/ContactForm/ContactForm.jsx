@@ -68,7 +68,7 @@ export default function ContactForm({ workerId, workerPhone, workerName = "Mjesh
       // 3. Redirect to WhatsApp
       const cleanPhone = workerPhone.replace(/\D/g, '');
       const message = encodeURIComponent(
-        `Përshëndetje ${workerName}, unë jam ${customerName}. Ju gjeta te Mjeshtri.ks...`
+        `Përshëndetje ${workerName}, unë jam ${customerName}. Ju gjeta te GjejNjerin.com...`
       );
       
       window.location.href = `https://wa.me/${cleanPhone}?text=${message}`;

@@ -179,7 +179,7 @@ export const createReviewRequest = onCall({ cors: true }, async (req) => {
   });
 
   return {
-    reviewUrl: `https://mjeshtri-blue.vercel.app/review/${token}`,
+    reviewUrl: `https://gjejnjerin.com/review/${token}`,
   };
 });
 
