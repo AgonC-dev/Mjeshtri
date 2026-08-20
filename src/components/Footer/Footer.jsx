@@ -38,7 +38,7 @@ function Footer() {
     Dërgo Mesazh
   </Link>
   <div className={styles.socialInfo}>
-    <span>info@gjejNjerin.com</span>
+    <span>support@gjejnjerin.com</span>
   </div>
 </div>
         </div>
