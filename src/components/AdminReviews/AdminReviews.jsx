@@ -10,7 +10,7 @@ import {
     limit 
 } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { db } from "../../api/firebase";
+import { db, auth } from "../../api/firebase";
 import styles from './AdminReviews.module.css';
 
 export default function AdminReviews() {

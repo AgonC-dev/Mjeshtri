@@ -13,6 +13,12 @@ import admin from "firebase-admin";
 // Destructure FieldValue specifically for Admin v13
 import { FieldValue } from "firebase-admin/firestore"; 
 import crypto from "node:crypto";
+import { defineSecret } from "firebase-functions/params";
+import { Resend } from "resend";
+import { onDocumentCreated } from "firebase-functions/v2/firestore";
+
+const resendApiKey = defineSecret("RESEND_API_KEY");
+
 
 
 
@@ -222,6 +228,101 @@ export const createReviewRequest = onCall({ cors: true }, async (req) => {
 //     throw new HttpsError("internal", err.message || "Ndodhi një gabim në server.");
 //   }
 // });
+
+export const sendWelcomeEmail = onDocumentCreated(
+  {
+    document: "workers/{workerId}",
+    secrets: [resendApiKey],
+  },
+  async (event) => {
+
+    const worker = event.data?.data();
+
+    if (!worker) {
+      console.log("Worker document does not exist.");
+      return;
+    }
+
+    const email = worker.email;
+    const name = worker.fullName;
+
+    if (!email) {
+      console.log("Worker has no email.");
+      return;
+    }
+
+    try {
+
+      const resend = new Resend(resendApiKey.value());
+
+      const { data, error } = await resend.emails.send({
+        from: "Gjejnjerin <hello@gjejnjerin.com>",
+        to: [email],
+        subject: "Mirë se erdhe në Gjejnjerin! 👋",
+
+        html: `
+          <div style="
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            color: #222;
+          ">
+
+            <h1 style="margin-bottom: 10px;">
+              Mirë se erdhe, ${name}! 👋
+            </h1>
+
+            <p style="font-size: 16px; line-height: 1.6;">
+              Llogaria jote në <strong>Gjejnjerin</strong>
+              u krijua me sukses.
+            </p>
+
+            <p style="font-size: 16px; line-height: 1.6;">
+              Tani mund të plotësosh profilin tënd,
+              të shtosh portfolio-n dhe të fillosh
+              të lidhesh me klientë.
+            </p>
+
+            <a
+              href="https://gjejnjerin.com"
+              style="
+                display: inline-block;
+                margin-top: 15px;
+                padding: 12px 20px;
+                background: #000;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 8px;
+              "
+            >
+              Hape Gjejnjerin
+            </a>
+
+            <p style="
+              margin-top: 30px;
+              color: #777;
+              font-size: 14px;
+            ">
+              Faleminderit që u bëre pjesë e Gjejnjerin. ❤️
+            </p>
+
+          </div>
+        `,
+      });
+
+      if (error) {
+        console.error("Resend error:", error);
+        return;
+      }
+
+      console.log("Welcome email sent:", data?.id);
+
+    } catch (error) {
+      console.error("Welcome email error:", error);
+    }
+  }
+);
 
 
 export const submitReview = onCall({ cors: true }, async (request) => {
