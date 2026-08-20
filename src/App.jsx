@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       { path: 'pricing', element: <PricingPage />},
       { path: "help", element: <Help />},
       { path: 'refund', element: <Refund />},
-      { path: "p/:slug", element: <WorkerProfile />},
+      { path: "/:slug", element: <WorkerProfile />},
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},

@@ -224,7 +224,7 @@ if (error) {
                 </a>
               </div>
               <div className={styles.trustFooter}>
-                <p>✓ Verifikuar nga Mjeshtri.ks</p>
+                <p>✓ Verifikuar nga GjejNjerin.com</p>
                 <p>✓ Reagim i shpejtë</p>
               </div>
             </div>

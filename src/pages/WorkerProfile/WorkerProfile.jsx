@@ -275,7 +275,7 @@ function WorkerProfile() {
                 </a>
               </div>
               <div className={styles.trustFooter}>
-                <p>✓ Verifikuar nga Mjeshtri.ks</p>
+                <p>✓ Verifikuar nga GjejNjerin.com</p>
                {worker.quickResponse === true && (
                  <p>✓ Reagim i shpejtë</p>
               )}
