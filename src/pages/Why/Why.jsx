@@ -6,7 +6,7 @@ export default function WhyGjejnjerin() {
   return (
     <main className={styles.page}>
       {/* HEADER */}
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <Link to="/" className={styles.logo}>
           <img
             src={Logo}
@@ -18,7 +18,7 @@ export default function WhyGjejnjerin() {
         <Link to="/register" className={styles.headerButton}>
           Regjistrohu
         </Link>
-      </header>
+      </header> */}
 
       {/* HERO */}
       <section className={styles.hero}>

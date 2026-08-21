@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./WorkerRegister.module.css";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -48,6 +48,14 @@ function WorkerRegister() {
   });
   const [photoPreview, setPhotoPreview] = useState(null);
 
+
+  useEffect(() => {
+   window.scrollTo({
+  top: 0,
+  behavior: 'smooth'
+});
+    
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
