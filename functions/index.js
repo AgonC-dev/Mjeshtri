@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onCall,onRequest, HttpsError } from "firebase-functions/v2/https";
 import { setGlobalOptions } from "firebase-functions/v2";
 import admin from "firebase-admin";
 // Destructure FieldValue specifically for Admin v13
@@ -17,7 +17,7 @@ import { defineSecret } from "firebase-functions/params";
 import { Resend } from "resend";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 
-const resendApiKey = defineSecret("RESEND_API_KEY");
+
 
 
 
@@ -229,6 +229,19 @@ export const createReviewRequest = onCall({ cors: true }, async (req) => {
 //   }
 // });
 
+
+// export const sendWelcomeEmail = onDocumentCreated(
+//   {
+//     document: "workers/{workerId}",
+//   },
+//   async (event) => {
+//     console.log("NEW WORKER CREATED!");
+//   }
+// );
+
+const resendApiKey = defineSecret("RESEND_API_KEY");
+const resendWebhookSecret = defineSecret("RESEND_WEBHOOK_SECRET");
+
 export const sendWelcomeEmail = onDocumentCreated(
   {
     document: "workers/{workerId}",
@@ -236,7 +249,9 @@ export const sendWelcomeEmail = onDocumentCreated(
   },
   async (event) => {
 
+
     const worker = event.data?.data();
+    console.log("NEW WORKER CREATED")
 
     if (!worker) {
       console.log("Worker document does not exist.");
@@ -324,6 +339,80 @@ export const sendWelcomeEmail = onDocumentCreated(
   }
 );
 
+export const resendInboundWebhook = onRequest(
+  {
+    secrets: [resendApiKey, resendWebhookSecret],
+  },
+  async (req, res) => {
+    if (req.method !== "POST") {
+      return res.status(405).send("Method not allowed");
+    }
+
+    try {
+      const payload = req.rawBody.toString();
+
+      // Extracted safely as standard JS strings
+      const id = String(req.headers["svix-id"] || "");
+      const timestamp = String(req.headers["svix-timestamp"] || "");
+      const signature = String(req.headers["svix-signature"] || "");
+
+      if (!id || !timestamp || !signature) {
+        console.warn("Missing Resend webhook headers");
+        return res.status(400).send("Missing webhook headers");
+      }
+
+      const resend = new Resend(resendApiKey.value());
+
+      // 1. Verify Webhook Event Signature
+      const event = resend.webhooks.verify({
+        payload,
+        headers: {
+          id,
+          timestamp,
+          signature,
+        },
+        webhookSecret: resendWebhookSecret.value(),
+      });
+
+      if (event.type !== "email.received") {
+        return res.status(200).send("Ignored non-email event");
+      }
+
+      const emailId = event.data.email_id;
+
+      // 2. Retrieve Email Content
+      const { data: emailData, error: receivingError } = await resend.emails.receiving.get(emailId);
+
+      if (receivingError || !emailData) {
+        console.error("Resend receiving error details:", receivingError);
+        return res.status(500).send(`Failed to retrieve email content: ${receivingError?.message || "No data"}`);
+      }
+
+      // 3. Forward Email
+      const { error: sendError } = await resend.emails.send({
+        from: "hello@gjejnjerin.com",
+        to: "liscitaku@gmail.com",
+        subject: `[FWD] ${emailData.subject || "No Subject"}`,
+        html: emailData.html || `<p>${emailData.text || "Empty message"}</p>`,
+        text: emailData.text || "",
+        replyTo: emailData.from,
+      });
+
+      if (sendError) {
+        console.error("Resend forwarding error:", sendError);
+        return res.status(500).send("Forwarding failed");
+      }
+
+      return res.status(200).send("OK");
+    } catch (err) {
+      console.error("Webhook unexpected failure:", err);
+      return res.status(500).json({
+        error: "Webhook failed",
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+);
 
 export const submitReview = onCall({ cors: true }, async (request) => {
   const { token, rating, comment, customerName, inputPhone } = request.data;

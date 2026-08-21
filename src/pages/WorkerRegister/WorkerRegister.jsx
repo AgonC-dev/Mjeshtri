@@ -28,6 +28,7 @@ const categories = [
   'Moler',
   'Murator',
   'Vullkanizer',
+  "IT",
 ];
 
 function WorkerRegister() {

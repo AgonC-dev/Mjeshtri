@@ -55,6 +55,7 @@ const categories = [
   'Moler',
   'Murator',
   'Vullkanizer',
+  "IT",
 ];
 
 function Dashboard() {
