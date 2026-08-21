@@ -346,3 +346,46 @@
 
 
 
+/* --- Mobile Responsive Fixes --- */
+@media (max-width: 480px) {
+  .glassCard {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Overrides fixed 20rem gap and stacks buttons nicely */
+  .previewActions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .primaryBtn,
+  .btnSaveAction,
+  .secondaryBtn,
+  .retryBtn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .idPlaceholder {
+    padding: 2.5rem 1rem;
+  }
+
+  .idImagePreview {
+    max-height: 240px;
+  }
+
+  .excuseBlock {
+    margin-top: 2rem;
+    padding: 16px;
+  }
+
+  .secondTitle {
+    font-size: 18px;
+  }
+
+  .secondSubtitle {
+    font-size: 14px;
+  }
+}
