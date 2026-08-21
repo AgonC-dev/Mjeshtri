@@ -1,0 +1,644 @@
+/* ==========================================
+   1. GLOBAL & CONTAINER SETUP
+   ========================================== */
+.page {
+  background: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  overflow-x: hidden;
+  width: 100%;
+  font-family: 'Graphik', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #000000;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================
+   2. HEADER & BRANDING
+   ========================================== */
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
+.logoImage {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+.headerButton {
+  background: #000000;
+  color: #ffffff;
+  padding: 10px 24px;
+  border-radius: 40px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.headerButton:hover {
+  background: #333333;
+  transform: translateY(-1px);
+}
+
+/* ==========================================
+   3. HERO SECTION
+   ========================================== */
+.hero {
+  width: 85%;
+  max-width: 1300px;
+  margin: 0 auto;
+  min-height: 42rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0 80px 0;
+  position: relative;
+}
+
+.heroContent {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e0e0e0;
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 24px;
+}
+
+.heroTitle {
+  font-family: 'Graphik', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #000000;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+.heroTitle span {
+  color: #000000;
+  display: inline-block;
+}
+
+.heroText {
+  font-family: 'Graphik', 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: #4a4a4a;
+  max-width: 580px;
+  margin: 0 auto 36px;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.primaryButton {
+  background: #000000;
+  color: #ffffff;
+  padding: 16px 36px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.primaryButton span {
+  transition: transform 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: #222222;
+  transform: translateY(-2px);
+}
+
+.primaryButton:hover span {
+  transform: translateX(4px);
+}
+
+.secondaryButton {
+  background: #ffffff;
+  color: #000000;
+  padding: 16px 32px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.secondaryButton:hover {
+  background: #f8fafc;
+  border-color: #000000;
+  transform: translateY(-2px);
+}
+
+.heroNote {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: #757575;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================
+   4. SECTIONS & FEATURE CARDS
+   ========================================== */
+.section {
+  padding: 90px 0;
+  position: relative;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 56px;
+}
+
+.sectionLabel {
+  color: #000000;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.sectionHeader h2 {
+  font-family: 'Graphik', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #000000;
+  margin: 0 0 16px 0;
+}
+
+.sectionHeader p {
+  font-size: 1.1rem;
+  color: #666666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Feature Grid */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.featureCard {
+  background: #ffffff;
+  padding: 40px 32px;
+  border-radius: 24px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featureCard:hover {
+  transform: translateY(-6px);
+  border-color: #000000;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
+}
+
+.featureIcon {
+  width: 56px;
+  height: 56px;
+  background: #f5f5f5;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 24px;
+}
+
+.featureCard h3 {
+  font-family: 'Graphik', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 12px 0;
+}
+
+.featureCard p {
+  color: #666666;
+  line-height: 1.6;
+  font-size: 0.98rem;
+  margin: 0;
+}
+
+/* ==========================================
+   5. HOW IT WORKS (Steps)
+   ========================================== */
+.howSection {
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.step:hover {
+  border-color: #000000;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+}
+
+.stepNumber {
+  background: #000000;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step h3 {
+  font-family: 'Graphik', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 8px 0;
+}
+
+.step p {
+  color: #666666;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* ==========================================
+   6. REASONS / WHY JOIN
+   ========================================== */
+.reasonsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.reason {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.reason:hover {
+  transform: translateY(-4px);
+  border-color: #000000;
+}
+
+.check {
+  width: 32px;
+  height: 32px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.reason h3 {
+  font-family: 'Graphik', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 6px 0;
+}
+
+.reason p {
+  color: #666666;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ==========================================
+   7. CATEGORIES BADGES
+   ========================================== */
+.categoriesSection {
+  padding: 80px 0;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.category {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 12px 22px;
+  border-radius: 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #000000;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
+}
+
+.category:hover {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
+  transform: scale(1.05) translateY(-2px);
+}
+
+/* ==========================================
+   8. CALL TO ACTION (CTA CARD)
+   ========================================== */
+.ctaSection {
+  padding: 60px 24px;
+}
+
+.ctaContent {
+  max-width: 960px;
+  margin: 0 auto;
+  background: #000000;
+  padding: 70px 40px;
+  border-radius: 32px;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaLabel {
+  color: #a3a3a3;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.ctaContent h2 {
+  font-family: 'Graphik', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.03em;
+}
+
+.ctaContent p {
+  color: #cccccc;
+  font-size: 1.1rem;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.5;
+}
+
+.ctaButton {
+  background: #ffffff;
+  color: #000000;
+  padding: 18px 40px;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.ctaButton:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.ctaContent small {
+  display: block;
+  margin-top: 20px;
+  color: #888888;
+  font-size: 0.85rem;
+}
+
+/* ==========================================
+   9. FOOTER
+   ========================================== */
+.footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px 20px;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footerLogo {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.footerLogoImage {
+  height: 34px;
+  width: auto;
+}
+
+.footer p {
+  color: #666666;
+  font-size: 0.95rem;
+  margin: 0 0 24px 0;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.footerLinks a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
+
+.footerLinks a:hover {
+  opacity: 0.6;
+}
+
+.copyright {
+  font-size: 0.85rem !important;
+  color: #999999 !important;
+  margin: 0 !important;
+}
+
+/* ==========================================
+   10. KEYFRAMES
+   ========================================== */
+@keyframes heroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   11. MEDIA QUERIES (Matching Landing Page BREAKPOINTS)
+   ========================================== */
+@media (max-width: 1200px) {
+  .hero {
+    width: 95%;
+    padding: 40px 20px 60px;
+  }
+
+  .heroTitle {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps, .reasonsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroTitle {
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 30px 15px;
+  }
+
+  .heroTitle {
+    font-size: 38px;
+    line-height: 1.1;
+  }
+
+  .heroText {
+    font-size: 15px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primaryButton, .secondaryButton {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaContent {
+    padding: 40px 20px;
+    border-radius: 24px;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.8rem;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

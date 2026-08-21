@@ -28,6 +28,7 @@ import AdminEnroll from "./components/AdminEnroll";
 import MostWanted from "./pages/MostWanted/MostWanted";
 import PricingPage from "./pages/Pricing/Price";
 import Refund from "./pages/Refund/Refund";
+import WhyGjejnjerin from "./pages/Why/Why";
 
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},
+      { path: 'bashkohu', element: <WhyGjejnjerin />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},
