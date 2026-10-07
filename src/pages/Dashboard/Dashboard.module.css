@@ -745,6 +745,30 @@
   margin-top: 1rem;
 }
 
+.avatarPreview {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 1.5rem;
+}
+
+.avatarPreview img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modalActions button {
+  flex: 1;
+}
+
 .closeBtn:hover {
   background: var(--primary);
   color: #fff;

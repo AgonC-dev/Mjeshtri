@@ -130,11 +130,13 @@ const ProfileSettings = () => {
           type: "error",
         });
         window.scroll(0, 0);
+        
       } else {
         setStatus({
           msg: "Fjalëkalimi i gabuar. Provoni përsëri.",
           type: "error",
         });
+         
       }
 
       window.scroll(0, 0);

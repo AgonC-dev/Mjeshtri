@@ -169,6 +169,11 @@ function Dashboard() {
     return;
   }
 
+    setIsModalOpen(p => ({
+    ...p,
+    avatar: false
+  }));
+
   setProfileFile(file);
   setIsDirty(true);
 };
