@@ -29,6 +29,8 @@ import MostWanted from "./pages/MostWanted/MostWanted";
 import PricingPage from "./pages/Pricing/Price";
 import Refund from "./pages/Refund/Refund";
 import WhyGjejnjerin from "./pages/Why/Why";
+import Udhezues from "./pages/Udhëzues/Udhëzues";
+import ElektrikeView from "./pages/Udhëzues/elektrike/Electrict";
 
 
 const queryClient = new QueryClient();
@@ -58,7 +60,9 @@ const router = createBrowserRouter([
       { path: "admin", element: <AdminDashboard />},
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},
-      { path: 'bashkohu', element: <WhyGjejnjerin />}
+      { path: 'bashkohu', element: <WhyGjejnjerin />},
+      // { path: 'udhëzues', element: <Udhezues />},
+      // { path: "udhëzues/elektrike", element: <ElektrikeView />}
     ],
   },
     {path: "review/:token", element: <ReviewPage />},

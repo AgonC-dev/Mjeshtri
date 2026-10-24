@@ -191,7 +191,7 @@ function WorkerList() {
   {isLoading ? (
     <div className={styles.initialLoader}>
       <div className={styles.spinner} />
-      <p className={styles.loadingText}>Duke u sinkronizuar me Mjeshtri.ks...</p>
+      <p className={styles.loadingText}>Duke u sinkronizuar me GjejNjerin.com...</p>
     </div>
   ) : (
     <>
