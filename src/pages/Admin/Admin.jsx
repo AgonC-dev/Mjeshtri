@@ -6,6 +6,11 @@ import {
   collection,
   doc,
   onSnapshot,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import {
@@ -54,6 +59,7 @@ const NAV = [
   { id: "reviews", label: "Reviews", icon: "⭐" },
   { id: "reports", label: "Raportet", icon: "🚩" },
   { id: "verifications", label: "Verifikimet", icon: "🪪" },
+  { id: "categorySugg", label: "Category Suggestions", icon: "📊" },
   { id: "explorer", label: "Data Explorer", icon: "🗃️" },
 ];
 
@@ -334,9 +340,14 @@ export default function AdminDashboard() {
   const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [adminNotes, setAdminNotes] = useState([]);
   const [globalStats, setGlobalStats] = useState({});
+  
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [period, setPeriod] = useState("30");
+  const [categorySuggestions, setCategorySuggestions] = useState([]);
+const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+const [suggestionError, setSuggestionError] = useState("");
+
   const [selectedCollection, setSelectedCollection] = useState("contactSessions");
   const [refreshError, setRefreshError] = useState("");
   const [records, setRecords] = useState({
@@ -374,6 +385,8 @@ export default function AdminDashboard() {
 
     return unsubscribe;
   }, [navigate]);
+
+
 
   useEffect(() => {
     if (!user) return undefined;
@@ -416,6 +429,43 @@ export default function AdminDashboard() {
 
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
   }, [user]);
+
+  async function loadCategorySuggestions() {
+  setLoadingSuggestions(true);
+  setSuggestionError("");
+
+  try {
+    const suggestionsQuery = query(
+      collection(db, "categorySuggestions"),
+      where("status", "==", "pending")
+    );
+
+    const snapshot = await getDocs(suggestionsQuery);
+
+    const suggestions = snapshot.docs.map((item) => ({
+      id: item.id,
+      ...item.data(),
+    }));
+
+    suggestions.sort((a, b) => {
+      const dateA = a.createdAt?.toMillis?.() ?? 0;
+      const dateB = b.createdAt?.toMillis?.() ?? 0;
+      return dateB - dateA;
+    });
+
+    setCategorySuggestions(suggestions);
+  } catch (error) {
+    console.error("Error loading category suggestions:", error);
+    setSuggestionError("Sugjerimet nuk mundën të ngarkohen.");
+  } finally {
+    setLoadingSuggestions(false);
+  }
+}
+
+
+useEffect(() => {
+  loadCategorySuggestions();
+}, []);
 
   const workers = records.workers;
   const contacts = records.contactSessions;
@@ -1049,6 +1099,9 @@ export default function AdminDashboard() {
               </div>
             </div>
 
+            
+
+
             <div
               style={{
                 display: "grid",
@@ -1238,6 +1291,156 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        {activeTab === "categorySugg" && (
+  <section
+    style={{
+      padding: "24px",
+      marginTop: "24px",
+      background: "#fff",
+      border: "1px solid #e5e7eb",
+      borderRadius: "16px",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "12px",
+        flexWrap: "wrap",
+        marginBottom: "20px",
+      }}
+    >
+      <div>
+        <h2 style={{ margin: 0, color: "#111827" }}>
+          Sugjerime për kategori
+        </h2>
+
+        <p style={{ margin: "6px 0 0", color: "#6b7280" }}>
+          Kategoritë e propozuara nga punëtorët.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={loadCategorySuggestions}
+        disabled={loadingSuggestions}
+        style={{
+          padding: "10px 16px",
+          border: "none",
+          borderRadius: "8px",
+          background: "#004cff",
+          color: "#fff",
+          cursor: loadingSuggestions ? "wait" : "pointer",
+        }}
+      >
+        {loadingSuggestions ? "Duke ngarkuar..." : "Rifresko"}
+      </button>
+    </div>
+
+    {suggestionError && (
+      <p style={{ color: "#dc2626" }}>
+        {suggestionError}
+      </p>
+    )}
+
+    {loadingSuggestions ? (
+      <p style={{ color: "#6b7280" }}>
+        Duke ngarkuar sugjerimet...
+      </p>
+    ) : !suggestionError && categorySuggestions.length === 0 ? (
+      <p style={{ color: "#6b7280" }}>
+        Nuk ka sugjerime të reja për momentin.
+      </p>
+    ) : (
+      <div style={{ display: "grid", gap: "14px" }}>
+        {categorySuggestions.map((suggestion) => (
+          <article
+            key={suggestion.id}
+            style={{
+              padding: "18px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "12px",
+              minWidth: 0,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: "12px",
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <h3
+                  style={{
+                    margin: "0 0 12px",
+                    color: "#111827",
+                    fontSize: "20px",
+                  }}
+                >
+                  {suggestion.suggestedCategory || "Pa emër"}
+                </h3>
+
+                <p style={{ margin: "4px 0", color: "#374151" }}>
+                  <strong>Punëtori:</strong>{" "}
+                  {suggestion.workerName || "Nuk është dhënë"}
+                </p>
+
+                <p
+                  style={{
+                    margin: "4px 0",
+                    color: "#374151",
+                    overflowWrap: "anywhere",
+                  }}
+                >
+                  <strong>Email:</strong>{" "}
+                  {suggestion.workerEmail || "Nuk është dhënë"}
+                </p>
+
+                <p style={{ margin: "4px 0", color: "#374151" }}>
+                  <strong>Qyteti:</strong>{" "}
+                  {suggestion.city || "Nuk është dhënë"}
+                </p>
+
+                <p
+                  style={{
+                    margin: "8px 0 0",
+                    color: "#6b7280",
+                    fontSize: "13px",
+                  }}
+                >
+                  {suggestion.createdAt?.toDate
+                    ? suggestion.createdAt.toDate().toLocaleString()
+                    : "Data nuk është e disponueshme"}
+                </p>
+              </div>
+
+              <span
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: "20px",
+                  background: "#fef3c7",
+                  color: "#92400e",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {suggestion.status === "pending"
+                  ? "Në pritje"
+                  : suggestion.status || "Pa status"}
+              </span>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+)}
 
         {activeTab === "analytics" && (
           <div style={{ display: "grid", gap: 18 }}>
