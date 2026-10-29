@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./WorkerRegister.module.css";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { createUserWithEmailAndPassword, deleteUser } from "firebase/auth";
 import { auth, db } from "../../api/firebase";
 import { doc, serverTimestamp, increment, writeBatch } from "firebase/firestore";
@@ -216,6 +217,19 @@ batch.update(statsRef, {
 });
 
 await batch.commit();
+// const functions = getFunctions(undefined, "us-central1");
+
+// const sendVerificationEmail = httpsCallable(
+//   functions,
+//   "sendVerificationEmail"
+// );
+
+// try {
+//   await sendVerificationEmail();
+// } catch (error) {
+//   console.error("Verification email failed:", error);
+//   // Registration succeeded, so don't treat this as registration failure.
+// }
 
       
       navigate("/", { state: { modalOpen: true, name: formData.name } });

@@ -31,6 +31,7 @@ import Refund from "./pages/Refund/Refund";
 import WhyGjejnjerin from "./pages/Why/Why";
 import Udhezues from "./pages/Udhëzues/Udhëzues";
 import ElektrikeView from "./pages/Udhëzues/elektrike/Electrict";
+import Email from "./pages/Email/Email";
 
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
       { path: 'enroll', element: <AdminEnroll />},
       { path: 'wanted', element: <MostWanted />},
       { path: 'bashkohu', element: <WhyGjejnjerin />},
+      { path: 'email/:action', element: <Email />}
       // { path: 'udhëzues', element: <Udhezues />},
       // { path: "udhëzues/elektrike", element: <ElektrikeView />}
     ],

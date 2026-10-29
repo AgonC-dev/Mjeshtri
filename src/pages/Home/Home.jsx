@@ -182,6 +182,33 @@ function Home() {
 
           <div className={styles.successInfoBox}>
             <p>Tani mund të plotësoni profilin tuaj, të shtoni punët në portofol dhe të filloni të merrni kërkesa nga klientët.</p>
+             <p className={styles.confirmEmail}>
+  <svg
+    viewBox="0 0 24 24"
+    className={styles.confirmEmailIcon}
+    aria-hidden="true"
+  >
+    <path
+      d="M4 6h16v12H4z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinejoin="round"
+    />
+    <path
+      d="m4 7 8 6 8-6"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinejoin="round"
+    />
+  </svg>
+
+  <span>
+    Një email për verifikimin e adresës suaj do t'ju dërgohet.
+    Ju lutemi kontrolloni Inbox-in dhe Spam-in.
+  </span>
+</p>
           </div>
 
           <button 

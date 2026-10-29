@@ -411,6 +411,45 @@
   animation-delay: 1.2s;
 }
 
+
+.confirmEmail {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 76, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(0, 76, 255, 0.055);
+  color: #334155;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.65;
+  text-align: left;
+}
+
+.confirmEmailIcon {
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  margin-top: 1px;
+  color: #004cff;
+}
+
+@media (max-width: 480px) {
+  .confirmEmail {
+    gap: 9px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .confirmEmailIcon {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+
 @keyframes explode {
   0% {
     transform: scale(0);

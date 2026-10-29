@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { doc, updateDoc, serverTimestamp, increment, writeBatch } from "firebase/firestore";
 import styles from "./ProfileSettings.module.css";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import {
   verifyBeforeUpdateEmail,
   EmailAuthProvider,
@@ -10,6 +11,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth, db } from "../../api/firebase";
+
 import { useNavigate } from "react-router-dom";
 import { sendEmailVerification } from "firebase/auth";
 
@@ -45,27 +47,59 @@ const ProfileSettings = () => {
     await reauthenticateWithCredential(auth.currentUser, credential);
   }
 
-  async function handleEditEmail(e) {
-    e.preventDefault();
+   
+async function handleEditEmail(e) {
+  e.preventDefault();
 
-    try {
-      setStatus({ msg: "Duke përditësuar...", type: "" });
-      await verifyUser(passwords.current);
-      await verifyBeforeUpdateEmail(auth.currentUser, newEmail);
+  try {
+    setStatus({ msg: "Duke përditësuar...", type: "" });
 
-      setIsEditing((prev) => ({ ...prev, email: false }));
-      setPassword((prev) => ({ ...prev, current: "" }));
-      setStatus({
-        msg: "Një link verifikimi u dërgua te email-i i ri. Klikoni linkun për të përfunduar ndryshimin.",
-        type: "success",
-      });
-    } catch (err) {
-      setStatus({
-        msg: "Dështoi përditësimi. Sigurohuni që fjalëkalimi është i saktë.",
-        type: "error",
-      });
+    // Verify the user's current password.
+    await verifyUser(passwords.current);
+
+    // Request the custom confirmation email through Cloud Functions.
+    const functions = getFunctions(undefined, "us-central1");
+    const requestEmailChange = httpsCallable(
+      functions,
+      "requestEmailChange"
+    );
+
+    const result = await requestEmailChange({
+      newEmail: newEmail.trim().toLowerCase(),
+    });
+
+    setIsEditing((prev) => ({ ...prev, email: false }));
+    setPassword((prev) => ({ ...prev, current: "" }));
+
+    setStatus({
+      msg:
+        result.data?.message ||
+        "Një link konfirmimi u dërgua në email-in e ri. Klikoni linkun për të përfunduar ndryshimin.",
+      type: "success",
+    });
+  } catch (err) {
+    console.error("Email change request failed:", err);
+
+    let message =
+      "Dështoi përditësimi. Kontrolloni fjalëkalimin dhe email-in e ri.";
+
+    if (err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential") {
+      message = "Fjalëkalimi aktual nuk është i saktë.";
+    } else if (err.code === "functions/failed-precondition") {
+      message =
+        "Ju lutem rikyçuni në llogari dhe provoni përsëri.";
+    } else if (err.code === "functions/already-exists") {
+      message = "Ky email nuk mund të përdoret. Provoni një tjetër.";
     }
+
+    setStatus({
+      msg: message,
+      type: "error",
+    });
   }
+}
+
 
   async function handleUpdatePassword(e) {
     e.preventDefault();
@@ -143,30 +177,44 @@ const ProfileSettings = () => {
     }
   }
 
-  const handleVerifyEmail = async () => {
-  // 1. Give immediate feedback so the user knows the click worked
-  setStatus({ msg: "Duke dërguar e-mailin...", type: "" });
+ 
+const handleVerifyEmail = async () => {
+  setStatus({
+    msg: "Duke dërguar e-mailin...",
+    type: "",
+  });
 
   try {
-    // Note: use auth.currentUser to ensure you have the latest instance
-    await sendEmailVerification(auth.currentUser);
-    
-    // 2. Fix 'message' to 'msg' to match your JSX {status.msg}
-    setStatus({ 
-      msg: "Linku i verifikimit u dërgua me sukses! Kontrolloni inbox-in tuaj.", 
-      type: "success" 
+    const functions = getFunctions(undefined, "us-central1");
+
+    const sendVerificationEmail = httpsCallable(
+      functions,
+      "sendVerificationEmail"
+    );
+
+    // Call YOUR Cloud Function, not Firebase's sendEmailVerification().
+    const result = await sendVerificationEmail();
+
+    setStatus({
+      msg:
+        result.data.message ||
+        "Linku i verifikimit u dërgua me sukses! Kontrolloni inbox-in tuaj.",
+      type: "success",
     });
 
-    // 3. Auto-clear after 6 seconds so the dashboard stays clean
-    setTimeout(() => setStatus({ msg: "", type: "" }), 6000);
-
+    setTimeout(() => {
+      setStatus({ msg: "", type: "" });
+    }, 6000);
   } catch (error) {
-    setStatus({ 
-      msg: "Dështoi dërgimi: " + error.message, 
-      type: "error" 
+    console.error("Verification email error:", error);
+
+    setStatus({
+      msg: "Dështoi dërgimi: " + error.message,
+      type: "error",
     });
   }
 };
+
 
   const handleRefreshStatus = async () => {
   try {

@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../api/firebase";
-
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 function Login() {
   const navigate = useNavigate();
@@ -60,25 +60,37 @@ function Login() {
 
  
 
-  const handleResetPassword = async () => {
-  if (!formData.email) {
-    setError("Shkuraj një email ");
+  
+const handleResetPassword = async () => {
+  const email = formData.email?.trim();
+
+  if (!email) {
+    setError("Shkruaj një email.");
     return;
   }
 
-  try {
-    await sendPasswordResetEmail(auth, formData.email);
-     setResetMessage("Linku për resetim u dërgua! Kontrolloni email-in (Inbox ose Spam).");
-     setError('')
-  } catch (error) {
-    if (error.code === 'auth/user-not-found') {
-        setError('Ky email nuk është i regjistruar.')
-    } else {
-        setError("Diqka nuk shkoj mirë")
-    }
-  }
+  setError("");
+  setResetMessage("");
 
+  try {
+    const functions = getFunctions(undefined, "us-central1");
+    const requestPasswordReset = httpsCallable(
+      functions,
+      "requestPasswordReset"
+    );
+
+    const result = await requestPasswordReset({ email });
+
+    setResetMessage(result.data.message);
+  } catch (error) {
+    console.error("Password reset request failed:", error);
+
+    setError(
+      "Nuk mundëm ta përpunonim kërkesën. Provo përsëri më vonë."
+    );
   }
+};
+
 
   return (
     <div className={styles.loginWrap}>

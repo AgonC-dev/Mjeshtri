@@ -103,6 +103,9 @@ export const createContactSession = onCall({ cors: true }, async (req) => {
 
 
 
+
+
+
 export const createReviewRequest = onCall({ cors: true }, async (req) => {
   const uid = req.auth?.uid;
   const { sessionId } = req.data;
@@ -242,16 +245,16 @@ export const createReviewRequest = onCall({ cors: true }, async (req) => {
 const resendApiKey = defineSecret("RESEND_API_KEY");
 const resendWebhookSecret = defineSecret("RESEND_WEBHOOK_SECRET");
 
+
 export const sendWelcomeEmail = onDocumentCreated(
   {
     document: "workers/{workerId}",
     secrets: [resendApiKey],
   },
   async (event) => {
-
-
     const worker = event.data?.data();
-    console.log("NEW WORKER CREATED")
+
+    console.log("NEW WORKER CREATED");
 
     if (!worker) {
       console.log("Worker document does not exist.");
@@ -267,6 +270,24 @@ export const sendWelcomeEmail = onDocumentCreated(
     }
 
     try {
+      const firebaseLink =
+        await admin.auth().generateEmailVerificationLink(email);
+
+      const generatedUrl = new URL(firebaseLink);
+      const oobCode = generatedUrl.searchParams.get("oobCode");
+      const mode = generatedUrl.searchParams.get("mode");
+
+      if (!oobCode || mode !== "verifyEmail") {
+        throw new Error("Unexpected Firebase verification link.");
+      }
+
+      // Redirect the user to your custom verification page.
+      const verificationUrl = new URL(
+        "https://gjejnjerin.com/email/confirm"
+      );
+
+      verificationUrl.searchParams.set("mode", "verifyEmail");
+      verificationUrl.searchParams.set("oobCode", oobCode);
 
       const resend = new Resend(resendApiKey.value());
 
@@ -294,16 +315,53 @@ export const sendWelcomeEmail = onDocumentCreated(
             </p>
 
             <p style="font-size: 16px; line-height: 1.6;">
-              Tani mund të plotësosh profilin tënd,
-              të shtosh portfolio-n dhe të fillosh
-              të lidhesh me klientë.
+              Para se të vazhdosh, verifiko adresën tënde
+              të email-it duke klikuar butonin më poshtë.
+            </p>
+
+            <a
+              href="${verificationUrl.href}"
+              style="
+                display: inline-block;
+                margin-top: 15px;
+                padding: 13px 22px;
+                background: #004cff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+              "
+            >
+              Verifiko email-in
+            </a>
+
+            <p style="
+              margin-top: 12px;
+              color: #777;
+              font-size: 13px;
+              line-height: 1.5;
+            ">
+              Nëse nuk e ke krijuar ti këtë llogari,
+              mund ta injorosh këtë email.
+            </p>
+
+            <hr style="
+              border: none;
+              border-top: 1px solid #eee;
+              margin: 25px 0;
+            " />
+
+            <p style="font-size: 16px; line-height: 1.6;">
+              Pasi të verifikosh email-in, mund të plotësosh
+              profilin, të shtosh punët në portofol dhe të
+              fillosh të lidhesh me klientë.
             </p>
 
             <a
               href="https://gjejnjerin.com"
               style="
                 display: inline-block;
-                margin-top: 15px;
+                margin-top: 10px;
                 padding: 12px 20px;
                 background: #000;
                 color: #fff;
@@ -327,17 +385,510 @@ export const sendWelcomeEmail = onDocumentCreated(
       });
 
       if (error) {
-        console.error("Resend error:", error);
+        console.error("Welcome email error:", error.message);
         return;
       }
 
       console.log("Welcome email sent:", data?.id);
 
     } catch (error) {
-      console.error("Welcome email error:", error);
+      console.error(
+        "Welcome email error:",
+        error?.code || error?.message || "Unknown error"
+      );
     }
   }
 );
+
+
+// export const sendVerificationEmail = onCall(
+//   {
+//     secrets: [resendApiKey],
+//     cors: true
+//   },
+//   async (request) => {
+//     // Only a signed-in user can request verification for their account.
+//     if (!request.auth) {
+//       throw new HttpsError(
+//         "unauthenticated",
+//         "You must be signed in to request email verification."
+//       );
+//     }
+
+//     try {
+//       // Get the account from Firebase Auth using the verified caller's UID.
+//       const user = await admin.auth().getUser(request.auth.uid);
+
+//       if (!user.email) {
+//         throw new HttpsError(
+//           "failed-precondition",
+//           "This account does not have an email address."
+//         );
+//       }
+
+//       if (user.emailVerified) {
+//         return {
+//           success: true,
+//           message: "Your email address is already verified.",
+//         };
+//       }
+
+//       // Generate a genuine Firebase email-verification link.
+//       const firebaseLink =
+//         await admin.auth().generateEmailVerificationLink(user.email);
+
+//       // Extract Firebase's one-time action code from the generated URL.
+//       const generatedUrl = new URL(firebaseLink);
+//       const oobCode = generatedUrl.searchParams.get("oobCode");
+//       const mode = generatedUrl.searchParams.get("mode");
+
+//       if (!oobCode || mode !== "verifyEmail") {
+//         throw new Error(
+//           "Firebase generated an unexpected verification link."
+//         );
+//       }
+
+//       // Build our own branded website URL.
+//       const customUrl = new URL(
+//         "https://gjejnjerin.com/email/confirm"
+//       );
+
+//       customUrl.searchParams.set("mode", "verifyEmail");
+//       customUrl.searchParams.set("oobCode", oobCode);
+
+//       const resend = new Resend(resendApiKey.value());
+
+//       // Send the custom-branded email through Resend.
+//       const { data, error } = await resend.emails.send({
+//         from: "Gjejnjerin <hello@gjejnjerin.com>",
+//         to: [user.email],
+//         subject: "Verifiko email-in tënd — Gjejnjerin",
+//         html: `
+//           <!DOCTYPE html>
+//           <html lang="sq">
+//             <body style="margin:0;padding:0;background:#f5f7fb;font-family:Arial,sans-serif;color:#222">
+//               <div style="max-width:560px;margin:32px auto;padding:32px;background:#ffffff;border-radius:14px">
+//                 <h1 style="color:#004cff;margin-top:0">Mirë se vjen në Gjejnjerin!</h1>
+
+//                 <p style="font-size:16px;line-height:1.6">
+//                   Për të përfunduar regjistrimin, konfirmo adresën tënde të email-it.
+//                 </p>
+
+//                 <p style="margin:28px 0">
+//                   <a
+//                     href="${customUrl.href}"
+//                     style="display:inline-block;padding:14px 22px;background:#004cff;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold"
+//                   >
+//                     Verifiko email-in
+//                   </a>
+//                 </p>
+
+//                 <p style="font-size:14px;line-height:1.6;color:#666">
+//                   Nëse nuk je regjistruar në Gjejnjerin, mund ta shpërfillësh këtë email.
+//                 </p>
+
+//                 <p style="font-size:12px;color:#888;margin-bottom:0">
+//                   Gjejnjerin.com
+//                 </p>
+//               </div>
+//             </body>
+//           </html>
+//         `,
+//       });
+
+//       if (error) {
+//         console.error(
+//           "Verification email delivery failed:",
+//           error.message
+//         );
+
+//         throw new HttpsError(
+//           "internal",
+//           "Could not send the verification email."
+//         );
+//       }
+
+//       console.log("Verification email sent:", data?.id);
+
+//       return {
+//         success: true,
+//         message: "Verification email sent. Please check your inbox.",
+//       };
+//     } catch (error) {
+//       // Preserve intentional callable errors.
+//       if (error instanceof HttpsError) {
+//         throw error;
+//       }
+
+//       // Do not log the action code or the complete verification URL.
+//       console.error(
+//         "Verification email request failed:",
+//         error?.code || error?.message || "Unknown error"
+//       );
+
+//       throw new HttpsError(
+//         "internal",
+//         "Could not send the verification email. Please try again later."
+//       );
+//     }
+//   }
+// );
+
+
+export const syncWorkerEmailAfterChange = onCall(
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError(
+        "unauthenticated",
+        "You must be signed in."
+      );
+    }
+
+    try {
+      // Always use the authenticated user's UID.
+      const uid = request.auth.uid;
+
+      // Read the email directly from Firebase Authentication.
+      const user = await admin.auth().getUser(uid);
+
+      if (!user.email || !user.emailVerified) {
+        throw new HttpsError(
+          "failed-precondition",
+          "The account email has not been verified."
+        );
+      }
+
+      const workerRef = db.collection("workers").doc(uid);
+      const workerDoc = await workerRef.get();
+
+      // This account may not have a worker profile.
+      if (!workerDoc.exists) {
+        throw new HttpsError(
+          "not-found",
+          "Worker profile not found."
+        );
+      }
+
+      // Synchronize Firestore with the trusted Auth email.
+      await workerRef.update({
+        email: user.email,
+      });
+
+      return {
+        success: true,
+        message: "Worker email synchronized successfully.",
+      };
+    } catch (error) {
+      if (error instanceof HttpsError) {
+        throw error;
+      }
+
+      console.error(
+        "Worker email synchronization failed:",
+        error?.code || error?.message || "Unknown error"
+      );
+
+      throw new HttpsError(
+        "internal",
+        "Could not synchronize the worker email."
+      );
+    }
+  }
+);
+
+
+export const requestEmailChange = onCall(
+  {
+    cors: true,
+    secrets: [resendApiKey],
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError(
+        "unauthenticated",
+        "Duhet të jesh i kyçur."
+      );
+    }
+
+    const newEmail =
+      typeof request.data?.newEmail === "string"
+        ? request.data.newEmail.trim().toLowerCase()
+        : "";
+
+    if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Shkruaj një email të vlefshëm."
+      );
+    }
+
+    // Require recent authentication before changing account details.
+    const authTime = Number(request.auth.token.auth_time);
+
+    if (
+      !authTime ||
+      Date.now() / 1000 - authTime > 5 * 60
+    ) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Rikyçu dhe provo përsëri."
+      );
+    }
+
+    try {
+      const user = await admin.auth().getUser(request.auth.uid);
+      const currentEmail = user.email;
+
+      if (!currentEmail) {
+        throw new HttpsError(
+          "failed-precondition",
+          "Llogaria nuk ka një email aktual."
+        );
+      }
+
+      if (currentEmail.toLowerCase() === newEmail) {
+        throw new HttpsError(
+          "invalid-argument",
+          "Ky është tashmë email-i yt."
+        );
+      }
+
+      // Firebase generates the action code for changing the email.
+      const firebaseLink =
+        await admin.auth().generateVerifyAndChangeEmailLink(
+          currentEmail,
+          newEmail
+        );
+
+      const generatedUrl = new URL(firebaseLink);
+      const oobCode = generatedUrl.searchParams.get("oobCode");
+
+      if (!oobCode) {
+        throw new Error("Firebase did not return an action code.");
+      }
+
+      const customUrl = new URL(
+        "https://gjejnjerin.com/email/change"
+      );
+
+      customUrl.searchParams.set(
+        "mode",
+        "verifyAndChangeEmail"
+      );
+      customUrl.searchParams.set("oobCode", oobCode);
+
+      const resend = new Resend(resendApiKey.value());
+
+      const { data, error } = await resend.emails.send({
+        from: "Gjejnjerin <hello@gjejnjerin.com>",
+        to: [newEmail],
+        subject: "Konfirmo email-in e ri — Gjejnjerin",
+        html: `
+          <div style="
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            color: #222;
+          ">
+            <h1>Konfirmo email-in e ri</h1>
+
+            <p style="font-size:16px;line-height:1.6">
+              Ke kërkuar ta ndryshosh email-in e llogarisë
+              tënde në Gjejnjerin në
+              <strong>${newEmail.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")}</strong>.
+            </p>
+
+            <p style="font-size:16px;line-height:1.6">
+              Kliko butonin më poshtë për ta konfirmuar
+              ndryshimin. Email-i i llogarisë do të ndryshohet
+              vetëm pasi ta konfirmosh.
+            </p>
+
+            <a
+              href="${customUrl.href}"
+              style="
+                display:inline-block;
+                margin-top:15px;
+                padding:13px 22px;
+                background:#004cff;
+                color:#fff;
+                text-decoration:none;
+                border-radius:8px;
+                font-weight:bold;
+              "
+            >
+              Konfirmo email-in e ri
+            </a>
+
+            <p style="
+              margin-top:25px;
+              color:#777;
+              font-size:13px;
+              line-height:1.6;
+            ">
+              Nëse nuk e ke kërkuar këtë ndryshim,
+              mos e kliko lidhjen.
+            </p>
+          </div>
+        `,
+      });
+
+      if (error) {
+        console.error("Email change delivery failed:", error.message);
+        throw new HttpsError(
+          "internal",
+          "Email-i i konfirmimit nuk mund të dërgohej."
+        );
+      }
+
+      console.log("Email change confirmation sent:", data?.id);
+
+      return {
+        success: true,
+        message:
+          "Email-i i konfirmimit u dërgua në adresën e re.",
+      };
+    } catch (error) {
+      if (error instanceof HttpsError) {
+        throw error;
+      }
+
+      console.error(
+        "Email change request failed:",
+        error?.code || error?.message || "Unknown error"
+      );
+
+      if (
+        error?.code === "auth/email-already-exists" ||
+        error?.code === "auth/invalid-email"
+      ) {
+        throw new HttpsError(
+          "already-exists",
+          "Ky email nuk mund të përdoret. Kontrolloje ose provo një tjetër."
+        );
+      }
+
+      throw new HttpsError(
+        "internal",
+        "Ndryshimi i email-it dështoi. Provo përsëri më vonë."
+      );
+    }
+  }
+);
+
+
+export const requestPasswordReset = onCall(
+  {
+    cors: true,
+    secrets: [resendApiKey],
+  },
+  async (request) => {
+    const email =
+      typeof request.data?.email === "string"
+        ? request.data.email.trim()
+        : "";
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Ju lutem shkruani një email të vlefshëm."
+      );
+    }
+
+    try {
+      // 1. Ask Firebase Admin to generate a genuine reset link.
+      const firebaseLink =
+        await admin.auth().generatePasswordResetLink(email);
+
+      // 2. Extract the real Firebase action code.
+      const generatedUrl = new URL(firebaseLink);
+      const oobCode = generatedUrl.searchParams.get("oobCode");
+      const apiKey = generatedUrl.searchParams.get("apiKey");
+      const mode = generatedUrl.searchParams.get("mode");
+
+      if (!oobCode || mode !== "resetPassword") {
+        throw new Error(
+          "Firebase generated a link with unexpected parameters."
+        );
+      }
+
+      // 3. Build the link to YOUR website.
+      const customUrl = new URL(
+        "https://gjejnjerin.com/email/reset"
+      );
+
+      customUrl.searchParams.set("mode", "resetPassword");
+      customUrl.searchParams.set("oobCode", oobCode);
+
+      if (apiKey) {
+        customUrl.searchParams.set("apiKey", apiKey);
+      }
+
+      // 4. Send the branded email using Resend.
+      const resend = new Resend(resendApiKey.value());
+
+      const { data, error } = await resend.emails.send({
+        from: "Gjejnjerin <hello@gjejnjerin.com>",
+        to: [email],
+        subject: "Rivendos fjalëkalimin — Gjejnjerin",
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px;color:#222">
+            <h1 style="color:#004cff">Rivendos fjalëkalimin</h1>
+
+            <p>
+              Kërkuat të rivendosni fjalëkalimin e llogarisë
+              suaj në Gjejnjerin.
+            </p>
+
+            <p>
+              Klikoni butonin më poshtë për të zgjedhur
+              një fjalëkalim të ri.
+            </p>
+
+            <a
+              href="${customUrl.href}"
+              style="display:inline-block;padding:13px 22px;background:#004cff;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold"
+            >
+              Rivendos fjalëkalimin
+            </a>
+
+            <p style="margin-top:24px;color:#666;font-size:14px">
+              Nëse nuk e keni kërkuar këtë ndryshim,
+              mund ta shpërfillni këtë email.
+            </p>
+
+            <p style="color:#888;font-size:12px">
+              Gjejnjerin.com
+            </p>
+          </div>
+        `,
+      });
+
+      if (error) {
+        console.error("Password reset email send failed:", error);
+        throw new Error("Email delivery failed.");
+      }
+
+      console.log("Password reset email sent:", data?.id);
+    } catch (error) {
+      // Do not expose whether an account exists.
+      // Avoid logging the generated link or its action code.
+      console.error(
+        "Password reset request failed:",
+        error?.code || error?.message || "Unknown error"
+      );
+    }
+
+    // Same response whether the account exists or not.
+    return {
+      success: true,
+      message:
+        "Nëse ky email është i regjistruar, do të merrni një link për rivendosjen e fjalëkalimit.",
+    };
+  }
+);
+
 
 export const resendInboundWebhook = onRequest(
   {
