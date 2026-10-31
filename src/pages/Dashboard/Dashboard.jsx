@@ -44,9 +44,13 @@ const cities = [
   "Ferizaj",
   "Gjilan",
 ];
+
+
 const categories = [
+  'Të gjitha',
   'Instalues',
   'Elektricist',
+  'Hidraulik',
   'Klima/AC',
   'Plastifikim',
   'Pastrim',
@@ -54,8 +58,18 @@ const categories = [
   'Mekanik',
   'Moler',
   'Murator',
+  'Ndërtimtari',
+  'Pllakaxhi',
+  'Zdrukthëtar',
+  'Kulme dhe Tjegulla',
+  'Fasada dhe Izolim',
+  'Parket dhe Laminat',
+  'Dyer dhe Dritare',
+  'Saldator',
+  'Gips dhe Tavane',
   'Vullkanizer',
-  "IT",
+  'IT',
+  "Tjetër"
 ];
 
 function Dashboard() {
@@ -65,7 +79,7 @@ function Dashboard() {
   const [status, setStatus] = useState({ message: "", type: "" });
   const [form, setForm] = useState({
     name: "", category: "", yearsExperience: "", hourlyRate: "",
-    phoneNumber: "", bio: "", isPro: false, isAvailable: true,
+    phoneNumber: "", bio: "", isPro: false, customCategory: "", isAvailable: true,
     profileUrl: "", portfolio: [], slug: "", isFeatured: false, showProStar: false,
     quickResponse: false, reviewCount: 0, avgRating: null, whatsappRequests: 0,
   });
@@ -107,6 +121,7 @@ function Dashboard() {
           const initialForm = {
             name: data.fullName || "",
             category: data.category || "",
+            customCategory: data.customCategory || "",
             yearsExperience: data.experienceYears || 0,
             phoneNumber: data.phoneNumber || "",
             hourlyRate: data.startingPrice ?? data.hourlyRate ?? "",
@@ -270,6 +285,16 @@ const handleInstantSave = async (key, value) => {
         return; 
     }
 
+    const finalCustomCategory = (form.customCategory || "").trim();
+
+if (form.category === "Tjetër" && !finalCustomCategory) {
+    setStatus({
+        message: "Shkruaj profesionin tënd.",
+        type: "error"
+    });
+    return;
+}
+
     setSaving(true);
     setStatus({ message: "Duke u ruajtur...", type: "pending" });
 
@@ -279,6 +304,8 @@ const handleInstantSave = async (key, value) => {
             searchName: form.name.toLowerCase().trim(),
             phoneNumber: form.phoneNumber,
             category: form.category,
+            customCategory: form.category === "Tjetër" ? finalCustomCategory : "",
+            categoryStatus: form.category === "Tjetër" ? "pending" : "approved",
             experienceYears: form.yearsExperience,
             startingPrice: Number(form.hourlyRate) || 0,
             bio: form.bio,
@@ -339,6 +366,40 @@ const handleInstantSave = async (key, value) => {
         }
 
         await updateDoc(doc(db, "workers", user.uid), updates);
+
+        // CATEGORY SUGGESTION SYSTEM
+if (form.category === "Tjetër") {
+
+    const suggestionRef = doc(db, "categorySuggestions", user.uid);
+
+    const suggestionSnap = await getDoc(suggestionRef);
+
+    const existingSuggestion = suggestionSnap.exists()
+        ? suggestionSnap.data()
+        : null;
+
+    // Avoid duplicate suggestions for the same pending/approved profession
+    if (
+        !existingSuggestion ||
+        existingSuggestion.suggestedCategory !== finalCustomCategory ||
+        existingSuggestion.status === "declined"
+    ) {
+
+        await setDoc(suggestionRef, {
+            workerId: user.uid,
+            workerName: form.name,
+            workerEmail: user.email || "",
+            city: form.city || "",
+            suggestedCategory: finalCustomCategory,
+            status: "pending",
+            createdAt: existingSuggestion?.createdAt || serverTimestamp(),
+            reviewedAt: null,
+            reviewedBy: null
+        }, { merge: true });
+
+    }
+}
+
         setIsDirty(false);
         setStatus({ message: "U ruajt me sukses!", type: "success" });
         
@@ -638,6 +699,19 @@ const handleInstantSave = async (key, value) => {
                         <option key={cat} value={cat}>{cat}</option>
                       ))}
                      </select>
+                     {form.category === "Tjetër" && (
+  <div className={styles.field}>
+    <label>Profesioni yt</label>
+    <input
+      type="text"
+      name="customCategory"
+      value={form.customCategory}
+      onChange={handleChange}
+      placeholder="Shkruaj profesionin tënd..."
+      maxLength={40}
+    />
+  </div>
+)}
                   </div>
                   <div className={styles.field}>
                     <label>Çmimi Fillestar (€)</label>
