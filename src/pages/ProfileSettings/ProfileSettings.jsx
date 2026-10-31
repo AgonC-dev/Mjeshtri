@@ -64,9 +64,12 @@ async function handleEditEmail(e) {
       "requestEmailChange"
     );
 
+   
     const result = await requestEmailChange({
       newEmail: newEmail.trim().toLowerCase(),
     });
+
+    
 
     setIsEditing((prev) => ({ ...prev, email: false }));
     setPassword((prev) => ({ ...prev, current: "" }));

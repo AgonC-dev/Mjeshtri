@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -39,7 +38,7 @@ export default function Email() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  // Validate the Firebase action code when the page opens.
+  // Kontrollo kodin e veprimit të Firebase kur hapet faqja.
   useEffect(() => {
     let cancelled = false;
 
@@ -52,7 +51,7 @@ export default function Email() {
 
       if (!oobCode) {
         setError(
-          "This link is incomplete. Please open the full link from your email."
+          "Kjo lidhje nuk është e plotë. Ju lutemi hapni lidhjen e plotë nga email-i juaj."
         );
         setLoading(false);
         return;
@@ -73,7 +72,7 @@ export default function Email() {
           const info = await checkActionCode(auth, oobCode);
 
           if (info.operation !== "VERIFY_EMAIL") {
-            throw new Error("Unexpected email action code.");
+            throw new Error("Kodi i veprimit të email-it është i papritur.");
           }
 
           if (!cancelled) {
@@ -84,7 +83,7 @@ export default function Email() {
 
           if (info.operation !== "VERIFY_AND_CHANGE_EMAIL") {
             throw new Error(
-              "This code is not for changing an email address."
+              "Ky kod nuk është për ndryshimin e adresës së email-it."
             );
           }
 
@@ -94,7 +93,7 @@ export default function Email() {
           }
         } else {
           if (!cancelled) {
-            setError("This email action is not supported.");
+            setError("Ky veprim i email-it nuk mbështetet.");
           }
         }
       } catch (err) {
@@ -102,7 +101,7 @@ export default function Email() {
 
         if (!cancelled) {
           setError(
-            "This link is invalid, expired, or has already been used. Please request a new link."
+            "Kjo lidhje është e pavlefshme, ka skaduar ose është përdorur më parë. Ju lutemi kërkoni një lidhje të re."
           );
         }
       } finally {
@@ -119,19 +118,19 @@ export default function Email() {
     };
   }, [currentAction, oobCode, isEmailChange]);
 
-  // Handle password reset.
+  // Trajto rivendosjen e fjalëkalimit.
   async function handlePasswordReset(event) {
     event.preventDefault();
     setError("");
     setSuccess("");
 
     if (password.length < 6) {
-      setError("Your password must contain at least 6 characters.");
+      setError("Fjalëkalimi duhet të përmbajë të paktën 6 karaktere.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("The passwords do not match.");
+      setError("Fjalëkalimet nuk përputhen.");
       return;
     }
 
@@ -141,7 +140,7 @@ export default function Email() {
       await confirmPasswordReset(auth, oobCode, password);
 
       setSuccess(
-        "Your password has been reset successfully. You can now log in with your new password."
+        "Fjalëkalimi juaj u ndryshua me sukses. Tani mund të hyni në llogarinë tuaj me fjalëkalimin e ri."
       );
 
       setValidCode(false);
@@ -155,19 +154,19 @@ export default function Email() {
         err.code === "auth/invalid-action-code"
       ) {
         setError(
-          "This reset link has expired or has already been used. Please request a new one."
+          "Kjo lidhje për rivendosjen e fjalëkalimit ka skaduar ose është përdorur më parë. Ju lutemi kërkoni një lidhje të re."
         );
       } else if (err.code === "auth/weak-password") {
-        setError("Please choose a stronger password.");
+        setError("Ju lutemi zgjidhni një fjalëkalim më të fortë.");
       } else {
-        setError("We could not reset your password. Please try again.");
+        setError("Nuk arritëm ta ndryshojmë fjalëkalimin. Ju lutemi provoni përsëri.");
       }
     } finally {
       setSubmitting(false);
     }
   }
 
-  // Handle initial email verification.
+  // Trajto verifikimin fillestar të email-it.
   async function handleEmailVerification() {
     setError("");
     setSuccess("");
@@ -177,7 +176,7 @@ export default function Email() {
       await applyActionCode(auth, oobCode);
 
       setSuccess(
-        "Your email address has been verified successfully. You can now return to Gjejnjerin."
+        "Adresa juaj e email-it u verifikua me sukses. Tani mund të ktheheni në Gjejnjerin."
       );
 
       setValidCode(false);
@@ -189,17 +188,17 @@ export default function Email() {
         err.code === "auth/invalid-action-code"
       ) {
         setError(
-          "This verification link has expired or has already been used."
+          "Kjo lidhje verifikimi ka skaduar ose është përdorur më parë."
         );
       } else {
-        setError("We could not verify your email. Please try again.");
+        setError("Nuk arritëm ta verifikojmë email-in tuaj. Ju lutemi provoni përsëri.");
       }
     } finally {
       setSubmitting(false);
     }
   }
 
-  // Handle changing the account email.
+  // Trajto ndryshimin e email-it të llogarisë.
   async function handleEmailChange() {
     setError("");
     setSuccess("");
@@ -208,24 +207,24 @@ export default function Email() {
     let firebaseChangeApplied = false;
 
     try {
-      // Get the new email from the action code before applying it.
+      // Merr email-in e ri nga kodi i veprimit para se ta aplikosh.
       const info = await checkActionCode(auth, oobCode);
 
       if (info.operation !== "VERIFY_AND_CHANGE_EMAIL") {
-        throw new Error("This is not a valid email-change code.");
+        throw new Error("Ky nuk është një kod i vlefshëm për ndryshimin e email-it.");
       }
 
       const newEmail = info.data.email;
 
       if (!newEmail) {
-        throw new Error("The new email address could not be found.");
+        throw new Error("Nuk arritëm ta gjejmë adresën e re të email-it.");
       }
 
-      // This completes the email change in Firebase Authentication.
+      // Përfundo ndryshimin e email-it në Firebase Authentication.
       await applyActionCode(auth, oobCode);
       firebaseChangeApplied = true;
 
-      // Keep workers/{uid}.email synchronized with Firebase Auth.
+      // Mbaj të sinkronizuar workers/{uid}.email me Firebase Auth.
       const functions = getFunctions(undefined, "us-central1");
       const syncWorkerEmail = httpsCallable(
         functions,
@@ -233,16 +232,26 @@ export default function Email() {
       );
 
       try {
+
+          if (!auth.currentUser) {
+    throw new Error(
+      "Nuk ka sesion aktiv. Për sinkronizimin e profilit duhet të jeni të kyçur."
+    );
+  }
+
+  // Rifresko gjendjen e autentifikimit të përdoruesit.
+  await auth.currentUser.reload();
+  await auth.currentUser.getIdToken(true); 
         await syncWorkerEmail({ email: newEmail });
 
         setSuccess(
-          "Your email address has been changed successfully. You can now use your new email to log in."
+          "Adresa juaj e email-it u ndryshua me sukses. Tani mund të hyni në llogarinë tuaj me email-in e ri."
         );
       } catch (syncError) {
         console.error("Worker email synchronization failed:", syncError);
 
         setSuccess(
-          "Your Firebase email has been changed successfully, but your worker profile could not be synchronized. Please contact support if your account details do not update."
+          "Email-i juaj në Firebase u ndryshua me sukses, por profili juaj nuk arriti të sinkronizohej. Ju lutemi kontaktoni mbështetjen nëse të dhënat e llogarisë nuk përditësohen."
         );
       }
 
@@ -253,18 +262,18 @@ export default function Email() {
 
       if (firebaseChangeApplied) {
         setError(
-          "Your email was changed, but a follow-up operation failed. Please contact support if your profile still shows the old email."
+          "Email-i juaj u ndryshua, por një veprim pasues dështoi. Ju lutemi kontaktoni mbështetjen nëse profili juaj ende shfaq email-in e vjetër."
         );
       } else if (
         err.code === "auth/expired-action-code" ||
         err.code === "auth/invalid-action-code"
       ) {
         setError(
-          "This email-change link has expired or has already been used. Please request a new email-change link."
+          "Kjo lidhje për ndryshimin e email-it ka skaduar ose është përdorur më parë. Ju lutemi kërkoni një lidhje të re."
         );
       } else {
         setError(
-          "We could not change your email. Please try again or request a new link."
+          "Nuk arritëm ta ndryshojmë email-in tuaj. Ju lutemi provoni përsëri ose kërkoni një lidhje të re."
         );
       }
     } finally {
@@ -288,36 +297,36 @@ export default function Email() {
 
         {loading ? (
           <>
-            <h1 className={styles.title}>Checking your link...</h1>
+            <h1 className={styles.title}>Duke kontrolluar lidhjen...</h1>
             <p className={styles.emailDescription}>
-              Please wait while we verify your email link.
+              Ju lutemi prisni derisa të verifikojmë lidhjen tuaj të email-it.
             </p>
           </>
         ) : (
           <>
             <h1 className={styles.title}>
               {isReset
-                ? "Reset your password"
+                ? "Rivendos fjalëkalimin"
                 : isEmailChange
-                  ? "Confirm email change"
+                  ? "Konfirmo ndryshimin e email-it"
                   : isVerify
-                    ? "Verify your email"
-                    : "Account action"}
+                    ? "Verifiko email-in"
+                    : "Veprimi i llogarisë"}
             </h1>
 
             <p className={styles.emailDescription}>
               {isReset
-                ? "Choose a new password for your Gjejnjerin account."
+                ? "Zgjidhni një fjalëkalim të ri për llogarinë tuaj në Gjejnjerin."
                 : isEmailChange
-                  ? "Confirm that you want to change your Gjejnjerin account to the new email address below."
+                  ? "Konfirmoni që dëshironi të ndryshoni email-in e llogarisë suaj në Gjejnjerin në adresën e re më poshtë."
                   : isVerify
-                    ? "Confirm your email address to complete verification."
-                    : "This email action is not supported."}
+                    ? "Konfirmoni adresën tuaj të email-it për të përfunduar verifikimin."
+                    : "Ky veprim i email-it nuk mbështetet."}
             </p>
 
             {email && (isReset || isEmailChange) && (
               <p className={styles.emailAddress}>
-                {isEmailChange ? "New email:" : "Account:"}{" "}
+                {isEmailChange ? "Email-i i ri:" : "Llogaria:"}{" "}
                 <strong>{email}</strong>
               </p>
             )}
@@ -344,7 +353,7 @@ export default function Email() {
                     className={styles.label}
                     htmlFor="new-password"
                   >
-                    New password
+                    Fjalëkalimi i ri
                   </label>
 
                   <input
@@ -352,7 +361,7 @@ export default function Email() {
                     className={styles.input}
                     type="password"
                     autoComplete="new-password"
-                    placeholder="Enter your new password"
+                    placeholder="Shkruani fjalëkalimin e ri"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     minLength={6}
@@ -365,7 +374,7 @@ export default function Email() {
                     className={styles.label}
                     htmlFor="confirm-password"
                   >
-                    Confirm new password
+                    Konfirmo fjalëkalimin e ri
                   </label>
 
                   <input
@@ -373,7 +382,7 @@ export default function Email() {
                     className={styles.input}
                     type="password"
                     autoComplete="new-password"
-                    placeholder="Enter your password again"
+                    placeholder="Shkruani përsëri fjalëkalimin"
                     value={confirmPassword}
                     onChange={(event) =>
                       setConfirmPassword(event.target.value)
@@ -391,7 +400,7 @@ export default function Email() {
                   {submitting ? (
                     <span className={styles.spinner} />
                   ) : (
-                    "Reset password"
+                    "Rivendos fjalëkalimin"
                   )}
                 </button>
               </form>
@@ -407,7 +416,7 @@ export default function Email() {
                 {submitting ? (
                   <span className={styles.spinner} />
                 ) : (
-                  "Verify email"
+                  "Verifiko email-in"
                 )}
               </button>
             )}
@@ -422,7 +431,7 @@ export default function Email() {
                 {submitting ? (
                   <span className={styles.spinner} />
                 ) : (
-                  "Confirm email change"
+                  "Konfirmo ndryshimin e email-it"
                 )}
               </button>
             )}
@@ -430,7 +439,7 @@ export default function Email() {
             {(success || error) && (
               <div className={styles.registerRow}>
                 <Link to="/login" className={styles.textBtn}>
-                  Return to login
+                  Kthehu te kyçja
                 </Link>
               </div>
             )}

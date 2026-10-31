@@ -1,4 +1,3 @@
-
 import { onAuthStateChanged } from "firebase/auth";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { auth, db } from "../../api/firebase";
@@ -9,8 +8,10 @@ import {
   getDocs,
   query,
   where,
+  getDoc,
   updateDoc,
   serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import {
@@ -39,7 +40,14 @@ const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
 const ADMIN_PIN_HASH =
   "8c2cd4a7bcff84654004d26d74ae332c7e24d701db2e5433ef672c2daf4b499c";
 
-const COLORS = ["#2563eb", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"];
+const COLORS = [
+  "#2563eb",
+  "#10b981",
+  "#f59e0b",
+  "#ef4444",
+  "#8b5cf6",
+  "#06b6d4",
+];
 
 const COLLECTIONS = [
   { id: "workers", label: "Mjeshtrit", icon: "🛠️" },
@@ -117,7 +125,9 @@ function dateTimeLabel(value) {
 }
 
 function normalize(value) {
-  return String(value ?? "").trim().toLowerCase();
+  return String(value ?? "")
+    .trim()
+    .toLowerCase();
 }
 
 function countBy(items, getter) {
@@ -170,7 +180,9 @@ function StatCard({ icon, label, value, hint, onClick, tone = "#2563eb" }) {
         transition: "transform .15s ease, box-shadow .15s ease",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+      <div
+        style={{ display: "flex", justifyContent: "space-between", gap: 12 }}
+      >
         <div style={{ minWidth: 0 }}>
           <div style={mutedStyle}>{label}</div>
           <div
@@ -332,23 +344,25 @@ export default function AdminDashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pinVerified, setPinVerified] = useState(
-    () => sessionStorage.getItem("admin_auth") === "true"
+    () => sessionStorage.getItem("admin_auth") === "true",
   );
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
   const [isNotesOpen, setIsNotesOpen] = useState(false);
   const [adminNotes, setAdminNotes] = useState([]);
+  const [processingSuggestion, setProcessingSuggestion] = useState(null);
   const [globalStats, setGlobalStats] = useState({});
-  
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [period, setPeriod] = useState("30");
   const [categorySuggestions, setCategorySuggestions] = useState([]);
-const [loadingSuggestions, setLoadingSuggestions] = useState(false);
-const [suggestionError, setSuggestionError] = useState("");
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [suggestionError, setSuggestionError] = useState("");
 
-  const [selectedCollection, setSelectedCollection] = useState("contactSessions");
+  const [selectedCollection, setSelectedCollection] =
+    useState("contactSessions");
   const [refreshError, setRefreshError] = useState("");
   const [records, setRecords] = useState({
     workers: [],
@@ -386,8 +400,6 @@ const [suggestionError, setSuggestionError] = useState("");
     return unsubscribe;
   }, [navigate]);
 
-
-
   useEffect(() => {
     if (!user) return undefined;
 
@@ -399,8 +411,8 @@ const [suggestionError, setSuggestionError] = useState("");
         (snapshot) => {
           setGlobalStats(snapshot.exists() ? snapshot.data() : {});
         },
-        (error) => setRefreshError(`Global stats: ${error.message}`)
-      )
+        (error) => setRefreshError(`Global stats: ${error.message}`),
+      ),
     );
 
     COLLECTIONS.forEach(({ id }) => {
@@ -422,50 +434,154 @@ const [suggestionError, setSuggestionError] = useState("");
               ...previous,
               [id]: error.message,
             }));
-          }
-        )
+          },
+        ),
       );
     });
 
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
   }, [user]);
 
-  async function loadCategorySuggestions() {
-  setLoadingSuggestions(true);
-  setSuggestionError("");
+  const loadCategorySuggestions = async () => {
+    try {
+      setLoadingSuggestions(true);
+      setSuggestionError("");
 
-  try {
-    const suggestionsQuery = query(
-      collection(db, "categorySuggestions"),
-      where("status", "==", "pending")
+      const suggestionsRef = collection(db, "categorySuggestions");
+      const snapshot = await getDocs(suggestionsRef);
+
+      const suggestions = snapshot.docs.map((document) => ({
+        id: document.id,
+        ...document.data(),
+      }));
+
+      // Show pending suggestions first, newest first.
+      suggestions.sort((a, b) => {
+        if (a.status === "pending" && b.status !== "pending") return -1;
+        if (a.status !== "pending" && b.status === "pending") return 1;
+
+        const dateA = a.createdAt?.toDate?.()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate?.()?.getTime() || 0;
+
+        return dateB - dateA;
+      });
+
+      setCategorySuggestions(suggestions);
+    } catch (error) {
+      console.error("Error loading category suggestions:", error);
+      setSuggestionError("Gabim gjatë ngarkimit të sugjerimeve.");
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  const approveCategorySuggestion = async (suggestion) => {
+    const suggestedCategory = suggestion.suggestedCategory?.trim();
+    const workerId = suggestion.workerId || suggestion.id;
+
+    if (!suggestedCategory || !workerId) {
+      alert("Mungojnë të dhënat e kategorisë ose punëtorit.");
+      return;
+    }
+
+    if (suggestion.status !== "pending") {
+      alert("Ky sugjerim është shqyrtuar më parë.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `A dëshiron ta aprovosh kategorinë "${suggestedCategory}"?`,
     );
 
-    const snapshot = await getDocs(suggestionsQuery);
+    if (!confirmed) return;
 
-    const suggestions = snapshot.docs.map((item) => ({
-      id: item.id,
-      ...item.data(),
-    }));
+    try {
+      setProcessingSuggestion(suggestion.id);
 
-    suggestions.sort((a, b) => {
-      const dateA = a.createdAt?.toMillis?.() ?? 0;
-      const dateB = b.createdAt?.toMillis?.() ?? 0;
-      return dateB - dateA;
-    });
+      const workerRef = doc(db, "workers", workerId);
+      const suggestionRef = doc(db, "categorySuggestions", suggestion.id);
 
-    setCategorySuggestions(suggestions);
-  } catch (error) {
-    console.error("Error loading category suggestions:", error);
-    setSuggestionError("Sugjerimet nuk mundën të ngarkohen.");
-  } finally {
-    setLoadingSuggestions(false);
-  }
-}
+      // Make sure the worker actually exists.
+      const workerSnapshot = await getDoc(workerRef);
 
+      if (!workerSnapshot.exists()) {
+        throw new Error("Punëtori nuk u gjet në databazë.");
+      }
 
-useEffect(() => {
-  loadCategorySuggestions();
-}, []);
+      const batch = writeBatch(db);
+
+      // Update the worker's public category.
+      batch.update(workerRef, {
+        category: suggestedCategory,
+        customCategory: suggestedCategory,
+        categoryStatus: "approved",
+      });
+
+      // Mark the suggestion as approved.
+      batch.update(suggestionRef, {
+        status: "approved",
+        reviewedAt: serverTimestamp(),
+        reviewedBy: auth.currentUser.uid,
+      });
+
+      await batch.commit();
+
+      setCategorySuggestions((previous) =>
+        previous.map((item) =>
+          item.id === suggestion.id ? { ...item, status: "approved" } : item,
+        ),
+      );
+
+      alert(`Kategoria "${suggestedCategory}" u aprovua me sukses!`);
+    } catch (error) {
+      console.error("Error approving category:", error);
+      alert(error.message || "Gabim gjatë aprovimit të kategorisë.");
+    } finally {
+      setProcessingSuggestion(null);
+    }
+  };
+
+  const declineCategorySuggestion = async (suggestion) => {
+    if (suggestion.status !== "pending") {
+      alert("Ky sugjerim është shqyrtuar më parë.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `A dëshiron ta refuzosh kategorinë "${suggestion.suggestedCategory}"?`,
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setProcessingSuggestion(suggestion.id);
+
+      const suggestionRef = doc(db, "categorySuggestions", suggestion.id);
+
+      await updateDoc(suggestionRef, {
+        status: "declined",
+        reviewedAt: serverTimestamp(),
+        reviewedBy: auth.currentUser.uid,
+      });
+
+      setCategorySuggestions((previous) =>
+        previous.map((item) =>
+          item.id === suggestion.id ? { ...item, status: "declined" } : item,
+        ),
+      );
+
+      alert("Sugjerimi u refuzua.");
+    } catch (error) {
+      console.error("Error declining category:", error);
+      alert("Gabim gjatë refuzimit të kategorisë.");
+    } finally {
+      setProcessingSuggestion(null);
+    }
+  };
+
+  useEffect(() => {
+    loadCategorySuggestions();
+  }, []);
 
   const workers = records.workers;
   const contacts = records.contactSessions;
@@ -476,46 +592,62 @@ useEffect(() => {
 
   const workerById = useMemo(
     () => new Map(workers.map((worker) => [worker.id, worker])),
-    [workers]
+    [workers],
   );
 
   const contactById = useMemo(
     () => new Map(contacts.map((contact) => [contact.id, contact])),
-    [contacts]
+    [contacts],
   );
 
   const analytics = useMemo(() => {
     const activeWorkers = workers.filter((worker) => worker.isActive === true);
-    const verifiedWorkers = workers.filter((worker) => worker.isVerified === true);
+    const verifiedWorkers = workers.filter(
+      (worker) => worker.isVerified === true,
+    );
     const proWorkers = workers.filter((worker) => worker.isPro === true);
-    const availableWorkers = workers.filter((worker) => worker.isAvailable === true);
-    const featuredWorkers = workers.filter((worker) => worker.isFeatured === true);
+    const availableWorkers = workers.filter(
+      (worker) => worker.isAvailable === true,
+    );
+    const featuredWorkers = workers.filter(
+      (worker) => worker.isFeatured === true,
+    );
 
     const pendingVerifications = verifications.filter((item) =>
-      isOpenStatus(item.status)
+      isOpenStatus(item.status),
     );
     const openReports = reports.filter((item) => isOpenStatus(item.status));
     const pendingReviewRequests = reviewRequests.filter((item) =>
-      isOpenStatus(item.status)
+      isOpenStatus(item.status),
     );
     const pendingReviews = reviews.filter((item) => isOpenStatus(item.status));
 
     const verifiedReviews = reviews.filter((item) => item.isVerified === true);
     const suspiciousReviews = reviews.filter(
-      (item) => item.isDifferentDevice === true
+      (item) => item.isDifferentDevice === true,
     );
     const ratings = reviews
       .map((review) => Number(review.rating))
-      .filter((rating) => Number.isFinite(rating) && rating >= 1 && rating <= 5);
+      .filter(
+        (rating) => Number.isFinite(rating) && rating >= 1 && rating <= 5,
+      );
 
     const averageRating = ratings.length
       ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
       : 0;
 
-    const recentContacts = contacts.filter((item) => isWithinDays(item, Number(period)));
-    const recentReviews = reviews.filter((item) => isWithinDays(item, Number(period)));
-    const recentReports = reports.filter((item) => isWithinDays(item, Number(period)));
-    const recentWorkers = workers.filter((item) => isWithinDays(item, Number(period)));
+    const recentContacts = contacts.filter((item) =>
+      isWithinDays(item, Number(period)),
+    );
+    const recentReviews = reviews.filter((item) =>
+      isWithinDays(item, Number(period)),
+    );
+    const recentReports = reports.filter((item) =>
+      isWithinDays(item, Number(period)),
+    );
+    const recentWorkers = workers.filter((item) =>
+      isWithinDays(item, Number(period)),
+    );
 
     const contactsWithReview = contacts.filter((contact) =>
       reviews.some(
@@ -523,13 +655,14 @@ useEffect(() => {
           review.workerId &&
           contact.workerId &&
           review.workerId === contact.workerId &&
-          (
-            (review.customerPhone && contact.customerPhone &&
-              normalize(review.customerPhone) === normalize(contact.customerPhone)) ||
-            (review.reviewerFingerprint && contact.fingerPrint &&
-              review.reviewerFingerprint === contact.fingerPrint)
-          )
-      )
+          ((review.customerPhone &&
+            contact.customerPhone &&
+            normalize(review.customerPhone) ===
+              normalize(contact.customerPhone)) ||
+            (review.reviewerFingerprint &&
+              contact.fingerPrint &&
+              review.reviewerFingerprint === contact.fingerPrint)),
+      ),
     );
 
     const contactsByWorker = countBy(contacts, (item) => {
@@ -538,17 +671,23 @@ useEffect(() => {
     }).slice(0, 10);
 
     const workerPerformance = workers.map((worker) => {
-      const workerContacts = contacts.filter((item) => item.workerId === worker.id);
-      const workerReviews = reviews.filter((item) => item.workerId === worker.id);
+      const workerContacts = contacts.filter(
+        (item) => item.workerId === worker.id,
+      );
+      const workerReviews = reviews.filter(
+        (item) => item.workerId === worker.id,
+      );
       const workerReports = reports.filter(
-        (item) => item.reportedUserId === worker.id
+        (item) => item.reportedUserId === worker.id,
       );
       const workerRequests = reviewRequests.filter(
-        (item) => item.workerId === worker.id
+        (item) => item.workerId === worker.id,
       );
       const numericRatings = workerReviews
         .map((item) => Number(item.rating))
-        .filter((rating) => Number.isFinite(rating) && rating >= 1 && rating <= 5);
+        .filter(
+          (rating) => Number.isFinite(rating) && rating >= 1 && rating <= 5,
+        );
 
       return {
         id: worker.id,
@@ -569,30 +708,33 @@ useEffect(() => {
       };
     });
 
-    const timeline = Array.from({ length: Number(period) === 7 ? 7 : 30 }, (_, index) => {
-      const days = Number(period) === 7 ? 7 : 30;
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      date.setDate(date.getDate() - (days - index - 1));
-      const nextDate = new Date(date);
-      nextDate.setDate(nextDate.getDate() + 1);
+    const timeline = Array.from(
+      { length: Number(period) === 7 ? 7 : 30 },
+      (_, index) => {
+        const days = Number(period) === 7 ? 7 : 30;
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - (days - index - 1));
+        const nextDate = new Date(date);
+        nextDate.setDate(nextDate.getDate() + 1);
 
-      const inDay = (item) => {
-        const ms = timestampMs(item.createdAt);
-        return ms >= date.getTime() && ms < nextDate.getTime();
-      };
+        const inDay = (item) => {
+          const ms = timestampMs(item.createdAt);
+          return ms >= date.getTime() && ms < nextDate.getTime();
+        };
 
-      return {
-        date: date.toLocaleDateString("sq-AL", {
-          day: "2-digit",
-          month: "short",
-        }),
-        Kontakte: contacts.filter(inDay).length,
-        Reviews: reviews.filter(inDay).length,
-        Raporte: reports.filter(inDay).length,
-        Regjistrime: workers.filter(inDay).length,
-      };
-    });
+        return {
+          date: date.toLocaleDateString("sq-AL", {
+            day: "2-digit",
+            month: "short",
+          }),
+          Kontakte: contacts.filter(inDay).length,
+          Reviews: reviews.filter(inDay).length,
+          Raporte: reports.filter(inDay).length,
+          Regjistrime: workers.filter(inDay).length,
+        };
+      },
+    );
 
     return {
       activeWorkers,
@@ -616,13 +758,19 @@ useEffect(() => {
       workerPerformance,
       timeline,
       cityBreakdown: countBy(workers, (item) => item.city || "Pa qytet"),
-      categoryBreakdown: countBy(workers, (item) => item.category || "Pa kategori"),
-      reportCategories: countBy(reports, (item) => item.category || "Pa kategori"),
+      categoryBreakdown: countBy(
+        workers,
+        (item) => item.category || "Pa kategori",
+      ),
+      reportCategories: countBy(
+        reports,
+        (item) => item.category || "Pa kategori",
+      ),
       reportStatuses: countBy(reports, (item) => item.status || "Pa status"),
       reviewStatuses: countBy(reviews, (item) => item.status || "Pa status"),
       verificationStatuses: countBy(
         verifications,
-        (item) => item.status || "Pa status"
+        (item) => item.status || "Pa status",
       ),
       ratingsBreakdown: [5, 4, 3, 2, 1].map((rating) => ({
         name: `${rating} ⭐`,
@@ -640,13 +788,25 @@ useEffect(() => {
         .sort((a, b) => b.reports - a.reports)
         .slice(0, 10),
       contactRate: percentage(contactsWithReview.length, contacts.length),
-      reviewVerificationRate: percentage(verifiedReviews.length, reviews.length),
+      reviewVerificationRate: percentage(
+        verifiedReviews.length,
+        reviews.length,
+      ),
       activeRate: percentage(activeWorkers.length, workers.length),
       proRate: percentage(proWorkers.length, workers.length),
       verifiedRate: percentage(verifiedWorkers.length, workers.length),
       totalRatings: ratings.length,
     };
-  }, [workers, contacts, reviews, reviewRequests, reports, verifications, workerById, period]);
+  }, [
+    workers,
+    contacts,
+    reviews,
+    reviewRequests,
+    reports,
+    verifications,
+    workerById,
+    period,
+  ]);
 
   useEffect(() => {
     setLoaded((previous) => previous);
@@ -713,12 +873,12 @@ useEffect(() => {
     const keys = [...new Set(items.flatMap((item) => Object.keys(item)))];
     const valueToText = (value) => {
       if (value == null) return "";
-      if (typeof value?.toDate === "function") return value.toDate().toISOString();
+      if (typeof value?.toDate === "function")
+        return value.toDate().toISOString();
       if (typeof value === "object") return JSON.stringify(value);
       return String(value);
     };
-    const escapeCsv = (value) =>
-      `"${valueToText(value).replace(/"/g, '""')}"`;
+    const escapeCsv = (value) => `"${valueToText(value).replace(/"/g, '""')}"`;
 
     const csv = [
       keys.map(escapeCsv).join(","),
@@ -770,10 +930,10 @@ useEffect(() => {
       ...new Set(
         (records[selectedCollection] || [])
           .map((item) => item.status)
-          .filter(Boolean)
+          .filter(Boolean),
       ),
     ],
-    [records, selectedCollection]
+    [records, selectedCollection],
   );
 
   const recentActivity = useMemo(() => {
@@ -850,7 +1010,8 @@ useEffect(() => {
     COLLECTIONS.find((item) => item.id === selectedCollection)?.label ||
     selectedCollection;
 
-  const sectionTitle = NAV.find((item) => item.id === activeTab)?.label || "Admin";
+  const sectionTitle =
+    NAV.find((item) => item.id === activeTab)?.label || "Admin";
 
   return (
     <div className={styles.adminDashboardContainer}>
@@ -888,7 +1049,9 @@ useEffect(() => {
             <button
               type="button"
               style={buttonStyle}
-              onClick={() => exportCsv(recentActivity, "gjejnjerin-activity.csv")}
+              onClick={() =>
+                exportCsv(recentActivity, "gjejnjerin-activity.csv")
+              }
             >
               ⬇ Eksporto aktivitetin
             </button>
@@ -1065,7 +1228,8 @@ useEffect(() => {
                     analytics.recentReports.length}
                 </h2>
                 <p style={mutedStyle}>
-                  Kontakte + reviews + raporte të krijuara në periudhën e zgjedhur.
+                  Kontakte + reviews + raporte të krijuara në periudhën e
+                  zgjedhur.
                 </p>
               </div>
               <div style={panelStyle}>
@@ -1084,8 +1248,8 @@ useEffect(() => {
                   {analytics.reviewVerificationRate}%
                 </h2>
                 <p style={mutedStyle}>
-                  {analytics.verifiedReviews.length} nga {reviews.length} reviews
-                  kanë isVerified = true.
+                  {analytics.verifiedReviews.length} nga {reviews.length}{" "}
+                  reviews kanë isVerified = true.
                 </p>
               </div>
               <div style={panelStyle}>
@@ -1094,13 +1258,11 @@ useEffect(() => {
                   {analytics.verifiedRate}%
                 </h2>
                 <p style={mutedStyle}>
-                  {analytics.verifiedWorkers.length} nga {workers.length} profile.
+                  {analytics.verifiedWorkers.length} nga {workers.length}{" "}
+                  profile.
                 </p>
               </div>
             </div>
-
-            
-
 
             <div
               style={{
@@ -1122,10 +1284,26 @@ useEffect(() => {
                       <YAxis allowDecimals={false} />
                       <Tooltip />
                       <Legend />
-                      <Line type="monotone" dataKey="Kontakte" stroke="#2563eb" />
-                      <Line type="monotone" dataKey="Reviews" stroke="#10b981" />
-                      <Line type="monotone" dataKey="Raporte" stroke="#ef4444" />
-                      <Line type="monotone" dataKey="Regjistrime" stroke="#8b5cf6" />
+                      <Line
+                        type="monotone"
+                        dataKey="Kontakte"
+                        stroke="#2563eb"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="Reviews"
+                        stroke="#10b981"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="Raporte"
+                        stroke="#ef4444"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="Regjistrime"
+                        stroke="#8b5cf6"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -1142,7 +1320,10 @@ useEffect(() => {
                           { name: "PRO", value: analytics.proWorkers.length },
                           {
                             name: "Basic",
-                            value: Math.max(0, workers.length - analytics.proWorkers.length),
+                            value: Math.max(
+                              0,
+                              workers.length - analytics.proWorkers.length,
+                            ),
                           },
                         ]}
                         dataKey="value"
@@ -1185,7 +1366,9 @@ useEffect(() => {
                     }}
                   >
                     <div style={mutedStyle}>{city.name}</div>
-                    <div style={{ fontSize: 24, fontWeight: 800, marginTop: 6 }}>
+                    <div
+                      style={{ fontSize: 24, fontWeight: 800, marginTop: 6 }}
+                    >
                       {city.value}
                     </div>
                     <div style={mutedStyle}>
@@ -1252,7 +1435,9 @@ useEffect(() => {
                     <div style={{ color: item.color, fontWeight: 800 }}>
                       {item.count} · {item.title}
                     </div>
-                    <p style={{ ...mutedStyle, marginBottom: 0 }}>{item.desc}</p>
+                    <p style={{ ...mutedStyle, marginBottom: 0 }}>
+                      {item.desc}
+                    </p>
                   </button>
                 ))}
               </div>
@@ -1272,7 +1457,12 @@ useEffect(() => {
                     label: "Mjeshtri",
                     render: (item) => {
                       const worker = workerById.get(item.workerId);
-                      return worker?.fullName || item.workerName || item.workerId || "—";
+                      return (
+                        worker?.fullName ||
+                        item.workerName ||
+                        item.workerId ||
+                        "—"
+                      );
                     },
                   },
                   {
@@ -1283,7 +1473,9 @@ useEffect(() => {
                   {
                     key: "status",
                     label: "Statusi",
-                    render: (item) => <Badge>{item.status || item.activityType}</Badge>,
+                    render: (item) => (
+                      <Badge>{item.status || item.activityType}</Badge>
+                    ),
                   },
                 ]}
                 rows={recentActivity}
@@ -1293,154 +1485,196 @@ useEffect(() => {
         )}
 
         {activeTab === "categorySugg" && (
-  <section
-    style={{
-      padding: "24px",
-      marginTop: "24px",
-      background: "#fff",
-      border: "1px solid #e5e7eb",
-      borderRadius: "16px",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "12px",
-        flexWrap: "wrap",
-        marginBottom: "20px",
-      }}
-    >
-      <div>
-        <h2 style={{ margin: 0, color: "#111827" }}>
-          Sugjerime për kategori
-        </h2>
-
-        <p style={{ margin: "6px 0 0", color: "#6b7280" }}>
-          Kategoritë e propozuara nga punëtorët.
-        </p>
-      </div>
-
-      <button
-        type="button"
-        onClick={loadCategorySuggestions}
-        disabled={loadingSuggestions}
-        style={{
-          padding: "10px 16px",
-          border: "none",
-          borderRadius: "8px",
-          background: "#004cff",
-          color: "#fff",
-          cursor: loadingSuggestions ? "wait" : "pointer",
-        }}
-      >
-        {loadingSuggestions ? "Duke ngarkuar..." : "Rifresko"}
-      </button>
-    </div>
-
-    {suggestionError && (
-      <p style={{ color: "#dc2626" }}>
-        {suggestionError}
-      </p>
-    )}
-
-    {loadingSuggestions ? (
-      <p style={{ color: "#6b7280" }}>
-        Duke ngarkuar sugjerimet...
-      </p>
-    ) : !suggestionError && categorySuggestions.length === 0 ? (
-      <p style={{ color: "#6b7280" }}>
-        Nuk ka sugjerime të reja për momentin.
-      </p>
-    ) : (
-      <div style={{ display: "grid", gap: "14px" }}>
-        {categorySuggestions.map((suggestion) => (
-          <article
-            key={suggestion.id}
+          <section
             style={{
-              padding: "18px",
+              padding: "24px",
+              marginTop: "24px",
+              background: "#fff",
               border: "1px solid #e5e7eb",
-              borderRadius: "12px",
-              minWidth: 0,
+              borderRadius: "16px",
             }}
           >
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "flex-start",
+                alignItems: "center",
                 gap: "12px",
                 flexWrap: "wrap",
+                marginBottom: "20px",
               }}
             >
-              <div style={{ minWidth: 0 }}>
-                <h3
-                  style={{
-                    margin: "0 0 12px",
-                    color: "#111827",
-                    fontSize: "20px",
-                  }}
-                >
-                  {suggestion.suggestedCategory || "Pa emër"}
-                </h3>
+              <div>
+                <h2 style={{ margin: 0, color: "#111827" }}>
+                  Sugjerime për kategori
+                </h2>
 
-                <p style={{ margin: "4px 0", color: "#374151" }}>
-                  <strong>Punëtori:</strong>{" "}
-                  {suggestion.workerName || "Nuk është dhënë"}
-                </p>
-
-                <p
-                  style={{
-                    margin: "4px 0",
-                    color: "#374151",
-                    overflowWrap: "anywhere",
-                  }}
-                >
-                  <strong>Email:</strong>{" "}
-                  {suggestion.workerEmail || "Nuk është dhënë"}
-                </p>
-
-                <p style={{ margin: "4px 0", color: "#374151" }}>
-                  <strong>Qyteti:</strong>{" "}
-                  {suggestion.city || "Nuk është dhënë"}
-                </p>
-
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    color: "#6b7280",
-                    fontSize: "13px",
-                  }}
-                >
-                  {suggestion.createdAt?.toDate
-                    ? suggestion.createdAt.toDate().toLocaleString()
-                    : "Data nuk është e disponueshme"}
+                <p style={{ margin: "6px 0 0", color: "#6b7280" }}>
+                  Kategoritë e propozuara nga punëtorët.
                 </p>
               </div>
 
-              <span
+              <button
+                type="button"
+                onClick={loadCategorySuggestions}
+                disabled={loadingSuggestions}
                 style={{
-                  padding: "6px 10px",
-                  borderRadius: "20px",
-                  background: "#fef3c7",
-                  color: "#92400e",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  whiteSpace: "nowrap",
+                  padding: "10px 16px",
+                  border: "none",
+                  borderRadius: "8px",
+                  background: "#004cff",
+                  color: "#fff",
+                  cursor: loadingSuggestions ? "wait" : "pointer",
                 }}
               >
-                {suggestion.status === "pending"
-                  ? "Në pritje"
-                  : suggestion.status || "Pa status"}
-              </span>
+                {loadingSuggestions ? "Duke ngarkuar..." : "Rifresko"}
+              </button>
             </div>
-          </article>
-        ))}
-      </div>
-    )}
-  </section>
-)}
+
+            {suggestionError && (
+              <p style={{ color: "#dc2626" }}>{suggestionError}</p>
+            )}
+
+            {loadingSuggestions ? (
+              <p style={{ color: "#6b7280" }}>Duke ngarkuar sugjerimet...</p>
+            ) : !suggestionError && categorySuggestions.length === 0 ? (
+              <p style={{ color: "#6b7280" }}>
+                Nuk ka sugjerime të reja për momentin.
+              </p>
+            ) : (
+              <div style={{ display: "grid", gap: "14px" }}>
+                {categorySuggestions.map((suggestion) => (
+                  <article
+                    key={suggestion.id}
+                    style={{
+                      padding: "18px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "12px",
+                      minWidth: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        gap: "12px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div style={{ minWidth: 0 }}>
+                        <h3
+                          style={{
+                            margin: "0 0 12px",
+                            color: "#111827",
+                            fontSize: "20px",
+                          }}
+                        >
+                          {suggestion.suggestedCategory || "Pa emër"}
+                        </h3>
+
+                        <p style={{ margin: "4px 0", color: "#374151" }}>
+                          <strong>Punëtori:</strong>{" "}
+                          {suggestion.workerName || "Nuk është dhënë"}
+                        </p>
+
+                        <p
+                          style={{
+                            margin: "4px 0",
+                            color: "#374151",
+                            overflowWrap: "anywhere",
+                          }}
+                        >
+                          <strong>Email:</strong>{" "}
+                          {suggestion.workerEmail || "Nuk është dhënë"}
+                        </p>
+
+                        <p style={{ margin: "4px 0", color: "#374151" }}>
+                          <strong>Qyteti:</strong>{" "}
+                          {suggestion.city || "Nuk është dhënë"}
+                        </p>
+
+                        <p
+                          style={{
+                            margin: "8px 0 0",
+                            color: "#6b7280",
+                            fontSize: "13px",
+                          }}
+                        >
+                          {suggestion.createdAt?.toDate
+                            ? suggestion.createdAt.toDate().toLocaleString()
+                            : "Data nuk është e disponueshme"}
+                        </p>
+                      </div>
+
+                      <span
+                        style={{
+                          padding: "6px 10px",
+                          borderRadius: "20px",
+                          background: "#fef3c7",
+                          color: "#92400e",
+                          fontSize: "12px",
+                          fontWeight: 600,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {suggestion.status === "pending"
+                          ? "Në pritje"
+                          : suggestion.status || "Pa status"}
+                      </span>
+                    </div>
+                    {suggestion.status === "pending" && (
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          marginTop: "18px",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => approveCategorySuggestion(suggestion)}
+                          disabled={processingSuggestion !== null}
+                          style={{
+                            padding: "9px 16px",
+                            border: "none",
+                            borderRadius: "8px",
+                            background: "#16a34a",
+                            color: "#fff",
+                            cursor: processingSuggestion ? "wait" : "pointer",
+                            opacity: processingSuggestion ? 0.6 : 1,
+                          }}
+                        >
+                          {processingSuggestion === suggestion.id
+                            ? "Duke përpunuar..."
+                            : "Aprovo"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => declineCategorySuggestion(suggestion)}
+                          disabled={processingSuggestion !== null}
+                          style={{
+                            padding: "9px 16px",
+                            border: "1px solid #dc2626",
+                            borderRadius: "8px",
+                            background: "#fff",
+                            color: "#dc2626",
+                            cursor: processingSuggestion ? "wait" : "pointer",
+                            opacity: processingSuggestion ? 0.6 : 1,
+                          }}
+                        >
+                          Refuzo
+                        </button>
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         {activeTab === "analytics" && (
           <div style={{ display: "grid", gap: 18 }}>
@@ -1499,12 +1733,24 @@ useEffect(() => {
                 <h3 style={{ marginTop: 0 }}>Kategoritë e mjeshtërve</h3>
                 <div style={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={analytics.categoryBreakdown.slice(0, 10)} layout="vertical">
+                    <BarChart
+                      data={analytics.categoryBreakdown.slice(0, 10)}
+                      layout="vertical"
+                    >
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis type="number" allowDecimals={false} />
-                      <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 11 }} />
+                      <YAxis
+                        type="category"
+                        dataKey="name"
+                        width={100}
+                        tick={{ fontSize: 11 }}
+                      />
                       <Tooltip />
-                      <Bar dataKey="value" fill="#2563eb" radius={[0, 5, 5, 0]} />
+                      <Bar
+                        dataKey="value"
+                        fill="#2563eb"
+                        radius={[0, 5, 5, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1522,7 +1768,11 @@ useEffect(() => {
                       <XAxis dataKey="name" />
                       <YAxis allowDecimals={false} />
                       <Tooltip />
-                      <Bar dataKey="value" fill="#f59e0b" radius={[5, 5, 0, 0]} />
+                      <Bar
+                        dataKey="value"
+                        fill="#f59e0b"
+                        radius={[5, 5, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1537,7 +1787,11 @@ useEffect(() => {
                       <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                       <YAxis allowDecimals={false} />
                       <Tooltip />
-                      <Bar dataKey="value" fill="#ef4444" radius={[5, 5, 0, 0]} />
+                      <Bar
+                        dataKey="value"
+                        fill="#ef4444"
+                        radius={[5, 5, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1551,7 +1805,12 @@ useEffect(() => {
                 action={
                   <button
                     style={buttonStyle}
-                    onClick={() => exportCsv(analytics.workerPerformance, "worker-performance.csv")}
+                    onClick={() =>
+                      exportCsv(
+                        analytics.workerPerformance,
+                        "worker-performance.csv",
+                      )
+                    }
                   >
                     Eksporto CSV
                   </button>
@@ -1662,7 +1921,9 @@ useEffect(() => {
               action={
                 <button
                   style={buttonStyle}
-                  onClick={() => exportCsv(contacts, "gjejnjerin-contact-sessions.csv")}
+                  onClick={() =>
+                    exportCsv(contacts, "gjejnjerin-contact-sessions.csv")
+                  }
                 >
                   ⬇ Eksporto kontaktet
                 </button>
@@ -1676,7 +1937,11 @@ useEffect(() => {
                 gap: 12,
               }}
             >
-              <StatCard icon="📞" label="Contact sessions" value={contacts.length} />
+              <StatCard
+                icon="📞"
+                label="Contact sessions"
+                value={contacts.length}
+              />
               <StatCard
                 icon="🔗"
                 label="Me sinjal të përputhur review"
@@ -1692,7 +1957,9 @@ useEffect(() => {
               <StatCard
                 icon="🧾"
                 label="Për review"
-                value={contacts.filter((item) => item.usedForReview === true).length}
+                value={
+                  contacts.filter((item) => item.usedForReview === true).length
+                }
                 hint="usedForReview = true."
               />
             </div>
@@ -1720,7 +1987,12 @@ useEffect(() => {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Kërko emër, telefon, worker ID ose fingerprint..."
-                style={{ ...buttonStyle, width: "100%", marginBottom: 14, boxSizing: "border-box" }}
+                style={{
+                  ...buttonStyle,
+                  width: "100%",
+                  marginBottom: 14,
+                  boxSizing: "border-box",
+                }}
               />
               <SimpleTable
                 columns={[
@@ -1730,7 +2002,9 @@ useEffect(() => {
                     key: "worker",
                     label: "Mjeshtri",
                     render: (item) =>
-                      workerById.get(item.workerId)?.fullName || item.workerId || "—",
+                      workerById.get(item.workerId)?.fullName ||
+                      item.workerId ||
+                      "—",
                   },
                   {
                     key: "createdAt",
@@ -1766,13 +2040,16 @@ useEffect(() => {
                 ]}
                 rows={contacts.filter((item) => {
                   const term = normalize(search);
-                  return !term || [
-                    item.customerName,
-                    item.customerPhone,
-                    item.workerId,
-                    item.fingerPrint,
-                    item.status,
-                  ].some((value) => normalize(value).includes(term));
+                  return (
+                    !term ||
+                    [
+                      item.customerName,
+                      item.customerPhone,
+                      item.workerId,
+                      item.fingerPrint,
+                      item.status,
+                    ].some((value) => normalize(value).includes(term))
+                  );
                 })}
               />
             </div>
@@ -1822,7 +2099,11 @@ useEffect(() => {
               <StatCard
                 icon="🔗"
                 label="Me session të lidhur"
-                value={reviewRequests.filter((item) => item.sessionId && contactById.has(item.sessionId)).length}
+                value={
+                  reviewRequests.filter(
+                    (item) => item.sessionId && contactById.has(item.sessionId),
+                  ).length
+                }
                 hint="Lidhje direkte përmes sessionId."
               />
             </div>
@@ -1833,7 +2114,10 @@ useEffect(() => {
                 description="Shpërndarja e reviewRequest.status."
               />
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                {countBy(reviewRequests, (item) => item.status || "Pa status").map((item) => (
+                {countBy(
+                  reviewRequests,
+                  (item) => item.status || "Pa status",
+                ).map((item) => (
                   <div
                     key={item.name}
                     style={{
@@ -1865,7 +2149,9 @@ useEffect(() => {
                     label: "Profili",
                     render: (item) => (
                       <span>
-                        {workerById.get(item.workerId)?.fullName || item.workerId || "—"}
+                        {workerById.get(item.workerId)?.fullName ||
+                          item.workerId ||
+                          "—"}
                       </span>
                     ),
                   },
@@ -1891,14 +2177,18 @@ useEffect(() => {
                     key: "status",
                     label: "Statusi",
                     render: (item) => (
-                      <Badge color={isOpenStatus(item.status) ? "#d97706" : "#059669"}>
+                      <Badge
+                        color={
+                          isOpenStatus(item.status) ? "#d97706" : "#059669"
+                        }
+                      >
                         {item.status}
                       </Badge>
                     ),
                   },
                 ]}
                 rows={[...reviewRequests].sort(
-                  (a, b) => timestampMs(b.createdAt) - timestampMs(a.createdAt)
+                  (a, b) => timestampMs(b.createdAt) - timestampMs(a.createdAt),
                 )}
               />
             </div>
@@ -2007,7 +2297,8 @@ useEffect(() => {
                   {
                     key: "workerId",
                     label: "Worker ID",
-                    render: (item) => item.workerId || item.reportedUserId || "—",
+                    render: (item) =>
+                      item.workerId || item.reportedUserId || "—",
                   },
                   {
                     key: "status",
@@ -2024,7 +2315,9 @@ useEffect(() => {
                     label: "Detajet",
                     render: (item) => (
                       <details>
-                        <summary style={{ cursor: "pointer" }}>Shfaq fushat</summary>
+                        <summary style={{ cursor: "pointer" }}>
+                          Shfaq fushat
+                        </summary>
                         <pre
                           style={{
                             whiteSpace: "pre-wrap",
@@ -2036,8 +2329,8 @@ useEffect(() => {
                           {JSON.stringify(
                             Object.fromEntries(
                               Object.entries(item).filter(
-                                ([key]) => key !== "storagePath"
-                              )
+                                ([key]) => key !== "storagePath",
+                              ),
                             ),
                             (key, value) => {
                               if (value && typeof value.toDate === "function") {
@@ -2045,7 +2338,7 @@ useEffect(() => {
                               }
                               return value;
                             },
-                            2
+                            2,
                           )}
                         </pre>
                       </details>
@@ -2103,7 +2396,10 @@ useEffect(() => {
                 <p className={styles.noNotes}>Nuk ka shënime për momentin.</p>
               ) : (
                 adminNotes.map((note, index) => (
-                  <li key={`${note.timestamp}-${index}`} className={styles.noteItem}>
+                  <li
+                    key={`${note.timestamp}-${index}`}
+                    className={styles.noteItem}
+                  >
                     <div className={styles.noteContent}>
                       <span className={styles.noteText}>{note.text}</span>
                       <span className={styles.noteTime}>{note.timestamp}</span>

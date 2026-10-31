@@ -11,6 +11,7 @@ const categories = [
   'Të gjitha',
   'Instalues',
   'Elektricist',
+  'Hidraulik',
   'Klima/AC',
   'Plastifikim',
   'Pastrim',
@@ -18,8 +19,30 @@ const categories = [
   'Mekanik',
   'Moler',
   'Murator',
+  'Ndërtimtari',
+  'Pllakaxhi',
+  'Zdrukthëtar',
+  'Kulme dhe Tjegulla',
+  'Fasada dhe Izolim',
+  'Parket dhe Laminat',
+  'Dyer dhe Dritare',
+  'Saldator',
+  'Gips dhe Tavane',
   'Vullkanizer',
-]
+  'IT',
+  "Tjetër"
+];
+
+const getPublicCategory = (worker) => {
+  if (
+    worker.categoryStatus === "approved" &&
+    worker.customCategory?.trim()
+  ) {
+    return worker.customCategory.trim();
+  }
+
+  return worker.category || "Tjetër";
+};
 
 function WorkerList() {
   const [searchParams] = useSearchParams()
@@ -102,17 +125,19 @@ function WorkerList() {
     
     const filtered = allWorkers.filter((worker) => {
       const matchesCity = selectedCity === 'Të gjitha' || worker.city === selectedCity
-      const matchesCategory =
-       !selectedCategory?.trim() ||
-        selectedCategory === 'Të gjitha' ||
-        worker.category === selectedCategory
+      const publicCategory = getPublicCategory(worker);
+
+const matchesCategory =
+  !selectedCategory?.trim() ||
+  selectedCategory === 'Të gjitha' ||
+  publicCategory === selectedCategory;
       // const matchesPrice = (maxPrice === 0) || (worker.startingPrice >= minPrice && worker.startingPrice <= maxPrice)
       
       const searchStr = debouncedSearchQuery.toLowerCase()
-      const matchesSearch = !searchStr || 
-        worker.fullName?.toLowerCase().includes(searchStr) ||
-        worker.category?.toLowerCase().includes(searchStr) ||
-        worker.city?.toLowerCase().includes(searchStr)
+      const matchesSearch = !searchStr ||
+  worker.fullName?.toLowerCase().includes(searchStr) ||
+  publicCategory.toLowerCase().includes(searchStr) ||
+  worker.city?.toLowerCase().includes(searchStr)
 
       return matchesCity && matchesCategory  && matchesSearch
     });
@@ -199,9 +224,15 @@ function WorkerList() {
       {paginatedWorkers.length > 0 ? (
         <>
           <div className={`${styles.grid} ${isFetching ? styles.dimmed : ''}`}>
-            {paginatedWorkers.map((worker) => (
-              <WorkerCard key={worker.id} worker={worker} />
-            ))}
+           {paginatedWorkers.map((worker) => (
+  <WorkerCard
+    key={worker.id}
+    worker={{
+      ...worker,
+      category: getPublicCategory(worker),
+    }}
+  />
+))}
           </div>
 
           {/* Pagination UI - Only shows if there is more than 1 page */}
