@@ -210,10 +210,15 @@
   font-style: italic;
 }
 
+.viewAll {
+  display: flex;
+  justify-content: center ;
+}
+
 
 .viewAllButton {
   background: transparent;
-
+  
   padding: 0.9rem 2.5rem;
   border-radius: 12px;
   font-weight: 700;

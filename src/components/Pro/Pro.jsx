@@ -37,7 +37,7 @@ const Pro = ({ isPro, onUpgradeClick, form, lastReviewDate, handleChange, onStat
           <p className={styles.title}>Cilësimet e Profilit PRO</p>
           <ul className={styles.settingsList}>
             <li>
-              <span>Në faqen kryesore të Gjejmjeshtrin</span>
+              <span>Në faqen kryesore të GjejNjerin</span>
               <label className={styles.switch}>
                 <input 
                   type="checkbox" 

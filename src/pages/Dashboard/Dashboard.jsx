@@ -120,7 +120,10 @@ function Dashboard() {
           isActuallyVerified = !!data.isVerified;
           const initialForm = {
             name: data.fullName || "",
-            category: data.category || "",
+            category:
+            data.categoryStatus === "approved" && data.customCategory?.trim()
+            ? data.customCategory.trim()
+            : data.category || "",
             customCategory: data.customCategory || "",
             yearsExperience: data.experienceYears || 0,
             phoneNumber: data.phoneNumber || "",
@@ -694,11 +697,24 @@ if (form.category === "Tjetër") {
                 <div className={styles.inputRow}>
                   <div className={styles.field}>
                     <label>Kategoria</label>
-                     <select name="category" value={form.category} onChange={handleChange}>
-                      {categories.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                     </select>
+                     <select
+  name="category"
+  value={form.category}
+  onChange={handleChange}
+>
+  {categories.map((cat) => (
+    <option key={cat} value={cat}>
+      {cat}
+    </option>
+  ))}
+
+  {form.category &&
+    !categories.includes(form.category) && (
+      <option value={form.category}>
+        {form.category}
+      </option>
+    )}
+</select>
                      {form.category === "Tjetër" && (
   <div className={styles.field}>
     <label>Profesioni yt</label>
