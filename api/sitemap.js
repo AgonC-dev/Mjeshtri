@@ -1,4 +1,4 @@
-import { adminDb } from "./_lib/firebaseAdmin.js";
+import { adminDb } from "./lib/firebaseAdmin.js";
 
 const SITE_URL = "https://gjejnjerin.com";
 
