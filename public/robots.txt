@@ -1,13 +1,5 @@
+
 User-agent: *
 Allow: /
-
-Disallow: /login
-Disallow: /dashboard
-Disallow: /settings
-Disallow: /profile
-Disallow: /admin
-Disallow: /enroll
-Disallow: /email/
-Disallow: /review/
 
 Sitemap: https://gjejnjerin.com/sitemap.xml
