@@ -1,8 +1,23 @@
+
 {
+  "outputDirectory": "dist",
+  "functions": {
+  "api/worker-profile.js": {
+    "includeFiles": "dist/index.html"
+  }
+},
   "rewrites": [
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
+    },
+    {
+      "source": "/worker/:id",
+      "destination": "/api/worker-profile?type=id&id=:id&path=/worker/:id"
+    },
+    {
+      "source": "/((?!workers$|wanted$|bashkohu$|about$|contact$|pricing$|help$|privacy$|terms$|refund$|register$|login$|dashboard$|settings$|profile$|admin$|enroll$|email$|worker$)[^/]+)",
+      "destination": "/api/worker-profile?type=slug&slug=$1&path=/$1"
     },
     {
       "source": "/(.*)",

@@ -61,24 +61,33 @@ export default function AdminWorkers() {
     }
   }
 
-  async function handleIsActive(id, isActive) {
-    try {
-      const workerRef = doc(db, "workers", id);
-      await updateDoc(workerRef, {
-        isActive: !isActive
-      })
+async function handleSuspend(id, isSuspended) {
+  try {
+    const workerRef = doc(db, "workers", id);
+    const newSuspendedStatus = !isSuspended;
 
-      setResults(results.map(w => 
-            w.id === id ? { ...w, isActive: !isActive } : w
-        ));
+    await updateDoc(workerRef, {
+      isSuspended: newSuspendedStatus
+    });
 
-      if (selectedWorker && selectedWorker.id === id) {
-        setSelectedWorker(prev => ({ ...prev, isActive: !isActive }));
-      }
-    } catch (err) {
-      console.error("Gabim!", err);
+    setResults(prev =>
+      prev.map(w =>
+        w.id === id
+          ? { ...w, isSuspended: newSuspendedStatus }
+          : w
+      )
+    );
+
+    if (selectedWorker?.id === id) {
+      setSelectedWorker(prev => ({
+        ...prev,
+        isSuspended: newSuspendedStatus
+      }));
     }
+  } catch (err) {
+    console.error("Gabim!", err);
   }
+}
   
   async function handleVerification(id , isVerified) {
      try {
@@ -214,7 +223,7 @@ return (
 
     {/* SUSPEND TOGGLE */}
     <button 
-      onClick={() => handleIsActive(worker.id, worker.isActive)} 
+      onClick={() => handleSuspend(worker.id, worker.isSuspended)} 
       className={`${styles.adminBtn} ${worker.isActive ? styles.suspendBtn : styles.activateBtn}`}
     >
       {worker.isActive ? "🚫 Suspend" : "✅ Aktivizo"}

@@ -1,24 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db, auth } from "../../api/firebase.js";
 import WhatsAppButton from '../../components/WhatsAppButton/WhatsAppButton';
 import styles from './WorkerProfile.module.css';
+import { Helmet } from "react-helmet-async";
 import MapPin from '../../assets/Mappin.png';
 import Verified from '../../assets/verified.png';
 
-function WorkerProfile() {
+function WorkerProfile({ initialData = null }) {
   const { id, slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Initialize with state if available (prevents loading flicker when navigating from home)
-  const [worker, setWorker] = useState(location.state?.workerData || null);
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(!worker);
+  const initialWorker =
+    initialData?.worker ||
+    location.state?.workerData ||
+    null;
+
+  const [worker, setWorker] = useState(initialWorker);
+  const [reviews, setReviews] = useState(initialData?.reviews || []);
+  const [loading, setLoading] = useState(!initialWorker);
 
   const [isFav, setIsFav] = useState(false);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
 
@@ -39,17 +45,18 @@ function WorkerProfile() {
      window.removeEventListener("storage", checkPersistence);
     }
   }, [worker?.id])
+  
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setIsAuthenticated(!!user);
+  });
 
+  return () => unsubscribe();
+}, []);
 
 
   // Sync with localStorage on mount
-  useEffect(() => {
-
-       if (!worker?.id) return;
-    const saved = JSON.parse(localStorage.getItem("mjeshtri_favs") || "[]");
-    setIsFav(saved.some(item => item.id === worker.id));
-  }, [worker?.id]);
-
+  
   const toggleFavorite = (e) => {
     e.stopPropagation(); // Prevents clicking the card
     e.preventDefault();
@@ -79,94 +86,181 @@ function WorkerProfile() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+  window.scrollTo(0, 0);
 
-    const fetchWorkerAndReviews = async () => {
-      if (!worker) setLoading(true);
+  // Server already supplied the worker and reviews.
+  // No need to fetch them again from Firestore.
+  if (
+    initialData?.worker &&
+    (
+      (id && initialData.worker.id === id) ||
+      (slug && initialData.worker.slug === slug)
+    )
+  ) {
+    setWorker(initialData.worker);
+    setReviews(initialData.reviews || []);
+    setLoading(false);
+    return;
+  }
 
-      try {
-        let finalWorkerData = worker;
+  const fetchWorkerAndReviews = async () => {
+    setLoading(true);
 
-        // 1. GET THE WORKER DATA
-        if (!finalWorkerData) {
-          if (id) {
-            // DIRECT HIT (Fastest - usually from internal navigation)
-            const docRef = doc(db, "workers", id);
-            const snap = await getDoc(docRef);
-            if (snap.exists()) {
-              finalWorkerData = { id: snap.id, ...snap.data() };
+    try {
+      let finalWorkerData = location.state?.workerData || null;
+
+      if (!finalWorkerData) {
+        if (id) {
+          const docRef = doc(db, "workers", id);
+          const snap = await getDoc(docRef);
+
+          if (snap.exists()) {
+            finalWorkerData = {
+              id: snap.id,
+              ...snap.data()
+            };
+          }
+        } else if (slug) {
+          const q = query(
+            collection(db, "workers"),
+            where("slug", "==", slug)
+          );
+
+          const qSnap = await getDocs(q);
+
+          if (!qSnap.empty) {
+            const data = qSnap.docs[0].data();
+
+            if (data.isPro) {
+              finalWorkerData = {
+                id: qSnap.docs[0].id,
+                ...data
+              };
             }
-          } else if (slug) {
-            // SLUG SEARCH (For personalized links)
-          
-            const q = query(collection(db, "workers"), where("slug", "==", slug));
-            const qSnap = await getDocs(q);
-            if (!qSnap.empty) {
-              const data = qSnap.docs[0].data();
-
-              if(data.isPro) {
-                finalWorkerData = { id: qSnap.docs[0].id, ...data};
-              } else {
-                finalWorkerData = null;
-              }
-            } 
           }
         }
-
-        if (finalWorkerData) {
-          setWorker(finalWorkerData);
-
-          // 2. GET APPROVED REVIEWS
-          const qReviews = query(
-            collection(db, "reviews"),
-            where("workerId", "==", finalWorkerData.id),
-            where("status", "==", "approved"), // Only show approved ones
-            orderBy("createdAt", "desc")
-          );
-          const revSnap = await getDocs(qReviews);
-          setReviews(revSnap.docs.map(d => ({ id: d.id, ...d.data() })));
-        }
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      } finally {
-        setLoading(false);
       }
-    };
 
-    fetchWorkerAndReviews();
-  }, [id, slug]); // Listen to both ID and Slug changes
+      if (finalWorkerData) {
+        setWorker(finalWorkerData);
 
-  if (loading) return <div className={styles.loader}><span></span></div>;
-  if (!worker) {
+        const qReviews = query(
+          collection(db, "reviews"),
+          where("workerId", "==", finalWorkerData.id),
+          where("status", "==", "approved"),
+          orderBy("createdAt", "desc")
+        );
+
+        const revSnap = await getDocs(qReviews);
+
+        setReviews(
+          revSnap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }))
+        );
+      } else {
+        setWorker(null);
+        setReviews([]);
+      }
+
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+      setWorker(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchWorkerAndReviews();
+
+}, [id, slug, initialData]);
+
+if (loading) {
+  return (
+    <div className={styles.loader}>
+      <span></span>
+    </div>
+  );
+}
+
+if (!worker) {
   return (
     <div className={styles.errorPageWrapper}>
       <div className={styles.errorCircleBg}></div>
       <div className={styles.errorCard}>
         <div className={styles.errorIconWrapper}>
-           <span className={styles.lockEmoji}>🔒</span>
-           <div className={styles.iconPulse}></div>
+          <span className={styles.lockEmoji}>🔒</span>
+          <div className={styles.iconPulse}></div>
         </div>
-        
+
         <h1 className={styles.errorTitle}>Link i Kufizuar</h1>
+
         <p className={styles.errorSubtext}>
           Ky profil kërkon një anëtarësim <span>PRO</span> për t'u hapur nëpërmjet linkut të personalizuar.
         </p>
-        
+
         <div className={styles.errorActionArea}>
           <button onClick={() => navigate('/')} className={styles.backBtn}>
             Kthehu në Ballinë
           </button>
-          <p className={styles.helpText}>Nëse jeni ju pronari i këtij profili, ju lutem kyçuni.</p>
+
+          <p className={styles.helpText}>
+            Nëse jeni ju pronari i këtij profili, ju lutem kyçuni.
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
+const whatsappPhone = String(
+  worker.phoneNumber || worker.phoneNum || ""
+).replace(/\D/g, "");
+
+
+const profilePath =
+  worker.isPro && worker.slug
+    ? `/${worker.slug}`
+    : `/worker/${worker.id}`;
+
+const profileUrl = `https://gjejnjerin.com${profilePath}`;
+
+const seoDescription = (
+  worker.bio ||
+  `${worker.fullName} është ${worker.category} në ${worker.city}, Kosovë. Kontaktoje përmes Gjejnjerin.`
+)
+  .replace(/\s+/g, " ")
+  .trim()
+  .slice(0, 160);
+
+const seoTitle = `${worker.fullName} - ${worker.category} në ${worker.city} | Gjejnjerin`;
 
 
   return (
     <div className={styles.page}>
+       <Helmet>
+      <title>{seoTitle}</title>
+
+      <meta name="description" content={seoDescription} />
+
+      <link rel="canonical" href={profileUrl} />
+
+      <meta name="robots" content="index, follow" />
+
+      <meta property="og:type" content="profile" />
+      <meta property="og:title" content={seoTitle} />
+      <meta property="og:description" content={seoDescription} />
+      <meta property="og:url" content={profileUrl} />
+
+      {worker.profilePic && (
+        <meta property="og:image" content={worker.profilePic} />
+      )}
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={seoTitle} />
+      <meta name="twitter:description" content={seoDescription} />
+    </Helmet>
       <section className={styles.hero}>
         <div className={styles.heroBg} style={{ backgroundImage: `url(${worker.profilePic})` }}></div>
         <div className={styles.heroContent}>
@@ -182,7 +276,7 @@ function WorkerProfile() {
             </div>
 
             <div className={styles.textSide}>
-             {!auth.currentUser && <button 
+             {!isAuthenticated  && <button 
                     onClick={toggleFavorite} 
                     className={`${styles.heartBtn} ${isFav ? styles.active : ''}`}
                     aria-label="Favorite"
@@ -265,14 +359,16 @@ function WorkerProfile() {
                   phoneNumber={worker.phoneNumber} 
                   workerName={worker.fullName} 
                 />
-                <a 
-                  href={`https://wa.me/${worker.phoneNumber.replace(/\D/g, '')}`} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className={styles.secondaryCallBtn}
-                >
-                   Bisedo direkt
-                </a>
+                {whatsappPhone && (
+  <a
+    href={`https://wa.me/${whatsappPhone}`}
+    target="_blank"
+    rel="noreferrer"
+    className={styles.secondaryCallBtn}
+  >
+    Bisedo direkt
+  </a>
+)}
               </div>
               <div className={styles.trustFooter}>
                 <p>✓ Verifikuar nga GjejNjerin.com</p>
@@ -303,7 +399,13 @@ function WorkerProfile() {
                     <div>
                       <p className={styles.reviewerName}>{r.customerName}</p>
                       <p className={styles.reviewDate}>
-                        {r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString('sq-AL') : "Sot"}
+                       {r.createdAt
+  ? new Date(
+      r.createdAt?.toDate
+        ? r.createdAt.toDate()
+        : r.createdAt
+    ).toLocaleDateString("sq-AL")
+  : "Sot"}
                       </p>
                     </div>
                   </div>

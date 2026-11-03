@@ -1,96 +1,47 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-// Layouts & Components
-import MainLayout from "./components/MainLayout";
-import ErrorPage from "./components/Error/Error";
+import AppRoutes from "./AppRoutes";
 import Maintenance from "./pages/Maintenance/Maintenance";
 
-// Pages
-import Home from "./pages/Home/Home";
-import WorkerList from "./pages/WorkerList/WorkerList";
-import WorkerProfile from "./pages/WorkerProfile/WorkerProfile";
-import WorkerRegister from "./pages/WorkerRegister/WorkerRegister";
-import Login from "./pages/Login/Login";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import ProfileSettings from "./pages/ProfileSettings/ProfileSettings";
-import UserProfile from './pages/ViewProfile/UserProfile';
-import ReviewPage from "./pages/Review/ReviewPage";
-import Contact from "./pages/Contact/Contact";
-import Privacy from "./pages/Privacy/Privacy";
-import Terms from "./pages/Terms/Terms";
-import About from "./pages/About/About";
-import Help from "./pages/Help/Help";
-import AdminDashboard from "./pages/Admin/Admin";
-import AdminEnroll from "./components/AdminEnroll";
-import MostWanted from "./pages/MostWanted/MostWanted";
-import PricingPage from "./pages/Pricing/Price";
-import Refund from "./pages/Refund/Refund";
-import WhyGjejnjerin from "./pages/Why/Why";
-import Udhezues from "./pages/Udhëzues/Udhëzues";
-import ElektrikeView from "./pages/Udhëzues/elektrike/Electrict";
-import Email from "./pages/Email/Email";
+export function AppProviders({ children, helmetContext }) {
+  // A separate QueryClient for each App instance/request.
+  const [queryClient] = useState(() => new QueryClient());
 
+  return (
+    <HelmetProvider context={helmetContext}>
+      <QueryClientProvider client={queryClient}>
+        <Helmet>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+        </Helmet>
 
-const queryClient = new QueryClient();
+        {children}
+      </QueryClientProvider>
+    </HelmetProvider>
+  );
+}
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainLayout />,
-    errorElement: <ErrorPage />, // This handles errors while keeping Header/Footer if desired
-    children: [
-      { index: true, element: <Home /> },
-      { path: "workers", element: <WorkerList /> },
-      { path: "worker/:id", element: <WorkerProfile /> },
-      { path: "register", element: <WorkerRegister /> },
-      { path: "login", element: <Login /> },
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "settings", element: <ProfileSettings /> },
-      { path: "profile", element: <UserProfile /> },
-      { path: "contact", element: <Contact />},
-      { path: "privacy", element: <Privacy />},
-      { path: "terms", element: <Terms />},
-      { path: "about", element: <About />},
-      { path: 'pricing', element: <PricingPage />},
-      { path: "help", element: <Help />},
-      { path: 'refund', element: <Refund />},
-      { path: "/:slug", element: <WorkerProfile />},
-      { path: "admin", element: <AdminDashboard />},
-      { path: 'enroll', element: <AdminEnroll />},
-      { path: 'wanted', element: <MostWanted />},
-      { path: 'bashkohu', element: <WhyGjejnjerin />},
-      { path: 'email/:action', element: <Email />}
-      // { path: 'udhëzues', element: <Udhezues />},
-      // { path: "udhëzues/elektrike", element: <ElektrikeView />}
-    ],
-  },
-    {path: "review/:token", element: <ReviewPage />},
-  {
-    path: "*",
-    element: <ErrorPage />,
-  },
-]);
-
-function App() {
+function App({ initialData = null }) {
   const MAINTENANCE = false;
 
   if (MAINTENANCE) return <Maintenance />;
 
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        {/* Global SEO / Viewport fix */}
-        <Helmet>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        </Helmet>
-        
-        <RouterProvider router={router} />
+    <AppProviders>
+      <BrowserRouter>
+        <AppRoutes initialData={initialData} />
+      </BrowserRouter>
+
+      {import.meta.env.DEV && (
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </HelmetProvider>
+      )}
+    </AppProviders>
   );
 }
 

@@ -15,7 +15,8 @@ export async function fetchUsers(city, category, isVerified) {
     const workersRef = collection(db, "workers")
     let constraints = [
       where("isActive", "==", true),
-      where("isAvailable", "==", true)
+      where("isAvailable", "==", true),
+      where("isSuspend", "==", false),
     ]
 
     if (isVerified) {
