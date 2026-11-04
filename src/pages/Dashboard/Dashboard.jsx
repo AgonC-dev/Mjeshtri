@@ -254,29 +254,44 @@ function Dashboard() {
   };
 
   // Add this to your Dashboard.js
+
 const handleInstantSave = async (key, value) => {
-  // 1. Update UI state immediately (Optimistic UI)
+  const previousValue = form[key];
+
   setForm(prev => ({ ...prev, [key]: value }));
 
-  // 2. Write ONLY this specific change to the database
   try {
     const docRef = doc(db, "workers", user.uid);
-    await updateDoc(docRef, { 
+
+    await updateDoc(docRef, {
       [key]: value,
-      updatedAt: serverTimestamp() 
+      updatedAt: serverTimestamp()
     });
-    
-    // Optional: Show a quick success toast
-    setStatus({ message: "Ndryshimi u ruajt!", type: "success" });
-    setTimeout(() => setStatus({ message: "", type: "" }), 2000);
-    
+
+    setStatus({
+      message: "Ndryshimi u ruajt!",
+      type: "success"
+    });
+
+    setTimeout(() => {
+      setStatus({ message: "", type: "" });
+    }, 2000);
+
   } catch (err) {
     console.error("Instant save failed:", err);
-    // Rollback if DB update fails
-    setForm(prev => ({ ...prev, [key]: !value }));
-    setStatus({ message: "Gabim gjatë ruajtjes!", type: "error" });
+
+    setForm(prev => ({
+      ...prev,
+      [key]: previousValue
+    }));
+
+    setStatus({
+      message: "Gabim gjatë ruajtjes!",
+      type: "error"
+    });
   }
 };
+
 
  const handleSave = async (e) => {
     if (e) e.preventDefault();
@@ -314,19 +329,26 @@ if (form.category === "Tjetër" && !finalCustomCategory) {
             bio: form.bio,
             city: form.city,
             updatedAt: serverTimestamp(),
-            portfolio: portfolioFiles,
+            portfolio: form.portfolio || [],
             profilePic: form.profileUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(form.name)}&background=00ff85&color=fff`,
         };
 
         // Pro Slug Logic
-        if (form.isPro) {
-            const baseSlug = form.name.toLowerCase()
-                .trim()
-                .replace(/[^\w\s-]/g, '')
-                .replace(/[\s_-]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-            updates.slug = `${baseSlug}-${user.uid.substring(0, 4)}`;
-        }
+         if (form.category === "Tjetër") {
+  updates.customCategory = finalCustomCategory;
+  updates.categoryStatus = "pending";
+}
+
+// PRO Slug Logic
+if (form.isPro) {
+  const baseSlug = form.name.toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  updates.slug = `${baseSlug}-${user.uid.substring(0, 4)}`;
+}
 
         // 1. Handle Profile Picture Compression (Optimized for Avatars)
         let profileUrl = form.profileUrl;
@@ -357,15 +379,24 @@ if (form.category === "Tjetër" && !finalCustomCategory) {
                 useWebWorker: true 
             };
             
-            const uploadPromises = portfolioFiles.map(async (file) => {
-              const compressed = await imageCompression(file, portfolioOptions);
-              const path = `workers/${user.uid}/portfolio/${Date.now()}-${file.name}`;
-              return uploadFile(path, compressed);
-            })
            
-            newPortfolioUrls = await Promise.all(uploadPromises)
-            updates.portfolio = arrayUnion(...newPortfolioUrls)
-            setPortfolioFiles([]);
+const uploadPromises = portfolioFiles.map(async (file) => {
+  const compressed = await imageCompression(file, portfolioOptions);
+
+  const path = `workers/${user.uid}/portfolio/${Date.now()}-${crypto.randomUUID()}-${file.name}`;
+
+  return uploadFile(path, compressed);
+});
+
+newPortfolioUrls = await Promise.all(uploadPromises);
+
+// Save existing images + newly uploaded images
+updates.portfolio = [
+  ...(form.portfolio || []),
+  ...newPortfolioUrls
+];
+
+
         }
 
         await updateDoc(doc(db, "workers", user.uid), updates);
@@ -406,12 +437,14 @@ if (form.category === "Tjetër") {
         setIsDirty(false);
         setStatus({ message: "U ruajt me sukses!", type: "success" });
         
-        setForm(prev => ({
-        ...prev,
-        profileUrl: profileUrl, 
-        portfolio: [...(prev.portfolio || []), ...newPortfolioUrls],
-        slug: updates.slug || prev.slug
-    }));
+       setForm(prev => ({
+  ...prev,
+  profileUrl: profileUrl,
+  portfolio: updates.portfolio,
+  slug: updates.slug || prev.slug
+}));
+
+setPortfolioFiles([]);
 
     } catch (err) {
         console.error(err);
