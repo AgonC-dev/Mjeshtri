@@ -37,6 +37,7 @@ const categories = [
   'Fasada dhe Izolim',
   'Parket dhe Laminat',
   'Dyer dhe Dritare',
+  'Auto Ngjyrosje,
   'Saldator',
   'Gips dhe Tavane',
   'Vullkanizer',
