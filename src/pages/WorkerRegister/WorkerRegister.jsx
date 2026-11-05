@@ -188,7 +188,7 @@ const workerData = {
   isAvailable: true,
   isActive: true,
   isVerified: false,
-  isSuspended: false,
+  isSuspend: false,
   isFeatured: false,
   showProStar: false,
   quickResponse: false,
