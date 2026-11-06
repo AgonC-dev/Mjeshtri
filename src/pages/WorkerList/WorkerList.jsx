@@ -7,7 +7,49 @@ import { Helmet } from "react-helmet-async";
 import { useQuery } from '@tanstack/react-query'
 import { fetchUsers } from '../../api/https'
 
-const cities = ['Të gjitha', 'Prishtinë', 'Ferizaj', 'Prizren', 'Gjakovë', 'Mitrovicë', 'Pejë']
+const cities = [
+  "Prishtinë",
+  "Prizren",
+  "Gjakovë",
+  "Mitrovicë",
+  "Pejë",
+  "Ferizaj",
+  "Gjilan",
+
+  // Additional municipalities
+  "Deçan",
+  "Dragash",
+  "Drenas",
+  "Fushë Kosovë",
+  "Istog",
+  "Kaçanik",
+  "Kamenicë",
+  "Klinë",
+  "Leposaviq",
+  "Lipjan",
+  "Malishevë",
+  "Novobërdë",
+  "Obiliq",
+  "Podujevë",
+  "Rahovec",
+  "Skënderaj",
+  "Shtime",
+  "Shtërpcë",
+  "Suharekë",
+  "Viti",
+  "Vushtrri",
+  "Hani i Elezit",
+  "Junik",
+  "Mamushë",
+  "Graçanicë",
+  "Ranillug",
+  "Partesh",
+  "Kllokot",
+  "Zubin Potok",
+  "Zveçan",
+  "Mitrovicë e Veriut",
+];
+
 const categories = [
   'Të gjitha',
   'Instalues',
