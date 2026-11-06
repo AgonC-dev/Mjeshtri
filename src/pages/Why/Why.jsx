@@ -1,5 +1,6 @@
 import styles from "./Why.module.css";
-import Logo from '../../assets/Logo2.png'
+import Logo from '../../assets/Logo2.png';
+import { Helmet } from 'react-helmet-async';
 import { Link } from "react-router-dom";
 
 export default function WhyGjejnjerin() {
