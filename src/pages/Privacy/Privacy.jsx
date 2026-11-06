@@ -1,5 +1,6 @@
 import styles from './Privacy.module.css';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 export default function Privacy() {
   useEffect(() => {
@@ -8,6 +9,20 @@ export default function Privacy() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+  <title>Politika e Privatësisë | Gjejnjerin</title>
+  <meta name="description" content="Lexo politikën e privatësisë së Gjejnjerin dhe mëso si mbledhim, përdorim dhe mbrojmë të dhënat personale të përdoruesve." />
+  <link rel="canonical" href="https://gjejnjerin.com/privacy" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Politika e Privatësisë | Gjejnjerin" />
+  <meta property="og:description" content="Informohu rreth mbledhjes, përdorimit dhe mbrojtjes së të dhënave personale në Gjejnjerin." />
+  <meta property="og:url" content="https://gjejnjerin.com/privacy" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <h1 className={styles.title}>
         Politika e <span>Privatësisë</span>
       </h1>

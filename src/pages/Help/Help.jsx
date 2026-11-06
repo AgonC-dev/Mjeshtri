@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './Help.module.css';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const faqs = [
   {
@@ -42,6 +43,20 @@ export default function Help() {
 
   return (
     <div className={styles.helpContainer}>
+      <Helmet>
+  <title>Qendra e Ndihmës | Gjejnjerin</title>
+  <meta name="description" content="Gjej përgjigje për pyetjet më të shpeshta rreth Gjejnjerin, regjistrimit, profileve profesionale dhe përdorimit të platformës." />
+  <link rel="canonical" href="https://gjejnjerin.com/help" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Qendra e Ndihmës | Gjejnjerin" />
+  <meta property="og:description" content="Gjej përgjigje dhe udhëzime për përdorimin e Gjejnjerin." />
+  <meta property="og:url" content="https://gjejnjerin.com/help" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <header className={styles.header}>
         <h1 className={styles.title}>Si mund t'ju <span>ndihmojmë?</span></h1>
         <p>Gjeni përgjigjet për pyetjet më të shpeshta rreth platformës sonë.</p>

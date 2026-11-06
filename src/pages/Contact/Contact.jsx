@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './Contact.module.css';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../../api/firebase';
+import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Contact() {
@@ -82,6 +83,20 @@ export default function Contact() {
 
   return (
     <div className={styles.wrapper}>
+      <Helmet>
+  <title>Na Kontakto | Gjejnjerin</title>
+  <meta name="description" content="Ke pyetje apo nevojë për ndihmë? Kontakto ekipin e Gjejnjerin për informacione, sugjerime ose mbështetje." />
+  <link rel="canonical" href="https://gjejnjerin.com/contact" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Na Kontakto | Gjejnjerin" />
+  <meta property="og:description" content="Kontakto ekipin e Gjejnjerin për pyetje, sugjerime ose mbështetje." />
+  <meta property="og:url" content="https://gjejnjerin.com/contact" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <div className={styles.contactCard}>
         <div className={styles.header}>
           <h2 className={styles.title}>Na <span>Kontaktoni</span></h2>

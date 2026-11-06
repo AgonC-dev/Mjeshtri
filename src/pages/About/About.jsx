@@ -1,5 +1,6 @@
 import styles from './About.module.css';
 import { useEffect } from 'react';
+import { Helmet } from "react-helmet-async";
 
 export default function About() {
   useEffect(() => {
@@ -8,6 +9,29 @@ export default function About() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+  <title>Rreth Nesh | Gjejnjerin</title>
+
+  <meta
+    name="description"
+    content="Mëso më shumë rreth Gjejnjerin, platformës që lidh klientët me profesionistët dhe punëtorët e shërbimeve në Kosovë."
+  />
+
+  <link rel="canonical" href="https://gjejnjerin.com/about" />
+
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Rreth Nesh | Gjejnjerin" />
+  <meta
+    property="og:description"
+    content="Gjejnjerin lidh klientët me profesionistët e shërbimeve në Kosovë."
+  />
+  <meta property="og:url" content="https://gjejnjerin.com/about" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <h1 className={styles.heroTitle}>Misioni ynë: <span>GjejNjerin</span></h1>
       <p className={styles.leadText}>
         Në një treg ku koha është flori, ne kemi krijuar urën lidhëse mes Njeriut profesionist dhe klientit që ka nevojë për zgjidhje të shpejta dhe të besueshme.

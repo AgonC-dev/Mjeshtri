@@ -5,6 +5,20 @@ import { Link } from "react-router-dom";
 export default function WhyGjejnjerin() {
   return (
     <main className={styles.page}>
+      <Helmet>
+  <title>Bashkohu me Gjejnjerin | Regjistrohu si Profesionist</title>
+  <meta name="description" content="Regjistrohu në Gjejnjerin dhe prezanto shërbimet e tua para klientëve në Kosovë. Krijo profilin tënd profesional dhe gjej mundësi të reja pune." />
+  <link rel="canonical" href="https://gjejnjerin.com/bashkohu" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Bashkohu me Gjejnjerin | Regjistrohu si Profesionist" />
+  <meta property="og:description" content="Krijo profilin tënd profesional dhe prezanto shërbimet e tua në Kosovë." />
+  <meta property="og:url" content="https://gjejnjerin.com/bashkohu" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       {/* HEADER */}
       {/* <header className={styles.header}>
         <Link to="/" className={styles.logo}>

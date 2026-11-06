@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import FilterSidebar from '../../components/FilterSidebar/FilterSidebar'
 import WorkerCard from '../../components/WorkerCard/WorkerCard'
 import styles from './WorkerList.module.css'
+import { Helmet } from "react-helmet-async";
 import { useQuery } from '@tanstack/react-query'
 import { fetchUsers } from '../../api/https'
 
@@ -177,6 +178,20 @@ const matchesCategory =
 
   return (
     <div className={styles.workerList}>
+      <Helmet>
+  <title>Gjej Punëtorë dhe Profesionistë në Kosovë | Gjejnjerin</title>
+  <meta name="description" content="Kërko dhe gjej profesionistë për shërbime të ndryshme në Kosovë. Zbulo punëtorë sipas qytetit, kategorisë dhe specializimit." />
+  <link rel="canonical" href="https://gjejnjerin.com/workers" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Gjej Punëtorë dhe Profesionistë në Kosovë | Gjejnjerin" />
+  <meta property="og:description" content="Zbulo profesionistë sipas qytetit, kategorisë dhe specializimit në Kosovë." />
+  <meta property="og:url" content="https://gjejnjerin.com/workers" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       {/* Top Progress Bar for background updates */}
       <div className={`${styles.loadingBar} ${isFetching ? styles.active : ''}`} />
       

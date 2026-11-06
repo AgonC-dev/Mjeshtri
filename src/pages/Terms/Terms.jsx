@@ -1,5 +1,6 @@
 import styles from './Terms.module.css';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 export default function Terms() {
   useEffect(() => {
@@ -8,6 +9,20 @@ export default function Terms() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+  <title>Kushtet e Përdorimit | Gjejnjerin</title>
+  <meta name="description" content="Lexo kushtet e përdorimit të Gjejnjerin për të kuptuar rregullat, përgjegjësitë dhe kushtet e përdorimit të platformës." />
+  <link rel="canonical" href="https://gjejnjerin.com/terms" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Kushtet e Përdorimit | Gjejnjerin" />
+  <meta property="og:description" content="Kushtet dhe rregullat për përdorimin e platformës Gjejnjerin." />
+  <meta property="og:url" content="https://gjejnjerin.com/terms" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <h1 className={styles.title}>
         Kushtet e <span>Përdorimit</span>
       </h1>

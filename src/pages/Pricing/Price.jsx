@@ -1,8 +1,23 @@
 import classes from './Price.module.css';
+import { Helmet } from 'react-helmet-async';
 
 export default function PricingPage() {
   return (
     <main className={classes.container}>
+      <Helmet>
+  <title>Çmimet dhe Planet PRO | Gjejnjerin</title>
+  <meta name="description" content="Zbulo planet dhe përfitimet e Gjejnjerin PRO. Përmirëso profilin tënd profesional dhe prezanto shërbimet e tua para klientëve." />
+  <link rel="canonical" href="https://gjejnjerin.com/pricing" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Çmimet dhe Planet PRO | Gjejnjerin" />
+  <meta property="og:description" content="Zbulo përfitimet e Gjejnjerin PRO dhe përmirëso prezantimin e shërbimeve të tua." />
+  <meta property="og:url" content="https://gjejnjerin.com/pricing" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <section className={classes.card}>
         <h1 className={classes.title}>PRO Membership</h1>
         <p className={classes.subtitle}>

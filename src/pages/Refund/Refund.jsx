@@ -1,5 +1,7 @@
 import styles from './Refund.module.css';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+
 
 export default function Refund() {
   useEffect(() => {
@@ -8,6 +10,20 @@ export default function Refund() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+  <title>Politika e Rimbursimit | Gjejnjerin</title>
+  <meta name="description" content="Mëso rreth politikës së rimbursimit të Gjejnjerin, kushteve të anulimit dhe procedurave për kërkesat e rimbursimit." />
+  <link rel="canonical" href="https://gjejnjerin.com/refund" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Politika e Rimbursimit | Gjejnjerin" />
+  <meta property="og:description" content="Informohu rreth kushteve dhe procedurave të rimbursimit në Gjejnjerin." />
+  <meta property="og:url" content="https://gjejnjerin.com/refund" />
+  <meta property="og:image" content="https://gjejnjerin.com/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+</Helmet>
       <h1 className={styles.title}>
         Politika e <span>Rimbursimit</span>
       </h1>

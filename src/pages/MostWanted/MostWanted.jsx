@@ -3,6 +3,7 @@ import { collection, onSnapshot, query, limit, orderBy } from 'firebase/firestor
 import WorkerCard from '../../components/WorkerCard/WorkerCard';
 import styles from './MostWanted.module.css';
 import { db } from '../../api/firebase';
+import { Helmet } from 'react-helmet-async';
 import Logo from '../../assets/Logo2.png';
 
 function MostWanted() {
@@ -80,6 +81,55 @@ function MostWanted() {
 
   return (
     <div className={styles.pageWrapper}>
+      
+
+<Helmet>
+  <title>Renditja e Punëtorëve më të Mirë në Kosovë | Gjejnjerin</title>
+
+  <meta
+    name="description"
+    content="Shiko renditjen live të profesionistëve më të dalluar në Gjejnjerin. Zbulo punëtorët kryesorë në Kosovë dhe gjej profesionistin e duhur për shërbimin që të nevojitet."
+  />
+
+  <link
+    rel="canonical"
+    href="https://gjejnjerin.com/wanted"
+  />
+
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:title"
+    content="Renditja e Punëtorëve më të Mirë në Kosovë | Gjejnjerin"
+  />
+  <meta
+    property="og:description"
+    content="Zbulo renditjen live të profesionistëve më të dalluar në Gjejnjerin dhe gjej punëtorin e duhur në Kosovë."
+  />
+  <meta
+    property="og:url"
+    content="https://gjejnjerin.com/wanted"
+  />
+  <meta
+    property="og:image"
+    content="https://gjejnjerin.com/og-image.png"
+  />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+    name="twitter:title"
+    content="Renditja e Punëtorëve më të Mirë | Gjejnjerin"
+  />
+  <meta
+    name="twitter:description"
+    content="Shiko renditjen live të profesionistëve në Kosovë."
+  />
+  <meta
+    name="twitter:image"
+    content="https://gjejnjerin.com/og-image.png"
+  />
+</Helmet>
       <header className={styles.topBar}>
           <div className={styles.titleSection}>
 
