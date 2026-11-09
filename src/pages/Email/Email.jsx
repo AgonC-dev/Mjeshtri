@@ -225,35 +225,11 @@ export default function Email() {
       firebaseChangeApplied = true;
 
       // Mbaj të sinkronizuar workers/{uid}.email me Firebase Auth.
-      const functions = getFunctions(undefined, "us-central1");
-      const syncWorkerEmail = httpsCallable(
-        functions,
-        "syncWorkerEmailAfterChange"
-      );
-
-      try {
-
-          if (!auth.currentUser) {
-    throw new Error(
-      "Nuk ka sesion aktiv. Për sinkronizimin e profilit duhet të jeni të kyçur."
-    );
-  }
-
-  // Rifresko gjendjen e autentifikimit të përdoruesit.
-  await auth.currentUser.reload();
-  await auth.currentUser.getIdToken(true); 
-        await syncWorkerEmail({ email: newEmail });
-
-        setSuccess(
-          "Adresa juaj e email-it u ndryshua me sukses. Tani mund të hyni në llogarinë tuaj me email-in e ri."
-        );
-      } catch (syncError) {
-        console.error("Worker email synchronization failed:", syncError);
-
-        setSuccess(
-          "Email-i juaj në Firebase u ndryshua me sukses, por profili juaj nuk arriti të sinkronizohej. Ju lutemi kontaktoni mbështetjen nëse të dhënat e llogarisë nuk përditësohen."
-        );
-      }
+   
+      setSuccess(
+  "Adresa juaj e email-it u ndryshua me sukses. Tani mund të hyni në llogarinë tuaj me email-in e ri."
+);
+     
 
       setEmail(newEmail);
       setValidCode(false);

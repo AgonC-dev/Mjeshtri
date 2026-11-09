@@ -56,6 +56,7 @@ const categories = [
   'Instalues',
   'Elektricist',
   'Hidraulik',
+  'Hidro',
   'Klima/AC',
   'Plastifikim',
   'Pastrim',

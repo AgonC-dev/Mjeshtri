@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../api/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../api/firebase";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 function Login() {
@@ -42,11 +44,32 @@ function Login() {
         formData.email, 
         formData.password,
       )
-
+      
       const user = userCrendentials.user;
 
-      
-      navigate('/')
+const workerRef = doc(db, "workers", user.uid);
+const workerSnapshot = await getDoc(workerRef);
+
+if (workerSnapshot.exists()) {
+  const workerData = workerSnapshot.data();
+
+  if (
+    user.emailVerified &&
+    workerData.email !== user.email
+  ) {
+    const functions = getFunctions(undefined, "us-central1");
+
+    const syncWorkerEmail = httpsCallable(
+      functions,
+      "syncWorkerEmailAfterChange"
+    );
+
+    await syncWorkerEmail();
+  }
+}
+
+navigate("/");
+
     } catch (err) {
      switch (err.code) {
         case 'auth/user-not-found': setError('Ky email nuk ekziston.'); break;
