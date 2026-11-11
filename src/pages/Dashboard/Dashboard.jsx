@@ -662,7 +662,10 @@ const handleDescriptionGeneration = async () => {
     }
 
     // Replace with your own state setter for the bio textarea
-    setForm({ ...prev, bio: data.description});
+    setForm((prev) => ({ 
+  ...prev, 
+  bio: data.description 
+}));
     setStatus({ message: "Përshkrimi u gjenerua!", type: "success" });
   } catch (error) {
     console.error("Generate description error:", error);
