@@ -666,6 +666,7 @@ const handleDescriptionGeneration = async () => {
   ...prev, 
   bio: data.description 
 }));
+   setIsDirty(true)
     setStatus({ message: "Përshkrimi u gjenerua!", type: "success" });
   } catch (error) {
     console.error("Generate description error:", error);
@@ -837,17 +838,26 @@ const handleDescriptionGeneration = async () => {
       </select>
     </div>
     <div className={styles.field}>
-      <label>Përshkrimi i punës (Bio)</label>
-      <textarea 
-        name="bio" 
-        value={form.bio} 
-        onChange={handleChange} 
-        rows="1" // E bëjmë 1 rresht fillimisht që të rreshtohet me Qytetin
-        placeholder="Shërbimet tuaja..."
-        style={{ minHeight: '45px' }} 
-      />
-      <button onClick={handleDescriptionGeneration} className={styles.aiBtn}>Gjenero me AI</button>
-    </div>
+  <label>Përshkrimi i punës (Bio)</label>
+  <div className={styles.textareaWrapper}>
+    <textarea 
+      name="bio" 
+      value={form.bio} 
+      onChange={handleChange} 
+      rows="1" 
+      placeholder="Shërbimet tuaja..."
+    />
+    <button 
+      onClick={handleDescriptionGeneration} 
+      className={styles.aiBtn}
+      type="button"
+      title="Gjenero me AI"
+    >
+      {/* You can replace this with an SVG icon or text */}
+      ✨
+    </button>
+  </div>
+</div>
   </div>
 </section>
 

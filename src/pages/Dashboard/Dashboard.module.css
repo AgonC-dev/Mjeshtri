@@ -1270,6 +1270,55 @@
   gap: 8px;
 }
 
+/* Container to position the button absolutely inside */
+.textareaWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Style your textarea and add right padding so text doesn't go under the button */
+.textareaWrapper textarea {
+  width: 100%;
+  min-height: 45px;
+  padding: 12px 50px 12px 14px; /* Extra right padding leaves room for the button */
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* The absolute positioned AI button */
+.aiBtn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px; /* Or use top: 8px if you want it aligned to the top */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  
+  /* Blue glow matching the site */
+  box-shadow: 0 0 8px rgba(0, 112, 243, 0.4); /* Change #0070f3 to your site's blue */
+}
+
+/* Hover effects */
+.aiBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(0, 112, 243, 0.7);
+}
+
+.aiBtn:active {
+  transform: scale(0.95);
+}
+
 /* ===== RESPONSIVE & CENTERING ===== */
 
 
