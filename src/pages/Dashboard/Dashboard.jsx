@@ -360,7 +360,6 @@ if (form.category === "Tjetër" && !finalCustomCategory) {
             phoneNumber: form.phoneNumber,
             category: form.category,
             customCategory: form.category === "Tjetër" ? finalCustomCategory : "",
-            customCategory: form.category === "Tjetër" ? finalCustomCategory : "",
             experienceYears: form.yearsExperience,
             startingPrice: Number(form.hourlyRate) || 0,
             bio: form.bio,
