@@ -1,7 +1,7 @@
 import { getAuth } from "firebase-admin/auth";
-import { adminDb } from "./lib/firebaseAdmin";
-import { apiRateLimit, uidRateLimit } from "./lib/ratelimit";
-import { openai } from "./lib/openai";
+import { adminDb } from "./lib/firebaseAdmin.js";
+import { apiRateLimit, uidRateLimit } from "./lib/ratelimit.js";
+import { openai } from "./lib/openai.js";
 
 const cities = [
   "Prishtinë", "Prizren", "Gjakovë", "Mitrovicë", "Pejë", "Ferizaj", "Gjilan",
