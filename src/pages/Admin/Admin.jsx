@@ -557,12 +557,18 @@ export default function AdminDashboard() {
       setProcessingSuggestion(suggestion.id);
 
       const suggestionRef = doc(db, "categorySuggestions", suggestion.id);
+      const workerRef = doc(db, "workers", suggestion.workerId)   
 
       await updateDoc(suggestionRef, {
         status: "declined",
         reviewedAt: serverTimestamp(),
         reviewedBy: auth.currentUser.uid,
       });
+
+      await updateDoc(workerRef,{
+        categoryStatus: 'declined',
+        declinedCategoryAt: serverTimestamp()
+    })
 
       setCategorySuggestions((previous) =>
         previous.map((item) =>

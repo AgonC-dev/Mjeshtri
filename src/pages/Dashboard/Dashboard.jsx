@@ -111,6 +111,7 @@ function Dashboard() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [status, setStatus] = useState({ message: "", type: "" });
   const [form, setForm] = useState({
     name: "", category: "", yearsExperience: "", hourlyRate: "",
@@ -160,6 +161,7 @@ function Dashboard() {
             ? data.customCategory.trim()
             : data.category || "",
             customCategory: data.customCategory || "",
+            categoryStatus: data.categoryStatus,
             yearsExperience: data.experienceYears || 0,
             phoneNumber: data.phoneNumber || "",
             hourlyRate: data.startingPrice ?? data.hourlyRate ?? "",
@@ -587,6 +589,94 @@ setPortfolioFiles([]);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+
+
+const handleDescriptionGeneration = async () => {
+  if (isGenerating) return;
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    navigate("/login");
+    return;
+  }
+
+  setIsGenerating(true);
+  setStatus({ message: "", type: "" });
+
+  try {
+    const token = await user.getIdToken();
+
+    const res = await fetch("/api/generate-description", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // If the server returned HTML or nothing, don't crash on res.json()
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      switch (res.status) {
+        case 401:
+          navigate("/login");
+          return;
+
+        case 403:
+          // CATEGORY_PENDING, CATEGORY_DECLINED, ACCOUNT_NOT_ALLOWED...
+          setStatus({
+            message: data.message || "Nuk keni leje për këtë veprim.",
+            type: "error",
+          });
+          return;
+
+        case 429:
+          // data.message already says how long to wait
+          setStatus({
+            message:
+              data.message || "Keni arritur kufirin e gjenerimeve. Provoni përsëri më vonë.",
+            type: "error",
+          });
+          return;
+
+        case 500:
+        case 502:
+        case 503:
+        case 504:
+          setStatus({
+            message: "Ndodhi një gabim në server. Provoni përsëri më vonë.",
+            type: "error",
+          });
+          return;
+
+        default:
+          setStatus({
+            message: data.message || "Diçka shkoi keq. Provoni përsëri.",
+            type: "error",
+          });
+          return;
+      }
+    }
+
+    if (!data.success || !data.description) {
+      setStatus({ message: "Nuk u gjenerua përshkrimi. Provoni përsëri.", type: "error" });
+      return;
+    }
+
+    // Replace with your own state setter for the bio textarea
+    setForm({ ...prev, bio: data.description});
+    setStatus({ message: "Përshkrimi u gjenerua!", type: "success" });
+  } catch (error) {
+    console.error("Generate description error:", error);
+    setStatus({
+      message: "Nuk u lidh me serverin. Kontrolloni internetin dhe provoni përsëri.",
+      type: "error",
+    });
+  } finally {
+    setIsGenerating(false);
+  }
+};
+
+
   if (loading) return <Loading />;
 
   return (
@@ -754,6 +844,7 @@ setPortfolioFiles([]);
         placeholder="Shërbimet tuaja..."
         style={{ minHeight: '45px' }} 
       />
+      <button onClick={handleDescriptionGeneration} className={styles.aiBtn}>Gjenero me AI</button>
     </div>
   </div>
 </section>
