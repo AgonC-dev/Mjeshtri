@@ -35,6 +35,7 @@ import AdminReports from "../../components/AdminReports/AdminReports";
 import AdminReviews from "../../components/AdminReviews/AdminReviews";
 import AdminVerifications from "../../components/AdminVerifications/AdminVerifications";
 import styles from "./Admin.module.css";
+import Users from "../../components/AdminUsers/Users";
 
 const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
 const ADMIN_PIN_HASH =
@@ -68,6 +69,7 @@ const NAV = [
   { id: "reports", label: "Raportet", icon: "🚩" },
   { id: "verifications", label: "Verifikimet", icon: "🪪" },
   { id: "categorySugg", label: "Category Suggestions", icon: "📊" },
+  { id: "EmailVerified", label:"EmailVerified", icon:"✉️"},
   { id: "explorer", label: "Data Explorer", icon: "🗃️" },
 ];
 
@@ -1489,6 +1491,8 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        {activeTab === "EmailVerified" && <Users />}
 
         {activeTab === "categorySugg" && (
           <section
