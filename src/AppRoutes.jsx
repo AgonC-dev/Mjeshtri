@@ -26,6 +26,8 @@ import PricingPage from "./pages/Pricing/Price";
 import Refund from "./pages/Refund/Refund";
 import WhyGjejnjerin from "./pages/Why/Why";
 import Email from "./pages/Email/Email";
+import Udhezues from "./pages/Udhezues";
+import ElektrikeView from "./pages/Udhëzues/elektrike/Electrict";
 
 function AppRoutes({ initialData = null }) {
   return (
@@ -49,6 +51,9 @@ function AppRoutes({ initialData = null }) {
         <Route path="pricing" element={<PricingPage />} />
         <Route path="help" element={<Help />} />
         <Route path="refund" element={<Refund />} />
+        <Route path="/udhezues" element={<Udhezues />} />
+<Route path="/udhezues/:category" element={<Udhezues />} />
+<Route path="/udhezues/:category/:slug" element={<Udhezues />} />
         <Route
           path=":slug"
           element={<WorkerProfile initialData={initialData} />}

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from "../../../assets/Logo2.png";
 import styles from "./Electric.module.css";
 
-const BASE = "/udhezues";
+const BASE = "/udhëzues";
 const ROUTES = { electricians: "/electricians", plumbers: "/plumbers" };
 
 const CATEGORY_ELEKTRIKE = {
