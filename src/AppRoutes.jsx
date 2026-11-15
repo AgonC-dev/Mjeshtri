@@ -27,7 +27,7 @@ import Refund from "./pages/Refund/Refund";
 import WhyGjejnjerin from "./pages/Why/Why";
 import Email from "./pages/Email/Email";
 import Udhezues from "./pages/Udhezues";
-import ElektrikeView from "./pages/Udhëzues/elektrike/Electrict";
+
 
 function AppRoutes({ initialData = null }) {
   return (
