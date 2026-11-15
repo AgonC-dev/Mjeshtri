@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { auth } from "../../api/firebase";
 import styles from "./Users.module.css";
 
-const ENDPOINT = "/api/admin-users"; // change to your real route
+const ENDPOINT = "/api/listusers"; // change to your real route
 
 async function request(query = "") {
   const user = auth.currentUser;
