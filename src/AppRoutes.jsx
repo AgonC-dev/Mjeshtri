@@ -51,9 +51,9 @@ function AppRoutes({ initialData = null }) {
         <Route path="pricing" element={<PricingPage />} />
         <Route path="help" element={<Help />} />
         <Route path="refund" element={<Refund />} />
-        <Route path="udhezues" element={<Udhezues />} />
-<Route path="udhezues/:category" element={<Udhezues />} />
-<Route path="udhezues/:category/:slug" element={<Udhezues />} />
+        <Route path="udhëzues" element={<Udhezues />} />
+<Route path="udhëzues/:category" element={<Udhezues />} />
+<Route path="udhëzues/:category/:slug" element={<Udhezues />} />
         <Route
           path=":slug"
           element={<WorkerProfile initialData={initialData} />}
