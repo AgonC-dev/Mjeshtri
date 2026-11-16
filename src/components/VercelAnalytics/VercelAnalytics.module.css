@@ -1,0 +1,378 @@
+
+.container {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 28px;
+  color: #171717;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.header p {
+  margin: 7px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rangeSelect,
+.refreshButton {
+  height: 40px;
+  padding: 0 13px;
+  border: 1px solid #e5e5e5;
+  border-radius: 9px;
+  background: #fff;
+  color: #222;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rangeSelect {
+  cursor: pointer;
+}
+
+.refreshButton {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.refreshButton:hover {
+  background: #f5f5f5;
+}
+
+.refreshButton:disabled,
+.rangeSelect:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.metricCard {
+  display: flex;
+  min-height: 135px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  border: 1px solid #eaeaea;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.metricTitle {
+  color: #777;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.metricValue {
+  margin-top: 13px;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -1px;
+}
+
+.metricDescription {
+  margin-top: 6px;
+  color: #999;
+  font-size: 12px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #eaeaea;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.panelHeader h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.panelHeader p {
+  margin: 5px 0 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.chart {
+  display: flex;
+  height: 230px;
+  align-items: stretch;
+  gap: 8px;
+  overflow-x: auto;
+  padding-top: 12px;
+}
+
+.chartColumn {
+  display: flex;
+  min-width: 35px;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.chartValue {
+  min-height: 17px;
+  margin-bottom: 6px;
+  color: #777;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.chartBarArea {
+  display: flex;
+  width: 100%;
+  height: 155px;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+}
+
+.chartBar {
+  width: min(65%, 28px);
+  min-height: 0;
+  border-radius: 5px 5px 0 0;
+  background: #004cff;
+  transition: height 0.3s ease;
+}
+
+.chartLabel {
+  margin-top: 9px;
+  color: #888;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.rankingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.rankingList {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.rankingItem {
+  min-width: 0;
+}
+
+.rankingInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.rankingInfo strong {
+  flex-shrink: 0;
+  color: #444;
+  font-size: 12px;
+}
+
+.rankingLabel {
+  overflow: hidden;
+  color: #555;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progressTrack {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f0f0f0;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: inherit;
+  background: #004cff;
+  transition: width 0.3s ease;
+}
+
+.emptyText {
+  padding: 20px 0;
+  color: #999;
+  font-size: 13px;
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  min-height: 260px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 13px;
+}
+
+.spinner {
+  width: 27px;
+  height: 27px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #004cff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading p {
+  margin-top: 13px;
+}
+
+.errorBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #f1caca;
+  border-radius: 10px;
+  background: #fff8f8;
+}
+
+.errorBox strong {
+  color: #a52b2b;
+  font-size: 13px;
+}
+
+.errorBox p {
+  margin: 5px 0 0;
+  color: #8b5555;
+  font-size: 12px;
+}
+
+.errorBox button {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 1px solid #e5baba;
+  border-radius: 7px;
+  background: #fff;
+  color: #a52b2b;
+  cursor: pointer;
+}
+
+.emptyState {
+  padding: 65px 20px;
+  border: 1px dashed #ddd;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.emptyState h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.emptyState p {
+  color: #888;
+  font-size: 13px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1000px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rankingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .rangeSelect {
+    flex: 1;
+  }
+
+  .metricsGrid {
+    gap: 10px;
+  }
+
+  .metricCard {
+    min-height: 115px;
+    padding: 14px;
+  }
+
+  .metricValue {
+    font-size: 24px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .chart {
+    gap: 5px;
+  }
+}
