@@ -1,11 +1,11 @@
 import React from "react";
-import { injectSpeedInsights } from "@vercel/speed-insights";
+
 import { createRoot, hydrateRoot } from "react-dom/client";
 
 import App from "./App.jsx";
 import "./index.css";
 
-injectSpeedInsights();
+
 
 const rootElement = document.getElementById("root");
 
