@@ -1,6 +1,6 @@
 
 import { getAuth } from "firebase-admin/auth";
-import "./lib/firebaseAdmin.js";
+import "../lib/firebaseAdmin.js";
 
 const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
 
