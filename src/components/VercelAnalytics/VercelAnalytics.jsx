@@ -1,6 +1,5 @@
 
 import { useEffect, useMemo, useState } from "react";
-import { auth } from "../../api/firebase";
 import styles from "./VercelAnalytics.module.css";
 
 const API_URL = "/api/admin/analytics";

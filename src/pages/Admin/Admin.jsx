@@ -1495,7 +1495,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === "vercelAnalytics" && <AdminAnalytics />}
+        {activeTab === "vercelAnalytics" && <AdminAnalytics auth={auth}/>}
 
         {activeTab === "EmailVerified" && <Users />}
 
