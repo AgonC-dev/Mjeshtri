@@ -22,8 +22,6 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [metadata, setMetaData] = useState(null);
   const [showProModal, setShowProModal] = useState(false);
-  const [isSuspended, setIsSuspended] = useState(false);
-const [suspensionLoading, setSuspensionLoading] = useState(true);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [user, setUser] = useState(null)
   const [authLoading, setAuthLoading] = useState(true);
@@ -36,45 +34,6 @@ const [suspensionLoading, setSuspensionLoading] = useState(true);
 
     return () => unsubscribe()
   }, [])
-
-  useEffect(() => {
-  if (authLoading) return;
-
-  let cancelled = false;
-
-  const checkSuspension = async () => {
-    if (!user) {
-      setIsSuspended(false);
-      setSuspensionLoading(false);
-      return;
-    }
-
-    setSuspensionLoading(true);
-
-    try {
-      const workerRef = doc(db, "workers", user.uid);
-      const workerSnap = await getDoc(workerRef);
-
-      if (!cancelled) {
-        setIsSuspended(
-          workerSnap.exists() && workerSnap.data().isSuspend === true
-        );
-      }
-    } catch (error) {
-      console.error("Suspension check failed:", error);
-    } finally {
-      if (!cancelled) {
-        setSuspensionLoading(false);
-      }
-    }
-  };
-
-  checkSuspension();
-
-  return () => {
-    cancelled = true;
-  };
-}, [user, authLoading]);
 
   useEffect(() => {
   if (authLoading || !user) return;
@@ -134,10 +93,6 @@ const [suspensionLoading, setSuspensionLoading] = useState(true);
   }
    
   }
-
-  if (authLoading || (user && suspensionLoading)) {
-  return <div>Loading...</div>;
-}
 
   return (
     <div className={styles.home}>
@@ -202,36 +157,6 @@ const [suspensionLoading, setSuspensionLoading] = useState(true);
           </button>
         </div>
       </Modal>
-
-       <Modal
-  open={isSuspended}
-  onClose={() => {}}
->
-  <div className={styles.suspendedModal}>
-    <div className={styles.suspendedIcon}>
-      !
-    </div>
-
-    <h2>Llogaria juaj është pezulluar</h2>
-
-    <p>
-      Llogaria juaj është pezulluar nga administratori i Gjejnjerin.
-      Për momentin nuk mund të përdorni platformën.
-    </p>
-
-    <p>
-      Nëse mendoni se ky vendim është marrë gabimisht,
-      ju lutemi kontaktoni ekipin tonë.
-    </p>
-
-    <a
-      href="/contact"
-      className={styles.contactSupportBtn}
-    >
-      Kontakto mbështetjen
-    </a>
-  </div>
-</Modal>
 
       {/* --- EXISTING SUCCESS MODAL --- */}
       <Modal 

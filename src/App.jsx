@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import AppRoutes from "./AppRoutes";
 import Maintenance from "./pages/Maintenance/Maintenance";
+import SuspensionGuard from "./components/SusoensionGuard/SuspensionGuard";
 
 export function AppProviders({ children, helmetContext }) {
   // A separate QueryClient for each App instance/request.
@@ -36,7 +37,10 @@ function App({ initialData = null }) {
   return (
     <AppProviders>
       <BrowserRouter>
-        <AppRoutes initialData={initialData} />
+      <SuspensionGuard>
+         <AppRoutes initialData={initialData} />
+      </SuspensionGuard>
+       
       </BrowserRouter>
 
        <Analytics />
