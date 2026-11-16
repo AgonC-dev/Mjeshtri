@@ -436,6 +436,47 @@
   color: #004cff;
 }
 
+
+.suspendedModal {
+  text-align: center;
+  padding: 24px;
+  max-width: 420px;
+}
+
+.suspendedIcon {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #dc2626;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 auto 20px;
+}
+
+.suspendedModal h2 {
+  margin-bottom: 12px;
+}
+
+.suspendedModal p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.contactSupportBtn {
+  display: block;
+  padding: 13px 20px;
+  background: #004cff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
 @media (max-width: 480px) {
   .confirmEmail {
     gap: 9px;
