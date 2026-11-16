@@ -36,6 +36,8 @@ import AdminReviews from "../../components/AdminReviews/AdminReviews";
 import AdminVerifications from "../../components/AdminVerifications/AdminVerifications";
 import styles from "./Admin.module.css";
 import Users from "../../components/AdminUsers/Users";
+import AdminAnalytics from "../../components/VercelAnalytics/VercelAnalytics";
+
 
 const ADMIN_UID = "mUc8sPZ3IURtFT3As8y0YN9Bsil2";
 const ADMIN_PIN_HASH =
@@ -62,6 +64,7 @@ const COLLECTIONS = [
 const NAV = [
   { id: "overview", label: "Overview", icon: "📊" },
   { id: "analytics", label: "Analytics", icon: "📈" },
+  { id: "vercelAnalytics", label: "Vercel Analytics", icon:"📈"},
   { id: "workers", label: "Mjeshtrit", icon: "🛠️" },
   { id: "contacts", label: "Kontaktet", icon: "📞" },
   { id: "reviewRequests", label: "Review Requests", icon: "✉️" },
@@ -1491,6 +1494,8 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        {activeTab === "vercelAnalytics" && <AdminAnalytics />}
 
         {activeTab === "EmailVerified" && <Users />}
 
