@@ -5,69 +5,297 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #f8fafc;
+  overflow-y: auto;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 76, 255, 0.07), transparent 55%),
+    #f5f7fb;
   font-family: inherit;
 }
 
-.suspendedCard {
+.suspendedCard,
+.statusCard,
+.loadingCard {
   width: 100%;
-  max-width: 440px;
-  padding: 32px 24px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
+  max-width: 480px;
+  padding: 36px;
+  background: #fff;
+  border: 1px solid #e8ecf3;
+  border-radius: 22px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.09);
   text-align: center;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
 }
 
-.icon {
-  width: 58px;
-  height: 58px;
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: 34px;
+  color: #111827;
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.brandMark {
   display: grid;
   place-items: center;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  background: #fee2e2;
-  color: #dc2626;
-  font-size: 30px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #004cff;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.statusIcon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 22px;
+  border-radius: 22px;
+  background: #fff1f0;
+  color: #dc4444;
+}
+
+.statusIcon svg {
+  width: 35px;
+  height: 35px;
+}
+
+.statusLabel {
+  display: inline-block;
+  margin-bottom: 11px;
+  color: #dc4444;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.suspendedCard h1 {
+  margin: 0 auto 14px;
+  max-width: 370px;
+  color: #111827;
+  font-size: clamp(23px, 5vw, 29px);
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.8px;
+}
+
+.description {
+  margin: 0 auto 25px;
+  max-width: 380px;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.infoBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 17px;
+  margin-bottom: 22px;
+  border: 1px solid #e8edf5;
+  border-radius: 13px;
+  background: #f8faff;
+  text-align: left;
+}
+
+.infoIcon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 11px;
+  background: #eaf0ff;
+  color: #004cff;
+}
+
+.infoIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.infoBox > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.infoTitle {
+  color: #202939;
+  font-size: 13px;
   font-weight: 700;
 }
 
-.suspendedCard h2 {
-  margin-bottom: 14px;
-  color: #111827;
-  font-size: 23px;
+.infoText {
+  color: #737f91;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
-.suspendedCard p {
-  color: #6b7280;
-  line-height: 1.7;
-  margin-bottom: 14px;
-}
-
-.contactButton {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 13px 24px;
-  border-radius: 9px;
-  background: #004cff;
-  color: white;
-  font-weight: 600;
+.emailLink {
+  width: fit-content;
+  color: #004cff;
+  font-size: 13px;
+  font-weight: 650;
   text-decoration: none;
-  transition: background 0.2s ease;
+  overflow-wrap: anywhere;
 }
 
-.contactButton:hover {
-  background: #003bd1;
+.emailLink:hover {
+  text-decoration: underline;
 }
 
-.screen button {
-  padding: 12px 22px;
+.primaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 49px;
+  padding: 13px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 11px;
   background: #004cff;
-  color: white;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
-  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: #003bd1;
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 15px;
+  margin-top: 11px;
+  border: 1px solid #e2e7ef;
+  border-radius: 11px;
+  background: #fff;
+  color: #344054;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.secondaryButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.secondaryButton svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.footerText {
+  display: block;
+  margin-top: 27px;
+  color: #a0a8b5;
+  font-size: 11px;
+}
+
+.errorText {
+  margin-top: 12px;
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Loading and verification error screens */
+
+.loadingCard h2,
+.statusCard h2 {
+  margin: 17px 0 9px;
+  color: #111827;
+  font-size: 21px;
+}
+
+.loadingCard p,
+.statusCard p {
+  margin-bottom: 20px;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.loader {
+  width: 38px;
+  height: 38px;
+  margin: 0 auto;
+  border: 3px solid #e5eaf2;
+  border-top-color: #004cff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.warningIcon {
+  display: grid;
+  place-items: center;
+  width: 55px;
+  height: 55px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #fff4e5;
+  color: #d97706;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 520px) {
+  .screen {
+    padding: 15px;
+  }
+
+  .suspendedCard,
+  .statusCard,
+  .loadingCard {
+    padding: 27px 20px;
+    border-radius: 17px;
+  }
+
+  .brand {
+    margin-bottom: 27px;
+  }
+
+  .statusIcon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .infoBox {
+    padding: 14px;
+  }
 }
