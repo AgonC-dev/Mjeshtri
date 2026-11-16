@@ -1,46 +1,49 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+
 import { auth, db } from "../../api/firebase";
 import styles from "./SuspensionGuard.module.css";
 
 const SUPPORT_EMAIL = "support@gjejnjerin.com";
 
-function SuspensionGuard({ children }) {
+export default function SuspensionGuard({ children }) {
   const [status, setStatus] = useState("checking");
-  const [retry, setRetry] = useState(0);
-  const [isSigningOut, setIsSigningOut] = useState(false);
-  const [signOutError, setSignOutError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+  const [signingOut, setSigningOut] = useState(false);
+
+  const requestId = useRef(0);
 
   useEffect(() => {
     let active = true;
-    let requestId = 0;
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      const currentRequest = ++requestId;
+      const currentRequest = ++requestId.current;
 
+      // Public visitors don't need a suspension check.
       if (!user) {
-        setStatus("allowed");
+        if (active) setStatus("allowed");
         return;
       }
 
+      // Only authenticated users reach this point.
       setStatus("checking");
 
       try {
         const workerRef = doc(db, "workers", user.uid);
         const workerSnap = await getDoc(workerRef);
 
-        if (!active || currentRequest !== requestId) return;
+        if (!active || currentRequest !== requestId.current) return;
 
-        const suspended =
+        const isSuspended =
           workerSnap.exists() &&
           workerSnap.data().isSuspend === true;
 
-        setStatus(suspended ? "suspended" : "allowed");
+        setStatus(isSuspended ? "suspended" : "allowed");
       } catch (error) {
-        console.error("Suspension verification failed:", error);
+        console.error("Suspension check failed:", error);
 
-        if (active && currentRequest === requestId) {
+        if (active && currentRequest === requestId.current) {
           setStatus("error");
         }
       }
@@ -48,196 +51,106 @@ function SuspensionGuard({ children }) {
 
     return () => {
       active = false;
+      requestId.current++;
       unsubscribe();
     };
-  }, [retry]);
+  }, [retryCount]);
 
   const handleSignOut = async () => {
-    if (isSigningOut) return;
-
-    setIsSigningOut(true);
-    setSignOutError("");
-
     try {
+      setSigningOut(true);
       await signOut(auth);
-      // onAuthStateChanged detects the sign-out
-      // and changes the guard status to "allowed".
     } catch (error) {
       console.error("Sign out failed:", error);
-      setSignOutError(
-        "Nuk mundëm të çkyçim llogarinë. Ju lutemi provoni përsëri."
-      );
-      setIsSigningOut(false);
+      setSigningOut(false);
     }
   };
 
-  if (status === "checking") {
-    return (
-      <div className={styles.screen}>
-        <div className={styles.loadingCard}>
-          <div className={styles.loader} />
-          <h2>Po verifikohet llogaria</h2>
-          <p>Ju lutemi prisni disa momente...</p>
-        </div>
-      </div>
-    );
+  const handleRetry = () => {
+    setStatus("checking");
+    setRetryCount((count) => count + 1);
+  };
+
+  // Important: while Firebase checks authentication or the worker
+  // document, the public website remains visible.
+  if (status !== "suspended" && status !== "error") {
+    return children;
   }
 
-  if (status === "error") {
-    return (
-      <div className={styles.screen}>
-        <div className={styles.statusCard}>
-          <div className={styles.warningIcon}>!</div>
+  return (
+    <div className={styles.overlay}>
+      <div className={styles.card}>
+        <div className={styles.logo}>G</div>
 
-          <h2>Verifikimi dështoi</h2>
+        {status === "suspended" ? (
+          <>
+            <div className={styles.icon}>!</div>
 
-          <p>
-            Nuk mundëm të verifikojmë statusin e llogarisë suaj.
-            Për arsye sigurie, qasja është përkohësisht e kufizuar.
-          </p>
+            <span className={styles.statusLabel}>
+              LLOGARIA E PEZULLUAR
+            </span>
 
-          <button
-            className={styles.primaryButton}
-            onClick={() => setRetry((prev) => prev + 1)}
-          >
-            Provo përsëri
-          </button>
-        </div>
-      </div>
-    );
-  }
+            <h1>Llogaria juaj është pezulluar</h1>
 
-  if (status === "suspended") {
-    return (
-      <div className={styles.screen}>
-        <div className={styles.suspendedCard}>
-          <div className={styles.brand}>
-            <span className={styles.brandMark}>G</span>
-            <span>Gjejnjerin</span>
-          </div>
+            <p className={styles.description}>
+              Qasja në platformën Gjejnjerin është kufizuar
+              për llogarinë tuaj. Nëse mendoni se ky vendim
+              është bërë gabimisht, kontaktoni ekipin tonë
+              të mbështetjes.
+            </p>
 
-          <div className={styles.statusIcon}>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M12 3 21 19H3L12 3Z"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12 9v4"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-              <circle cx="12" cy="16" r="1" fill="currentColor" />
-            </svg>
-          </div>
-
-          <span className={styles.statusLabel}>
-            STATUSI I LLOGARISË
-          </span>
-
-          <h1>Llogaria juaj është pezulluar</h1>
-
-          <p className={styles.description}>
-            Qasja në llogarinë tuaj është kufizuar nga administratori
-            i Gjejnjerin. Për momentin nuk mund të përdorni shërbimet
-            e platformës përmes kësaj llogarie.
-          </p>
-
-          <div className={styles.infoBox}>
-            <div className={styles.infoIcon}>
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M4 6h16v12H4z"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="m4 7 8 6 8-6"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            <div>
-              <span className={styles.infoTitle}>
-                Keni nevojë për ndihmë?
-              </span>
-
-              <span className={styles.infoText}>
-                Kontaktoni ekipin tonë për sqarime ose rishikim të
-                vendimit.
-              </span>
-
-              <a
-                href={`mailto:${SUPPORT_EMAIL}`}
-                className={styles.emailLink}
-              >
+            <div className={styles.support}>
+              <span>Ne jemi këtu për t'ju ndihmuar</span>
+              <a href={`mailto:${SUPPORT_EMAIL}`}>
                 {SUPPORT_EMAIL}
               </a>
             </div>
-          </div>
 
-          <a
-            href={`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
-              "Kërkesë për rishikimin e pezullimit të llogarisë"
-            )}`}
-            className={styles.primaryButton}
-          >
-            Kontakto mbështetjen
-            <span aria-hidden="true">→</span>
-          </a>
+            <a
+              className={styles.primaryButton}
+              href={`mailto:${SUPPORT_EMAIL}`}
+            >
+              Kontakto mbështetjen
+            </a>
 
-          <button
-            type="button"
-            className={styles.secondaryButton}
-            onClick={handleSignOut}
-            disabled={isSigningOut}
-          >
-            {isSigningOut ? (
-              "Duke u çkyçur..."
-            ) : (
-              <>
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M10 17l5-5-5-5M15 12H3"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                Dil dhe kyçu me një llogari tjetër
-              </>
-            )}
-          </button>
+            <button
+              className={styles.secondaryButton}
+              onClick={handleSignOut}
+              disabled={signingOut}
+            >
+              {signingOut
+                ? "Duke dalë..."
+                : "Dil dhe kyçu me një llogari tjetër"}
+            </button>
+          </>
+        ) : (
+          <>
+            <div className={styles.icon}>!</div>
 
-          {signOutError && (
-            <p className={styles.errorText} role="alert">
-              {signOutError}
+            <h1>Nuk mund ta verifikojmë llogarinë</h1>
+
+            <p className={styles.description}>
+              Pati një problem gjatë kontrollimit të statusit
+              të llogarisë suaj. Ju lutemi provoni përsëri.
             </p>
-          )}
 
-          <span className={styles.footerText}>
-            Gjejnjerin · Mbështetje për përdoruesit
-          </span>
-        </div>
+            <button
+              className={styles.primaryButton}
+              onClick={handleRetry}
+            >
+              Provo përsëri
+            </button>
+
+            <button
+              className={styles.secondaryButton}
+              onClick={handleSignOut}
+              disabled={signingOut}
+            >
+              {signingOut ? "Duke dalë..." : "Dil nga llogaria"}
+            </button>
+          </>
+        )}
       </div>
-    );
-  }
-
-  return children;
+    </div>
+  );
 }
-
-export default SuspensionGuard;
