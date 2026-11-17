@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 
 import { auth, db } from "../../api/firebase";
@@ -82,7 +83,13 @@ export default function SuspensionGuard({ children }) {
   return (
     <div className={styles.overlay}>
       <div className={styles.card}>
-        <div className={styles.logo}>G</div>
+         <Link to="/" className={styles.emailLogoLink}>
+                  <img
+                    className={styles.emailLogo}
+                    src="https://gjejnjerin.com/assets/Logo2-GOoX1SOo.png"
+                    alt="Gjejnjerin"
+                  />
+                </Link>
 
         {status === "suspended" ? (
           <>
