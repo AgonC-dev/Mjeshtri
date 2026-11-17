@@ -63,6 +63,8 @@ export default function SuspensionGuard({ children }) {
     } catch (error) {
       console.error("Sign out failed:", error);
       setSigningOut(false);
+    } finally {
+      setSigningOut(false);
     }
   };
 
