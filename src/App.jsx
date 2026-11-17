@@ -8,10 +8,14 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import AppRoutes from "./AppRoutes";
 import Maintenance from "./pages/Maintenance/Maintenance";
 import SuspensionGuard from "./components/SusoensionGuard/SuspensionGuard";
+import CookieConsent from "./CookieConsent";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 export function AppProviders({ children, helmetContext }) {
+
   // A separate QueryClient for each App instance/request.
   const [queryClient] = useState(() => new QueryClient());
+  
 
   return (
     <HelmetProvider context={helmetContext}>
@@ -30,6 +34,7 @@ export function AppProviders({ children, helmetContext }) {
 }
 
 function App({ initialData = null }) {
+     const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
   const MAINTENANCE = false;
 
   if (MAINTENANCE) return <Maintenance />;
@@ -40,7 +45,9 @@ function App({ initialData = null }) {
       <SuspensionGuard>
          <AppRoutes initialData={initialData} />
       </SuspensionGuard>
-       
+      <CookieConsent onAccept={() => setAnalyticsAllowed(true)} />
+      { analyticsAllowed && <GoogleAnalytics />}
+
       </BrowserRouter>
 
        <Analytics />
